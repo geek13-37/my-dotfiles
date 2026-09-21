@@ -7,3 +7,7 @@
     mode "2560x1440@359.979" // Set resolution and refresh rate
     scale 1 // No scaling (use 2 for HiDPI)
 }
+
+output "HDMI-A-1" {
+    mode "1920x1080@75.002"
+}

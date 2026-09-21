@@ -1,0 +1,3 @@
+happ
+
+# caelestia-sddm theme is bundled in config/sddm/caelestia-theme, no AUR package needed for it

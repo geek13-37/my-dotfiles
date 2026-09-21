@@ -1,0 +1,7 @@
+[shell]
+polkit_agent = true
+
+[bar.default]
+position = "top"
+widget_spacing = 10
+

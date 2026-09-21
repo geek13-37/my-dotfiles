@@ -1,122 +1,161 @@
 #!/usr/bin/env bash
-# Dotfiles installer for CachyOS (niri + noctalia + fish already present).
-# Installs the remaining packages and symlinks every managed config into place.
+#
+# Usage: ./install.sh [--no-packages]
+#   --no-packages   skip pacman/AUR install, only (re)link configs
+#
+# niri, noctalia and fish are assumed preinstalled (CachyOS default) and are
+# not installed here - only their configs get linked.
+
 set -euo pipefail
 
-DOTFILES_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_DIR="$HOME/.config"
+SKIP_PACKAGES=0
 
-log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
-warn() { printf '\033[1;33m!!\033[0m %s\n' "$*" >&2; }
+for arg in "$@"; do
+    case "$arg" in
+        --no-packages) SKIP_PACKAGES=1 ;;
+        *) echo "Unknown option: $arg" >&2; exit 1 ;;
+    esac
+done
 
-# ---------------------------------------------------------------------------
-# 1. Packages
-# ---------------------------------------------------------------------------
-# niri, noctalia, fish are preinstalled on this system - not touched here.
-PACMAN_PKGS=(ghostty telegram-desktop spotify-launcher)
-AUR_PKGS=(happ)
+CONFIGS=(
+    niri
+    noctalia
+    ghostty
+    fish
+    fastfetch
+    mimeapps.list
+)
 
-if ! command -v pacman >/dev/null 2>&1; then
-    warn "pacman not found - this installer targets Arch/CachyOS. Skipping package install."
+if [ "$SKIP_PACKAGES" -eq 0 ]; then
+    if ! command -v pacman >/dev/null 2>&1; then
+        echo "==> pacman not found, skipping package install (use --no-packages to silence this)"
+    else
+        echo "==> Installing packages"
+        mapfile -t PACKAGES < <(grep -vE '^\s*#|^\s*$' "$DOTFILES_DIR/packages.txt")
+        sudo pacman -S --needed "${PACKAGES[@]}"
+
+        mapfile -t AUR_PACKAGES < <(grep -vE '^\s*#|^\s*$' "$DOTFILES_DIR/packages-aur.txt")
+        if [ ${#AUR_PACKAGES[@]} -gt 0 ]; then
+            if command -v yay >/dev/null 2>&1; then
+                echo "==> Installing AUR packages"
+                yay -S --needed "${AUR_PACKAGES[@]}"
+            elif command -v paru >/dev/null 2>&1; then
+                echo "==> Installing AUR packages"
+                paru -S --needed "${AUR_PACKAGES[@]}"
+            else
+                echo "==> No AUR helper (yay/paru) found, skipping AUR packages (${AUR_PACKAGES[*]}) - install one and rerun"
+            fi
+        fi
+    fi
 else
-    log "Installing pacman packages: ${PACMAN_PKGS[*]}"
-    sudo pacman -S --needed --noconfirm "${PACMAN_PKGS[@]}"
+    echo "==> Skipping package install (--no-packages)"
+fi
 
-    AUR_HELPER=""
-    if command -v yay >/dev/null 2>&1; then
-        AUR_HELPER=yay
-    elif command -v paru >/dev/null 2>&1; then
-        AUR_HELPER=paru
+# Telegram, Happ and Spotify are only installed above - their own configs are
+# intentionally NOT managed/symlinked by this repo.
+
+echo "==> Linking configs from $DOTFILES_DIR"
+
+mkdir -p "$CONFIG_DIR"
+
+link_config() {
+    local name="$1"
+
+    if [ -e "$CONFIG_DIR/$name" ] && [ ! -L "$CONFIG_DIR/$name" ]; then
+        echo "Backing up existing $name"
+        mv "$CONFIG_DIR/$name" "$CONFIG_DIR/${name}.backup"
     fi
 
-    if [ -n "$AUR_HELPER" ]; then
-        log "Installing AUR packages with $AUR_HELPER: ${AUR_PKGS[*]}"
-        "$AUR_HELPER" -S --needed --noconfirm "${AUR_PKGS[@]}"
-    else
-        warn "No AUR helper (yay/paru) found - install manually: ${AUR_PKGS[*]}"
+    ln -sfn "$DOTFILES_DIR/config/$name" "$CONFIG_DIR/$name"
+
+    echo "Linked $name"
+}
+
+for name in "${CONFIGS[@]}"; do
+    link_config "$name"
+done
+
+if command -v docker >/dev/null 2>&1 && command -v systemctl >/dev/null 2>&1; then
+    echo "==> Enabling docker"
+    sudo systemctl enable --now docker.service
+
+    if ! groups "$USER" | grep -qw docker; then
+        sudo usermod -aG docker "$USER"
+        echo "Added $USER to the docker group (log out and back in for it to take effect)"
     fi
 fi
 
-# Note: Telegram, Happ and Spotify are only installed above - their configs
-# are intentionally NOT managed/symlinked by this repo.
+if command -v sddm >/dev/null 2>&1 || [ -d /etc/sddm.conf.d ] || pacman -Qi sddm >/dev/null 2>&1; then
+    echo "==> Installing caelestia-sddm theme (minimalistV2, Atuel palette)"
 
-# ---------------------------------------------------------------------------
-# 2. Symlink helpers
-# ---------------------------------------------------------------------------
-backup_suffix=".bak.$(date +%Y%m%d%H%M%S)"
+    sudo rm -rf /usr/share/sddm/themes/caelestia
+    sudo mkdir -p /usr/share/sddm/themes/caelestia
+    sudo cp -r "$DOTFILES_DIR/config/sddm/caelestia-theme/." /usr/share/sddm/themes/caelestia/
+    sudo find /usr/share/sddm/themes/caelestia -type d -exec chmod 755 {} +
+    sudo find /usr/share/sddm/themes/caelestia -type f -exec chmod 644 {} +
+    echo "Installed caelestia theme to /usr/share/sddm/themes/caelestia"
 
-# Symlink a path owned by the current user.
-link() {
-    local src="$1" dst="$2"
-    mkdir -p "$(dirname -- "$dst")"
+    sudo mkdir -p /etc/sddm.conf.d
+    sudo ln -sfn "$DOTFILES_DIR/config/sddm/theme.conf" /etc/sddm.conf.d/theme.conf
+    echo "Linked sddm theme.conf"
 
-    if [ -L "$dst" ] && [ "$(readlink -- "$dst")" = "$src" ]; then
-        log "ok:      $dst"
-        return
+    mkdir -p "$HOME/.config/caelestia/templates"
+    ln -sfn "$DOTFILES_DIR/config/caelestia/templates/sddm-theme.conf" "$HOME/.config/caelestia/templates/sddm-theme.conf"
+
+    # /etc/sddm.conf takes precedence over /etc/sddm.conf.d/*, so a leftover
+    # Current= from a previously installed theme there would silently win.
+    if [ -f /etc/sddm.conf ] && grep -qE '^Current=' /etc/sddm.conf; then
+        echo "Removing conflicting Current= line from /etc/sddm.conf (leftover from another theme)"
+        sudo cp /etc/sddm.conf /etc/sddm.conf.backup
+        sudo sed -i '/^Current=/d' /etc/sddm.conf
     fi
 
-    if [ -e "$dst" ] || [ -L "$dst" ]; then
-        mv -- "$dst" "$dst$backup_suffix"
-        warn "backed up existing $dst -> $dst$backup_suffix"
+    if command -v systemctl >/dev/null 2>&1; then
+        sudo systemctl enable sddm.service >/dev/null 2>&1 || true
     fi
+else
+    echo "==> sddm not installed, skipping theme setup"
+fi
 
-    ln -s -- "$src" "$dst"
-    log "linked:  $dst -> $src"
-}
+echo "==> Linking noctalia state (bar layout, enabled plugins)"
 
-# Symlink a path that requires root (under /etc or /usr).
-link_sudo() {
-    local src="$1" dst="$2"
-    sudo mkdir -p "$(dirname -- "$dst")"
+STATE_DIR="$HOME/.local/state"
+NOCTALIA_STATE_REPO="state/noctalia/settings.toml"
+NOCTALIA_STATE="$STATE_DIR/noctalia/settings.toml"
 
-    if sudo test -L "$dst" && [ "$(sudo readlink -- "$dst")" = "$src" ]; then
-        log "ok:      $dst"
-        return
-    fi
+mkdir -p "$STATE_DIR/noctalia"
+if [ -e "$NOCTALIA_STATE" ] && [ ! -L "$NOCTALIA_STATE" ]; then
+    echo "Backing up existing noctalia settings.toml"
+    mv "$NOCTALIA_STATE" "$STATE_DIR/noctalia/settings.toml.backup"
+fi
+ln -sfn "$DOTFILES_DIR/$NOCTALIA_STATE_REPO" "$NOCTALIA_STATE"
+echo "Linked noctalia/settings.toml"
 
-    if sudo test -e "$dst" || sudo test -L "$dst"; then
-        sudo mv -- "$dst" "$dst$backup_suffix"
-        warn "backed up existing $dst -> $dst$backup_suffix"
-    fi
+echo "==> Linking local-path noctalia plugin (happ-control)"
+# Everything else in settings.toml's [plugins] enabled list is a git/community
+# plugin - Noctalia fetches those itself on startup. This one is sourced as a
+# local path, so it needs to physically exist on disk.
+mkdir -p "$HOME/Plugins"
+if [ -e "$HOME/Plugins/happ-control" ] && [ ! -L "$HOME/Plugins/happ-control" ]; then
+    echo "Backing up existing Plugins/happ-control"
+    mv "$HOME/Plugins/happ-control" "$HOME/Plugins/happ-control.backup"
+fi
+ln -sfn "$DOTFILES_DIR/plugins/happ-control" "$HOME/Plugins/happ-control"
 
-    sudo ln -s -- "$src" "$dst"
-    log "linked:  $dst -> $src (root)"
-}
+echo "==> Linking wallpaper"
+mkdir -p "$HOME/Pictures"
+if [ -e "$HOME/Pictures/wallhaven-yqkj3l.png" ] && [ ! -L "$HOME/Pictures/wallhaven-yqkj3l.png" ]; then
+    echo "Backing up existing Pictures/wallhaven-yqkj3l.png"
+    mv "$HOME/Pictures/wallhaven-yqkj3l.png" "$HOME/Pictures/wallhaven-yqkj3l.png.backup"
+fi
+ln -sfn "$DOTFILES_DIR/wallpapers/wallhaven-yqkj3l.png" "$HOME/Pictures/wallhaven-yqkj3l.png"
 
-# ---------------------------------------------------------------------------
-# 3. Niri
-# ---------------------------------------------------------------------------
-link "$DOTFILES_DIR/config/niri" "$HOME/.config/niri"
+if command -v fish >/dev/null 2>&1 && command -v fisher >/dev/null 2>&1; then
+    echo "==> Installing fish plugins (fisher)"
+    fish -c "fisher update"
+fi
 
-# ---------------------------------------------------------------------------
-# 3b. Fish
-# ---------------------------------------------------------------------------
-link "$DOTFILES_DIR/config/fish" "$HOME/.config/fish"
-
-# ---------------------------------------------------------------------------
-# 4. Noctalia (settings + bar live under ~/.local/state/noctalia)
-# ---------------------------------------------------------------------------
-link "$DOTFILES_DIR/config/noctalia/settings.toml" "$HOME/.local/state/noctalia/settings.toml"
-
-# Local-path noctalia plugin (git/community plugins are pulled by Noctalia
-# itself from the `plugins.enabled` list in settings.toml - only this one,
-# sourced as a local path, needs to physically exist on disk).
-link "$DOTFILES_DIR/plugins/happ-control" "$HOME/Plugins/happ-control"
-
-# ---------------------------------------------------------------------------
-# 5. Ghostty
-# ---------------------------------------------------------------------------
-link "$DOTFILES_DIR/config/ghostty" "$HOME/.config/ghostty"
-
-# ---------------------------------------------------------------------------
-# 6. SDDM (caelestia theme + config)
-# ---------------------------------------------------------------------------
-link_sudo "$DOTFILES_DIR/config/sddm/caelestia-theme" "/usr/share/sddm/themes/caelestia"
-link_sudo "$DOTFILES_DIR/config/sddm/sddm.conf.d-theme.conf" "/etc/sddm.conf.d/theme.conf"
-link "$DOTFILES_DIR/config/caelestia/templates/sddm-theme.conf" "$HOME/.config/caelestia/templates/sddm-theme.conf"
-
-# ---------------------------------------------------------------------------
-# 7. Wallpaper
-# ---------------------------------------------------------------------------
-link "$DOTFILES_DIR/wallpapers/wallhaven-yqkj3l.png" "$HOME/Pictures/wallhaven-yqkj3l.png"
-
-log "Done. Log out / restart niri and sddm for everything to take effect."
+echo
+echo "Done! Log out and pick niri at the login screen (or run 'niri' from a TTY)."

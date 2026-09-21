@@ -9,38 +9,49 @@ binds {
     Mod+Shift+ESCAPE                     { show-hotkey-overlay; }
 
     // ─── Applications ───
-    Mod+Return hotkey-overlay-title="Open Terminal: Ghostty" { spawn "ghostty"; }
-    Mod+B hotkey-overlay-title="Open Browser: firefox" { spawn "firefox"; }
+    Mod+Return                          hotkey-overlay-title="Open Terminal: Ghostty" { spawn "ghostty"; }
+    Mod+B                               hotkey-overlay-title="Open Browser: firefox" { spawn "firefox"; }
+    Mod+CTRL+Y                          hotkey-overlay-title="Open YouTube" { spawn "firefox" "https://youtube.com"; }
+    Mod+CTRL+Shift+C                    hotkey-overlay-title="Open Claude" { spawn "firefox" "https://claude.ai"; }
+    Mod+CTRL+G                          hotkey-overlay-title="Open GitHub" { spawn "firefox" "https://github.com"; }
+    Mod+CTRL+M                          hotkey-overlay-title="Open Mail" { spawn "firefox" "https://mail.proton.me"; }
 
     // --- Noctalia ---
-    Mod+Shift+Return hotkey-overlay-title="Open Wallpaper Selector: noctalia wallpaper toggle" { spawn-sh "noctalia msg panel-toggle wallpaper"; }
-    Mod+S hotkey-overlay-title="Open Control Center: noctalia controlCenter" { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Mod+Shift+Return                    hotkey-overlay-title="Open Wallpaper Selector: noctalia wallpaper toggle" { spawn-sh "noctalia msg panel-toggle wallpaper"; }
+    Mod+S                               hotkey-overlay-title="Open Control Center: noctalia controlCenter" { spawn-sh "noctalia msg panel-toggle control-center"; }
     // Mod+Shift+S                         hotkey-overlay-title="Open Settings: noctalia settings" { spawn-sh "noctalia msg settings-toggle"; }
-    Mod+CTRL+Return hotkey-overlay-title="Open App Launcher: noctalia launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Mod+ALT+L hotkey-overlay-title="Lock Screen: noctalia lock" { spawn-sh "noctalia msg session lock"; }
-    Mod+Shift+Q hotkey-overlay-title="Session Menu: noctalia sessionMenu" { spawn-sh "noctalia msg panel-toggle session"; }
-    Mod+V hotkey-overlay-title="Open Clipboard History: noctalia clipboard" { spawn-sh "noctalia msg panel-toggle clipboard"; }
-    Mod+Semicolon hotkey-overlay-title="Open Emoji Picker: noctalia emoji" { spawn-sh "noctalia msg panel-toggle launcher /emo"; }
+    Mod+CTRL+Return                     hotkey-overlay-title="Open App Launcher: noctalia launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Mod+ALT+L                           hotkey-overlay-title="Lock Screen: noctalia lock" { spawn-sh "noctalia msg session lock"; }
+    Mod+Shift+Q                         hotkey-overlay-title="Session Menu: noctalia sessionMenu" { spawn-sh "noctalia msg panel-toggle session"; }
+    Mod+V                               hotkey-overlay-title="Open Clipboard History: noctalia clipboard" { spawn-sh "noctalia msg panel-toggle clipboard"; }
+    Mod+Semicolon                       hotkey-overlay-title="Open Emoji Picker: noctalia emoji" { spawn-sh "noctalia msg panel-toggle launcher /emo"; }
+    Mod+Z                                hotkey-overlay-title="Open Calculator: noctalia calculator" { spawn-sh "noctalia msg panel-toggle yuuto/calculator:panel"; }
 
     // Please set the text editor of your choice.
     // Mod+Shift+E                               hotkey-overlay-title="Open Text Editor: Zed" { spawn "zed"; }
 
     // Please choose your own file manager.
-    Mod+E hotkey-overlay-title="File Manager" { spawn "nautilus"; }
+    Mod+E                               hotkey-overlay-title="File Manager" { spawn "nautilus"; }
+
+    Mod+CTRL+E                          hotkey-overlay-title="Open Zed" { spawn "zeditor"; }
+    Mod+CTRL+T                           hotkey-overlay-title="Open Telegram" { spawn "Telegram"; }
+    Mod+CTRL+S                           hotkey-overlay-title="Open Spotify" { spawn "spotify-launcher"; }
+    Mod+CTRL+D                           hotkey-overlay-title="Open Discord" { spawn "discord"; }
+    Mod+CTRL+H                           hotkey-overlay-title="Open Happ" { spawn "happ"; }
 
     // ─── Media Controls ───
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "noctalia msg volume-down"; }
-    XF86AudioMute allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
-    XF86AudioMicMute allow-when-locked=true { spawn-sh "noctalia msg mic-mute"; }
-    XF86AudioNext allow-when-locked=true { spawn-sh "noctalia msg media next"; }
-    XF86AudioPrev allow-when-locked=true { spawn-sh "noctalia msg media previous"; }
-    XF86AudioPlay allow-when-locked=true { spawn-sh "noctalia msg media play"; }
-    XF86AudioPause allow-when-locked=true { spawn-sh "noctalia msg media stop"; }
+    XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
+    XF86AudioLowerVolume                allow-when-locked=true { spawn-sh "noctalia msg volume-down"; }
+    XF86AudioMute                       allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
+    XF86AudioMicMute                    allow-when-locked=true { spawn-sh "noctalia msg mic-mute"; }
+    XF86AudioNext                       allow-when-locked=true { spawn-sh "noctalia msg media next"; }
+    XF86AudioPrev                       allow-when-locked=true { spawn-sh "noctalia msg media previous"; }
+    XF86AudioPlay                       allow-when-locked=true { spawn-sh "noctalia msg media play"; }
+    XF86AudioPause                      allow-when-locked=true { spawn-sh "noctalia msg media stop"; }
 
     // ─── Brightness Controls ───
-    XF86MonBrightnessUp allow-when-locked=true { spawn-sh "noctalia msg brightness-up"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "noctalia msg brightness-down"; }
+    XF86MonBrightnessUp                 allow-when-locked=true { spawn-sh "noctalia msg brightness-up"; }
+    XF86MonBrightnessDown               allow-when-locked=true { spawn-sh "noctalia msg brightness-down"; }
 
     // ─── Window Movement and Focus ───
     Mod+Q                               { close-window; }
@@ -55,7 +66,6 @@ binds {
     Mod+J                               { focus-window-down; }
 
     Mod+CTRL+Left                       { move-column-left; }
-    Mod+CTRL+H                          { move-column-left; }
     Mod+CTRL+Right                      { move-column-right; }
     Mod+CTRL+L                          { move-column-right; }
     Mod+CTRL+UP                         { move-window-up; }
@@ -93,10 +103,10 @@ binds {
 
 
     // ─── Workspace Switching ───
-    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
-    Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
-    Mod+CTRL+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
-    Mod+CTRL+WheelScrollUp cooldown-ms=150 { move-column-to-workspace-up; }
+    Mod+WheelScrollDown                 cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp                   cooldown-ms=150 { focus-workspace-up; }
+    Mod+CTRL+WheelScrollDown            cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+CTRL+WheelScrollUp              cooldown-ms=150 { move-column-to-workspace-up; }
 
     Mod+WheelScrollRight                { focus-column-right; }
     Mod+WheelScrollLeft                 { focus-column-left; }
@@ -138,8 +148,8 @@ binds {
     Mod+Equal                           { set-column-width "+10%"; }
     Mod+Shift+Minus                     { set-window-height "-10%"; }
     Mod+Shift+Equal                     { set-window-height "+10%"; }
-    Mod+Ctrl+Minus hotkey-overlay-title="Shrink Floating Window Width (e.g. PiP)" { set-window-width "-10%"; }
-    Mod+Ctrl+Equal hotkey-overlay-title="Grow Floating Window Width (e.g. PiP)" { set-window-width "+10%"; }
+    Mod+Ctrl+Minus                      hotkey-overlay-title="Shrink Floating Window Width (e.g. PiP)" { set-window-width "-10%"; }
+    Mod+Ctrl+Equal                      hotkey-overlay-title="Grow Floating Window Width (e.g. PiP)" { set-window-width "+10%"; }
 
 
     // ─── Modes ───
@@ -157,12 +167,10 @@ binds {
     // ─── Emergency Escape Key ───
     // Use this when a fullscreen app blocks your keybinds.
     // It disables any active keyboard shortcut inhibitor, restoring control.
-    Mod+ESCAPE allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    Mod+ESCAPE                          allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
     // ─── Exit / Power ───
-    CTRL+ALT+Delete                     { quit; }
- // Also quits Niri
-    Mod+Shift+P                         { power-off-monitors; }
- // Turn off screens (useful for OLED or privacy)
-    Mod+O repeat=false { toggle-overview; }
+    CTRL+ALT+Delete                     { quit; } // Also quits Niri
+    Mod+Shift+P                         { power-off-monitors; } // Turn off screens (useful for OLED or privacy)
+    Mod+O                               repeat=false { toggle-overview; }
 }
