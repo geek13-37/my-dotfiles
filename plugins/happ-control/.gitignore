@@ -1,0 +1,7 @@
+# OS/editor cruft
+.DS_Store
+*.swp
+*~
+
+# Local Noctalia plugin runtime state (materialized copies, not this dev dir)
+/materialized/

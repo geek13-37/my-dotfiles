@@ -1,0 +1,53 @@
+include "./cfg/animation.kdl"
+include "./cfg/autostart.kdl"
+include "./cfg/keybinds.kdl"
+include "./cfg/input.kdl"
+include "./cfg/display.kdl"
+include "./cfg/layout.kdl"
+include "./cfg/rules.kdl"
+include "./cfg/misc.kdl"
+
+input {
+    mouse {
+        accel-speed -1.0
+        accel-profile "adaptive"
+    }
+    keyboard
+
+    touchpad
+}
+
+layout {
+    border {
+        off
+
+        width 4
+    }
+
+    focus-ring {
+        width 1
+
+        active-color "#1c71d8"
+    }
+}
+
+window-rule {
+    geometry-corner-radius 2
+    clip-to-geometry true
+}
+
+binds {
+    Mod+Shift+T { spawn "Telegram"; }
+    Mod+Shift+C { spawn "zeditor"; }
+    Mod+Shift+A { spawn "spotify-launcher"; }
+    Mod+Shift+D { spawn "discord"; }
+    Mod+Shift+F { spawn "firefox"; }
+}
+
+debug {
+    wait-for-frame-completion-before-queueing
+}
+
+output "HDMI-A-1" {
+    mode "1920x1080@75.002"
+}

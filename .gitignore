@@ -1,0 +1,3 @@
+# Noctalia writes generated per-app theme files into the ghostty config dir
+config/ghostty/themes/
+*.bak.*
