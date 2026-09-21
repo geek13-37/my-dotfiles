@@ -88,6 +88,11 @@ link_sudo() {
 link "$DOTFILES_DIR/config/niri" "$HOME/.config/niri"
 
 # ---------------------------------------------------------------------------
+# 3b. Fish
+# ---------------------------------------------------------------------------
+link "$DOTFILES_DIR/config/fish" "$HOME/.config/fish"
+
+# ---------------------------------------------------------------------------
 # 4. Noctalia (settings + bar live under ~/.local/state/noctalia)
 # ---------------------------------------------------------------------------
 link "$DOTFILES_DIR/config/noctalia/settings.toml" "$HOME/.local/state/noctalia/settings.toml"
