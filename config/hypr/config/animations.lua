@@ -12,6 +12,7 @@ hl.animation({ leaf = "global",     enabled = true, speed = 4, bezier = "easeOut
 hl.animation({ leaf = "windows",    enabled = true, speed = 4, spring = "move" })
 hl.animation({ leaf = "windowsIn",  enabled = true, speed = 4, spring = "open", style = "popin 90%" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 4, spring = "open", style = "popin 90%" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 4, spring = "ws",   style = "slidevert" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 4, spring = "ws",   style = "slide" })
+hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 4, spring = "ws", style = "slidevert" })
 hl.animation({ leaf = "layers",     enabled = true, speed = 3, bezier = "easeOutCubic", style = "fade" })
 hl.animation({ leaf = "fade",       enabled = true, speed = 3, bezier = "easeOutCubic" })

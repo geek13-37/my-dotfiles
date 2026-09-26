@@ -57,3 +57,23 @@ hl.layer_rule({
     blur_popups  = true,
     ignore_alpha = 0.5,
 })
+
+-- Scratchpad (Mod+`): opening it empty spawns a terminal; wide outer gaps
+-- keep it smaller than the screen so it reads as a drop-down
+hl.workspace_rule({
+    workspace        = "special:term",
+    on_created_empty = "ghostty",
+    gaps_out         = 80,
+})
+
+-- Claude Desktop scratchpad (Mod+Shift+C): opening it empty launches the
+-- app, and its window always lands there instead of a regular workspace
+hl.workspace_rule({
+    workspace        = "special:claude",
+    on_created_empty = "claude-desktop",
+    gaps_out         = 80,
+})
+hl.window_rule({
+    match     = { class = "^com\\.anthropic\\.Claude$" },
+    workspace = "special:claude silent",
+})

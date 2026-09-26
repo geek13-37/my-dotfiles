@@ -67,9 +67,7 @@ bind("K",                    hl.dsp.focus({ direction = "u" }))
 bind("Down",                 hl.dsp.focus({ direction = "d" }))
 bind("J",                    hl.dsp.focus({ direction = "d" }))
 
-bind("CTRL + Left",          hl.dsp.window.move({ direction = "l" }))
 bind("CTRL + H",             hl.dsp.window.move({ direction = "l" }))
-bind("CTRL + Right",         hl.dsp.window.move({ direction = "r" }))
 bind("CTRL + L",             hl.dsp.window.move({ direction = "r" }))
 bind("CTRL + Up",            hl.dsp.window.move({ direction = "u" }))
 bind("CTRL + K",             hl.dsp.window.move({ direction = "u" }))
@@ -116,6 +114,15 @@ for i = 1, 9 do
     bind("CTRL + " .. i,         hl.dsp.window.move({ workspace = i }))
 end
 bind("Tab",                  hl.dsp.focus({ workspace = "previous" }))
+-- workspaces slide horizontally, so Ctrl + Left/Right walks through them
+bind("CTRL + Left",          hl.dsp.focus({ workspace = "r-1" }))
+bind("CTRL + Right",         hl.dsp.focus({ workspace = "r+1" }))
+
+-- Scratchpad: a hidden terminal that drops down over the current workspace
+bind("grave",                hl.dsp.workspace.toggle_special("term"))
+bind("SHIFT + grave",        hl.dsp.window.move({ workspace = "special:term" }))
+-- Claude Desktop scratchpad
+bind("SHIFT + C",            hl.dsp.workspace.toggle_special("claude"))
 
 -- ─── Mouse wheel ───
 bind("mouse_down",                 hl.dsp.focus({ workspace = "r+1" }))

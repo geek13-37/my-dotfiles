@@ -15,18 +15,7 @@ capsule_opacity = 0.0
 capsule_padding = 8.0
 capsule_radius = 2
 capsule_thickness = 0.69999998807907104
-end = [
-    "network_tx",
-    "network_rx",
-    "pill",
-    "mini-docker",
-    "privacy",
-    "wallpaper",
-    "clipboard",
-    "volume",
-    "brightness",
-    "session"
-]
+end = [ "pill", "mini-docker", "privacy", "wallpaper", "clipboard", "volume", "brightness", "session" ]
 margin_edge = 5
 margin_ends = 12
 radius = 2
