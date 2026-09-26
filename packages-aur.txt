@@ -1,3 +1,6 @@
-happ
-
-# caelestia-sddm theme is bundled in config/sddm/caelestia-theme, no AUR package needed for it
+# AUR packages, installed with yay (install.sh bootstraps yay itself).
+happ-desktop-bin
+zen-browser-bin
+localsend-bin
+ventoy-bin
+hyprmod

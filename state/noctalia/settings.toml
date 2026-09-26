@@ -4,7 +4,8 @@ config_version = 14
 enable_sounds = true
 
 [backdrop]
-tint_intensity = 0.4999999888241291
+blur_intensity = 0.99999997764825821
+tint_intensity = 0.069999998435378075
 
 [bar.default]
 background_opacity = 0.79999998211860657
@@ -14,7 +15,18 @@ capsule_opacity = 0.0
 capsule_padding = 8.0
 capsule_radius = 2
 capsule_thickness = 0.69999998807907104
-end = [ "pill", "mini-docker", "privacy", "wallpaper", "clipboard", "volume", "brightness", "session" ]
+end = [
+    "network_tx",
+    "network_rx",
+    "pill",
+    "mini-docker",
+    "privacy",
+    "wallpaper",
+    "clipboard",
+    "volume",
+    "brightness",
+    "session"
+]
 margin_edge = 5
 margin_ends = 12
 radius = 2
@@ -22,9 +34,6 @@ start = [ "workspaces", "tray", "ram", "cpu", "widget", "status" ]
 
 [calendar]
 enabled = true
-
-[control_center.calendar]
-show_events_card = false
 
 [desktop_widgets]
 schema_version = 2

@@ -1,0 +1,59 @@
+-- Window and layer rules
+
+-- Floating Noctalia settings window
+hl.window_rule({
+    match = { class = "^(dev\\.)?noctalia\\.Noctalia(\\.Settings)?$" },
+    float = true,
+    size  = { 1080, 920 },
+    center = true,
+})
+
+-- Browser Picture-in-Picture: float in the bottom-right corner
+hl.window_rule({
+    match = { title = "^Picture-in-Picture$" },
+    float = true,
+    pin   = true,
+    keep_aspect_ratio = true,
+    move  = { "monitor_w-window_w-16", "monitor_h-window_h-16" },
+})
+
+-- Steam: everything except the main window floats
+hl.window_rule({
+    match = { class = "^steam$", title = "negative:^[Ss]team$" },
+    float = true,
+})
+hl.window_rule({
+    match = { class = "^steam$", title = "^notificationtoasts_\\d+_desktop$" },
+    move  = { "monitor_w-window_w-10", "monitor_h-window_h-10" },
+    no_initial_focus = true,
+})
+
+-- Ignore maximize requests from apps
+hl.window_rule({
+    name  = "suppress-maximize-events",
+    match = { class = ".*" },
+    suppress_event = "maximize",
+})
+
+-- Fix some dragging issues with XWayland
+hl.window_rule({
+    name  = "fix-xwayland-drags",
+    match = {
+        class      = "^$",
+        title      = "^$",
+        xwayland   = true,
+        float      = true,
+        fullscreen = false,
+        pin        = false,
+    },
+    no_focus = true,
+})
+
+-- Noctalia bar/panels/OSD blur
+hl.layer_rule({
+    name  = "noctalia",
+    match = { namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd|window-switcher)$" },
+    blur         = true,
+    blur_popups  = true,
+    ignore_alpha = 0.5,
+})

@@ -1,0 +1,3 @@
+# Flatpak apps from Flathub
+org.keepassxc.KeePassXC
+org.vinegarhq.Sober
