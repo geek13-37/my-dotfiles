@@ -169,6 +169,7 @@ popup_borders = false
 [theme]
 builtin = "Tokyo-Night"
 community_palette = "Atuel"
+mode = "dark"
 source = "community"
 wallpaper_scheme = "dysfunctional"
 
@@ -177,28 +178,16 @@ wallpaper_scheme = "dysfunctional"
     community_ids = [ "discord", "gimp", "fastfetch", "obs", "yazi" ]
 
 [wallpaper]
-directory = "/home/andrey/Pictures"
+directory = "/home/geekd/Pictures"
 
     [wallpaper.default]
-    path = "/home/andrey/Pictures/wallhaven-yqkj3l.png"
+    path = "/home/andrey/Pictures/1.jpg"
 
     [wallpaper.last]
-    path = "/home/andrey/Pictures/wallhaven-yqkj3l.png"
+    path = "/home/andrey/Pictures/1.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/andrey/Pictures/wallhaven-yqkj3l.png"
-
-    [[wallpaper.favorite]]
-    community_palette = "Atuel"
-    palette_source = "community"
     path = "/home/andrey/Pictures/1.jpg"
-    theme_mode = "dark"
-
-    [[wallpaper.favorite]]
-    builtin_palette = "Tokyo-Night"
-    palette_source = "builtin"
-    path = "/home/andrey/Pictures/wallhaven-e7kpl8.png"
-    theme_mode = "dark"
 
 [widget.active_window]
 enabled = false

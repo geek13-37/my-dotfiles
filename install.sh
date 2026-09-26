@@ -151,12 +151,6 @@ if [ "$SKIP_PACKAGES" -eq 0 ]; then
         echo "uv already installed"
     fi
 
-    step "Installing Claude Code"
-    if [ ! -x "$HOME/.local/bin/claude" ]; then
-        curl -fsSL https://claude.ai/install.sh | bash
-    else
-        echo "Claude Code already installed ($("$HOME/.local/bin/claude" --version 2>/dev/null || echo '?'))"
-    fi
 else
     step "Skipping package install (--no-packages)"
 fi
