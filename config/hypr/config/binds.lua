@@ -121,8 +121,16 @@ bind("CTRL + Right",         hl.dsp.focus({ workspace = "r+1" }))
 -- Scratchpad: a hidden terminal that drops down over the current workspace
 bind("grave",                hl.dsp.workspace.toggle_special("term"))
 bind("SHIFT + grave",        hl.dsp.window.move({ workspace = "special:term" }))
--- Claude Desktop scratchpad
-bind("SHIFT + C",            hl.dsp.workspace.toggle_special("claude"))
+-- Claude Desktop: focus its window (fullscreen, see rules.lua) or launch it
+bind("SHIFT + C", function()
+    for _, w in ipairs(hl.get_windows()) do
+        if w.class == "com.anthropic.Claude" then
+            hl.dispatch(hl.dsp.focus({ window = "address:" .. w.address }))
+            return
+        end
+    end
+    hl.dispatch(exec("claude-desktop"))
+end)
 
 -- ─── Mouse wheel ───
 bind("mouse_down",                 hl.dsp.focus({ workspace = "r+1" }))

@@ -66,16 +66,10 @@ hl.workspace_rule({
     gaps_out         = 80,
 })
 
--- Claude Desktop scratchpad (Mod+Shift+C): opening it empty launches the
--- app, and its window always lands there instead of a regular workspace
-hl.workspace_rule({
-    workspace        = "special:claude",
-    on_created_empty = "claude-desktop",
-    gaps_out         = 80,
-})
+-- Claude Desktop (Mod+Shift+C): always opens fullscreen
 hl.window_rule({
-    match     = { class = "^com\\.anthropic\\.Claude$" },
-    workspace = "special:claude silent",
+    match      = { class = "^com\\.anthropic\\.Claude$" },
+    fullscreen = true,
 })
 
 -- Sober (Roblox): no blur and fully opaque
