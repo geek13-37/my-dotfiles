@@ -173,13 +173,13 @@ wallpaper_scheme = "dysfunctional"
 directory = "/home/geekd/Pictures"
 
     [wallpaper.default]
-    path = "/home/geekd/Pictures/wide-great-wave-of-kanagawa-2560x1440-v0-8f4qcttvmls41.png"
+    path = "/home/geekd/Pictures/wallhaven-j58qwp.jpg"
 
     [wallpaper.last]
-    path = "/home/geekd/Pictures/wide-great-wave-of-kanagawa-2560x1440-v0-8f4qcttvmls41.png"
+    path = "/home/geekd/Pictures/wallhaven-j58qwp.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/geekd/Pictures/wide-great-wave-of-kanagawa-2560x1440-v0-8f4qcttvmls41.png"
+    path = "/home/geekd/Pictures/wallhaven-j58qwp.jpg"
 
 [widget.active_window]
 enabled = false
