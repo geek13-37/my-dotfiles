@@ -72,6 +72,8 @@ ttf-liberation
 ttf-bitstream-vera
 ttf-opensans
 cantarell-fonts
+ttf-jetbrains-mono
+ttf-jetbrains-mono-nerd
 ttf-meslo-nerd
 otf-hasklig-nerd
 ttf-fantasque-nerd

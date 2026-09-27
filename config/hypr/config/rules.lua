@@ -77,3 +77,10 @@ hl.window_rule({
     match     = { class = "^com\\.anthropic\\.Claude$" },
     workspace = "special:claude silent",
 })
+
+-- Sober (Roblox): no blur and fully opaque
+hl.window_rule({
+    match   = { class = "^org\\.vinegarhq\\.Sober$" },
+    no_blur = true,
+    opaque  = true,
+})

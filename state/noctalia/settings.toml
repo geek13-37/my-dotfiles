@@ -13,12 +13,12 @@ border = "on_surface_variant"
 capsule = true
 capsule_opacity = 0.0
 capsule_padding = 8.0
-capsule_radius = 2
+capsule_radius = 0
 capsule_thickness = 0.69999998807907104
 end = [ "pill", "mini-docker", "privacy", "wallpaper", "clipboard", "volume", "brightness", "session" ]
 margin_edge = 5
 margin_ends = 12
-radius = 2
+radius = 80
 start = [ "workspaces", "tray", "ram", "cpu", "widget", "status" ]
 
 [calendar]
@@ -36,6 +36,7 @@ widget_order = []
     [desktop_widgets.widget]
 
 [dock]
+radius = 2
 smart_auto_hide = true
 
 [location]
@@ -140,7 +141,7 @@ enabled = [
 button_borders = false
 card_borders = false
 corner_radius_scale = 0.5000000074505806
-font_family = "Noto Sans"
+font_family = "JetBrainsMono NF"
 input_borders = false
 niri_overview_type_to_launch_enabled = true
 popup_borders = false
@@ -150,6 +151,9 @@ popup_borders = false
 
     [shell.panel]
     transparency_mode = "soft"
+
+    [shell.screen_corners]
+    size = 30
 
     [shell.shadow]
     direction = "up"
