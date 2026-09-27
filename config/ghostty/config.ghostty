@@ -1,1 +1,5 @@
 theme = noctalia
+
+# cursor trail (shaders/cursor_trail.glsl)
+custom-shader = shaders/cursor_trail.glsl
+custom-shader-animation = true

@@ -29,7 +29,7 @@ bind("CTRL + E",             exec("zeditor"))
 bind("CTRL + T",             exec("Telegram"))
 bind("CTRL + S",             exec("spotify-launcher"))
 bind("CTRL + D",             exec("discord"))
-bind("CTRL + H",             exec("happ"))
+bind("CTRL + SHIFT + H",     exec("happ"))
 
 -- ─── Noctalia ───
 bind("SHIFT + Return",       exec(noct .. "panel-toggle wallpaper"))
@@ -137,6 +137,18 @@ bind("CTRL + mouse_left",          hl.dsp.window.move({ direction = "l" }))
 -- Move / resize with Mod + LMB / RMB drag
 bind("mouse:272",            hl.dsp.window.drag(),   { mouse = true })
 bind("mouse:273",            hl.dsp.window.resize(), { mouse = true })
+
+-- ─── Magnifier: zoom the screen around the cursor ───
+local zoom = 1.0
+local function set_zoom(factor)
+    zoom = math.max(1.0, math.min(factor, 10.0))
+    hl.config({ cursor = { zoom_factor = zoom } })
+end
+bind("ALT + equal",          function() set_zoom(zoom * 1.25) end, { repeating = true })
+bind("ALT + minus",          function() set_zoom(zoom / 1.25) end, { repeating = true })
+bind("ALT + mouse_up",       function() set_zoom(zoom * 1.25) end)
+bind("ALT + mouse_down",     function() set_zoom(zoom / 1.25) end)
+bind("ALT + 0",              function() set_zoom(1.0) end)
 
 -- ─── Screenshots (to clipboard) ───
 bind("SHIFT + S",            exec(noct .. "screenshot-region"))

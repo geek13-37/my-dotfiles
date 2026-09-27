@@ -16,8 +16,9 @@ capsule_padding = 8.0
 capsule_radius = 0
 capsule_thickness = 0.69999998807907104
 end = [ "pill", "mini-docker", "privacy", "wallpaper", "wallhaven", "clipboard", "volume", "brightness", "session" ]
-margin_edge = 5
-margin_ends = 12
+margin_edge = 6
+margin_ends = 14
+padding = 8
 radius = 0
 start = [ "workspaces", "tray", "ram", "cpu", "widget", "status" ]
 

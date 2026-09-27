@@ -26,8 +26,8 @@ hl.config({
     },
 
     decoration = {
-        -- rules.kdl: last rule wins -> radius 6
-        rounding = 6,
+        -- window corner radius
+        rounding = 3,
 
         -- slight transparency so the blur behind windows shows through
         active_opacity     = 0.95,

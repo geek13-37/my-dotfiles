@@ -84,3 +84,10 @@ hl.window_rule({
     no_blur = true,
     opaque  = true,
 })
+
+-- VirtualBox (Manager and VM windows): no blur and fully opaque
+hl.window_rule({
+    match   = { class = "(?i)^virtualbox( manager| machine)?$" },
+    no_blur = true,
+    opaque  = true,
+})
