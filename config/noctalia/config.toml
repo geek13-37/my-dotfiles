@@ -5,3 +5,6 @@ polkit_agent = true
 position = "top"
 widget_spacing = 10
 
+
+[shell.screenshot]
+directory = "~/Screenshots"

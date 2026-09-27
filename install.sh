@@ -180,7 +180,7 @@ for name in "${CONFIGS[@]}"; do
 done
 
 if command -v sddm >/dev/null 2>&1 || [ -d /etc/sddm.conf.d ] || pacman -Qi sddm >/dev/null 2>&1; then
-    step "Installing caelestia-sddm theme (minimalistV2, Atuel palette)"
+    step "Installing caelestia-sddm theme (minimalistV2, Kanagawa palette)"
 
     sudo rm -rf /usr/share/sddm/themes/caelestia
     sudo mkdir -p /usr/share/sddm/themes/caelestia
@@ -234,14 +234,14 @@ ln -sfn "$DOTFILES_DIR/plugins/happ-control" "$HOME/Plugins/happ-control"
 
 step "Linking wallpaper"
 mkdir -p "$HOME/Pictures"
-if [ -e "$HOME/Pictures/wallhaven-yqkj3l.png" ] && [ ! -L "$HOME/Pictures/wallhaven-yqkj3l.png" ]; then
-    echo "Backing up existing Pictures/wallhaven-yqkj3l.png"
-    mv "$HOME/Pictures/wallhaven-yqkj3l.png" "$HOME/Pictures/wallhaven-yqkj3l.png.backup"
+if [ -e "$HOME/Pictures/Powerline.png" ] && [ ! -L "$HOME/Pictures/Powerline.png" ]; then
+    echo "Backing up existing Pictures/Powerline.png"
+    mv "$HOME/Pictures/Powerline.png" "$HOME/Pictures/Powerline.png.backup"
 fi
-ln -sfn "$DOTFILES_DIR/wallpapers/wallhaven-yqkj3l.png" "$HOME/Pictures/wallhaven-yqkj3l.png"
+ln -sfn "$DOTFILES_DIR/wallpapers/Powerline.png" "$HOME/Pictures/Powerline.png"
 
-if [ "$HOME" != "/home/andrey" ]; then
-    warn "state/noctalia/settings.toml points wallpapers at /home/andrey/Pictures - pick the wallpaper again in Noctalia"
+if [ "$HOME" != "/home/geekd" ]; then
+    warn "state/noctalia/settings.toml points wallpapers at /home/geekd/Pictures - pick the wallpaper again in Noctalia"
 fi
 
 if [ "$SKIP_PACKAGES" -eq 0 ] && command -v systemctl >/dev/null 2>&1; then

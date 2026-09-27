@@ -156,6 +156,7 @@ popup_borders = false
     size = 1
 
     [shell.shadow]
+    alpha = 0.099999997764825821
     direction = "up"
 
 [theme]
@@ -166,20 +167,20 @@ source = "builtin"
 wallpaper_scheme = "dysfunctional"
 
     [theme.templates]
-    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "ghostty" ]
-    community_ids = [ "discord", "gimp", "fastfetch", "obs", "yazi" ]
+    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "ghostty", "hyprland", "qt", "scroll" ]
+    community_ids = [ "claude-code", "discord", "telegram", "gimp", "vscode", "zed", "fastfetch", "obs", "yazi" ]
 
 [wallpaper]
 directory = "/home/geekd/Pictures"
 
     [wallpaper.default]
-    path = "/home/geekd/Pictures/wallhaven-j58qwp.jpg"
+    path = "/home/geekd/Pictures/Powerline.png"
 
     [wallpaper.last]
-    path = "/home/geekd/Pictures/wallhaven-j58qwp.jpg"
+    path = "/home/geekd/Pictures/Powerline.png"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/geekd/Pictures/wallhaven-j58qwp.jpg"
+    path = "/home/geekd/Pictures/Powerline.png"
 
 [widget.active_window]
 enabled = false
