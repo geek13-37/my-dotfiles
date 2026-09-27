@@ -34,11 +34,33 @@
         "host": "blue"
       }
     },
-    { "type": "os", "key": "OS", "format": "{name}" },
-    { "type": "kernel", "key": "Kernel", "format": "{release}" },
-    { "type": "uptime", "key": "Uptime" },
-    { "type": "packages", "key": "Pkgs", "format": "{all}" },
-    { "type": "memory", "key": "Mem", "format": "{used} / {total}" },
-    { "type": "colors", "symbol": "circle" }
+    {
+      "type": "os",
+      "key": "OS",
+      "format": "{name}"
+    },
+    {
+      "type": "kernel",
+      "key": "Kernel",
+      "format": "{release}"
+    },
+    {
+      "type": "uptime",
+      "key": "Uptime"
+    },
+    {
+      "type": "packages",
+      "key": "Pkgs",
+      "format": "{all}"
+    },
+    {
+      "type": "memory",
+      "key": "Mem",
+      "format": "{used} / {total}"
+    },
+    {
+      "type": "colors",
+      "symbol": "circle"
+    }
   ]
 }

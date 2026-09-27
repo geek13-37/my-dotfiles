@@ -146,7 +146,6 @@ niri_overview_type_to_launch_enabled = true
 popup_borders = false
 
     [shell.launcher]
-    pinned = [ "org.telegram.desktop", "Happ", "spotify-launcher", "firefox", "com.obsproject.Studio", "org.vinegarhq.Sober" ]
     show_app_origin_indicator = false
 
     [shell.panel]
@@ -170,13 +169,13 @@ wallpaper_scheme = "dysfunctional"
 directory = "/home/geekd/Pictures"
 
     [wallpaper.default]
-    path = "/home/andrey/Pictures/1.jpg"
+    path = "/home/geekd/Pictures/wallhaven-yqkj3l.png"
 
     [wallpaper.last]
-    path = "/home/andrey/Pictures/1.jpg"
+    path = "/home/geekd/Pictures/wallhaven-yqkj3l.png"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/andrey/Pictures/1.jpg"
+    path = "/home/geekd/Pictures/wallhaven-yqkj3l.png"
 
 [widget.active_window]
 enabled = false
