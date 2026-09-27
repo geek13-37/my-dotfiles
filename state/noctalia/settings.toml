@@ -15,10 +15,10 @@ capsule_opacity = 0.0
 capsule_padding = 8.0
 capsule_radius = 0
 capsule_thickness = 0.69999998807907104
-end = [ "pill", "mini-docker", "privacy", "wallpaper", "clipboard", "volume", "brightness", "session" ]
+end = [ "pill", "mini-docker", "privacy", "wallpaper", "wallhaven", "clipboard", "volume", "brightness", "session" ]
 margin_edge = 5
 margin_ends = 12
-radius = 80
+radius = 0
 start = [ "workspaces", "tray", "ram", "cpu", "widget", "status" ]
 
 [calendar]
@@ -36,7 +36,7 @@ widget_order = []
     [desktop_widgets.widget]
 
 [dock]
-radius = 2
+radius = 0
 smart_auto_hide = true
 
 [location]
@@ -140,7 +140,7 @@ enabled = [
 [shell]
 button_borders = false
 card_borders = false
-corner_radius_scale = 0.5000000074505806
+corner_radius_scale = 0.0
 font_family = "JetBrainsMono NF"
 input_borders = false
 niri_overview_type_to_launch_enabled = true
@@ -153,16 +153,16 @@ popup_borders = false
     transparency_mode = "soft"
 
     [shell.screen_corners]
-    size = 30
+    size = 1
 
     [shell.shadow]
     direction = "up"
 
 [theme]
-builtin = "Tokyo-Night"
-community_palette = "Atuel"
+builtin = "Kanagawa"
+community_palette = "Breeze"
 mode = "dark"
-source = "community"
+source = "builtin"
 wallpaper_scheme = "dysfunctional"
 
     [theme.templates]
@@ -173,13 +173,13 @@ wallpaper_scheme = "dysfunctional"
 directory = "/home/geekd/Pictures"
 
     [wallpaper.default]
-    path = "/home/geekd/Pictures/wallhaven-yqkj3l.png"
+    path = "/home/geekd/Pictures/wide-great-wave-of-kanagawa-2560x1440-v0-8f4qcttvmls41.png"
 
     [wallpaper.last]
-    path = "/home/geekd/Pictures/wallhaven-yqkj3l.png"
+    path = "/home/geekd/Pictures/wide-great-wave-of-kanagawa-2560x1440-v0-8f4qcttvmls41.png"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/geekd/Pictures/wallhaven-yqkj3l.png"
+    path = "/home/geekd/Pictures/wide-great-wave-of-kanagawa-2560x1440-v0-8f4qcttvmls41.png"
 
 [widget.active_window]
 enabled = false
@@ -199,6 +199,9 @@ type = "andrey/happ-control:status"
 [widget.tray]
 drawer = true
 match_adjacent_spacing = true
+
+[widget.wallhaven]
+type = "noctalia/wallhaven:wallhaven"
 
 [widget.wallpaper.actions]
 right = "wallpaper-next"

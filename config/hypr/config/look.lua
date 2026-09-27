@@ -9,8 +9,9 @@ hl.config({
 
         border_size = 1,
         col = {
-            active_border   = "rgb(99B6F2)",
-            inactive_border = "rgb(212C4D)",
+            -- kanagawa (noctalia primary / surface variant)
+            active_border   = "rgb(76946A)",
+            inactive_border = "rgb(2A2A37)",
         },
 
         resize_on_border = true,
