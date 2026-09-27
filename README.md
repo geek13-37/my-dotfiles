@@ -1,5 +1,7 @@
 # my-dotfiles
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/60dc04f1-a33b-46d8-8f3b-622c8cf993a1" />
+
 Моё окружение рабочего стола: Hyprland + noctalia, тема входа SDDM
 (caelestia), терминал ghostty, fish, fastfetch, обои - плюс все программы,
 которые у меня стоят.
