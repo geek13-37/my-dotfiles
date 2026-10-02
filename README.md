@@ -3,7 +3,7 @@
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/60dc04f1-a33b-46d8-8f3b-622c8cf993a1" />
 
 Моё окружение рабочего стола: Hyprland + noctalia, тема входа SDDM
-(caelestia), терминал ghostty, fish, fastfetch, обои - плюс все программы,
+(where-is-my-sddm-theme), терминал ghostty, fish, fastfetch, обои - плюс все программы,
 которые у меня стоят.
 
 ## Установка с нуля
@@ -35,9 +35,12 @@ cd ~/my-dotfiles
 - `config/fish` - конфиг fish (prompt на tide); `config/fish/cachyos` - копия
   fish-конфига CachyOS (алиасы eza/bat и т.п.), чтобы работало и на чистом Arch
 - `config/fastfetch`, `config/mimeapps.list`
-- `config/sddm/caelestia-theme` + `config/sddm/theme.conf` - тема входа SDDM
-- `config/caelestia/templates/sddm-theme.conf` - шаблон синхронизации цвета
-  темы SDDM с текущей палитрой
+- `config/sddm/theme.conf` - выбор темы входа SDDM (where-is-my-sddm-theme,
+  ставится из AUR)
+- `config/noctalia/templates/{sddm,limine}.conf` + `config/sddm/noctalia-boot-theme` -
+  цвета SDDM и загрузчика Limine берутся из текущей палитры Noctalia и
+  обновляются сами при её смене (скрипт ставится в `/usr/local/bin` и
+  запускается из Noctalia через sudo без пароля - только он, см. install.sh)
 - `wallpapers/` - обои
 - Telegram, Happ, Spotify - только ставятся пакетом, их личные конфиги в
   репозиторий не попадают

@@ -97,10 +97,24 @@ if [ "$SKIP_PACKAGES" -eq 0 ]; then
     done
     pacman_install "${HEADERS[@]}"
 
-    if lspci 2>/dev/null | grep -iE 'vga|3d|display' | grep -qi nvidia; then
+    # Each GPU vendor found is handled separately, so hybrid laptops
+    # (Intel/AMD iGPU + NVIDIA dGPU) get drivers for both.
+    GPUS="$(lspci 2>/dev/null | grep -iE 'vga|3d|display' || true)"
+
+    if grep -qi nvidia <<<"$GPUS"; then
         step "NVIDIA GPU detected, installing drivers"
         pacman_install nvidia-open-dkms nvidia-utils lib32-nvidia-utils \
             nvidia-settings libva-nvidia-driver egl-wayland opencl-nvidia lib32-opencl-nvidia
+    fi
+
+    if grep -qi intel <<<"$GPUS"; then
+        step "Intel GPU detected, installing Vulkan and VA-API drivers"
+        pacman_install mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver
+    fi
+
+    if grep -qiE 'amd/ati|radeon' <<<"$GPUS"; then
+        step "AMD GPU detected, installing Vulkan drivers"
+        pacman_install mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
     fi
 
     if grep -q GenuineIntel /proc/cpuinfo; then
@@ -180,21 +194,30 @@ for name in "${CONFIGS[@]}"; do
 done
 
 if command -v sddm >/dev/null 2>&1 || [ -d /etc/sddm.conf.d ] || pacman -Qi sddm >/dev/null 2>&1; then
-    step "Installing caelestia-sddm theme (minimalistV2, Kanagawa palette)"
+    step "Setting up SDDM theme (where_is_my_sddm_theme, colours from Noctalia)"
 
-    sudo rm -rf /usr/share/sddm/themes/caelestia
-    sudo mkdir -p /usr/share/sddm/themes/caelestia
-    sudo cp -r "$DOTFILES_DIR/config/sddm/caelestia-theme/." /usr/share/sddm/themes/caelestia/
-    sudo find /usr/share/sddm/themes/caelestia -type d -exec chmod 755 {} +
-    sudo find /usr/share/sddm/themes/caelestia -type f -exec chmod 644 {} +
-    echo "Installed caelestia theme to /usr/share/sddm/themes/caelestia"
+    # The theme itself comes from packages-aur.txt (where-is-my-sddm-theme-git)
+    if [ ! -d /usr/share/sddm/themes/where_is_my_sddm_theme ]; then
+        warn "where_is_my_sddm_theme is not installed - run: yay -S where-is-my-sddm-theme-git"
+    fi
 
     sudo mkdir -p /etc/sddm.conf.d
     sudo ln -sfn "$DOTFILES_DIR/config/sddm/theme.conf" /etc/sddm.conf.d/theme.conf
     echo "Linked sddm theme.conf"
 
-    mkdir -p "$HOME/.config/caelestia/templates"
-    ln -sfn "$DOTFILES_DIR/config/caelestia/templates/sddm-theme.conf" "$HOME/.config/caelestia/templates/sddm-theme.conf"
+    # Noctalia renders the palette into ~/.cache/noctalia/boot-theme/ and its
+    # post_hook runs this root helper (passwordless, this one script only) to
+    # recolour SDDM and Limine. The helper only writes validated hex colours.
+    sudo install -m755 "$DOTFILES_DIR/config/sddm/noctalia-boot-theme" /usr/local/bin/noctalia-boot-theme
+    SUDOERS_TMP="$(mktemp)"
+    echo "$USER ALL=(root) NOPASSWD: /usr/local/bin/noctalia-boot-theme" >"$SUDOERS_TMP"
+    if sudo visudo -cf "$SUDOERS_TMP" >/dev/null; then
+        sudo install -m440 "$SUDOERS_TMP" /etc/sudoers.d/noctalia-boot-theme
+        echo "Installed noctalia-boot-theme helper and sudoers rule"
+    else
+        warn "sudoers rule for noctalia-boot-theme failed validation, skipped"
+    fi
+    rm -f "$SUDOERS_TMP"
 
     # /etc/sddm.conf takes precedence over /etc/sddm.conf.d/*, so a leftover
     # Current= from a previously installed theme there would silently win.

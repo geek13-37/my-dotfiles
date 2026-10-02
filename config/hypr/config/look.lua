@@ -3,9 +3,10 @@ hl.config({
     general = {
         layout = "dwindle",
 
-        -- 16px between windows and around the edges
-        gaps_in  = 8,
-        gaps_out = 16,
+        -- tight tiling: 3px between windows; outer gaps line windows up with the
+        -- Noctalia bar (margin_ends = 14), 6px below it like its margin_edge
+        gaps_in  = 3,
+        gaps_out = { top = 6, right = 14, bottom = 14, left = 14 },
 
         border_size = 1,
         col = {
@@ -27,7 +28,7 @@ hl.config({
 
     decoration = {
         -- window corner radius
-        rounding = 3,
+        rounding = 0,
 
         -- slight transparency so the blur behind windows shows through
         active_opacity     = 0.95,

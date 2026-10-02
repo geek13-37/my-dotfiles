@@ -8,3 +8,15 @@ widget_spacing = 10
 
 [shell.screenshot]
 directory = "~/Screenshots"
+
+# Palette -> SDDM (where_is_my_sddm_theme) + Limine. The rendered files are
+# copied into place by /usr/local/bin/noctalia-boot-theme (root, via sudoers).
+[theme.templates.user.sddm]
+input_path = "~/.config/noctalia/templates/sddm.conf"
+output_path = "~/.cache/noctalia/boot-theme/sddm.conf"
+post_hook = "sudo -n /usr/local/bin/noctalia-boot-theme"
+
+[theme.templates.user.limine]
+input_path = "~/.config/noctalia/templates/limine.conf"
+output_path = "~/.cache/noctalia/boot-theme/limine.conf"
+post_hook = "sudo -n /usr/local/bin/noctalia-boot-theme"

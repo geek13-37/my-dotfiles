@@ -85,3 +85,10 @@ hl.window_rule({
     no_blur = true,
     opaque  = true,
 })
+
+-- Firefox: no blur and fully opaque
+hl.window_rule({
+    match   = { class = "^firefox$" },
+    no_blur = true,
+    opaque  = true,
+})

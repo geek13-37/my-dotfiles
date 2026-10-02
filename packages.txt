@@ -20,13 +20,10 @@ capitaine-cursors
 xdg-user-dirs
 xdg-utils
 
-# ─── Login screen: SDDM + caelestia theme deps ───
+# ─── Login screen: SDDM (theme where-is-my-sddm-theme-git is in packages-aur.txt) ───
 sddm
 qt6-declarative
 qt6-5compat
-qt6-svg
-qt6-multimedia
-qt6-virtualkeyboard
 
 # ─── Audio / video ───
 pipewire
@@ -123,7 +120,6 @@ firefox
 telegram-desktop
 discord
 spotify-launcher
-zed
 code
 nautilus
 ffmpegthumbnailer

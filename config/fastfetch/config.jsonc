@@ -7,21 +7,21 @@
       "right": 2
     },
     "color": {
-      "1": "#769463",
-      "2": "#c0a363"
+      "1": "#63b6f2",
+      "2": "#5581d9"
     }
   },
   "display": {
     "separator": "  ",
     "color": {
-      "keys": "#76946a",
-      "title": "#c0a36e"
+      "keys": "#99b6f2",
+      "title": "#5581d9"
     },
     "percent": {
       "color": {
-        "green": "#7e9cd8",
-        "yellow": "#ade996",
-        "red": "#c34043"
+        "green": "#4e6ba6",
+        "yellow": "#8eaef1",
+        "red": "#d98886"
       }
     }
   },

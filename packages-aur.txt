@@ -1,6 +1,6 @@
 # AUR packages, installed with yay (install.sh bootstraps yay itself).
 happ-desktop-bin
-zen-browser-bin
 localsend-bin
 ventoy-bin
 hyprmod
+where-is-my-sddm-theme-git
