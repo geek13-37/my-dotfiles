@@ -244,17 +244,6 @@ fi
 ln -sfn "$DOTFILES_DIR/$NOCTALIA_STATE_REPO" "$NOCTALIA_STATE"
 echo "Linked noctalia/settings.toml"
 
-step "Linking local-path noctalia plugin (happ-control)"
-# Everything else in settings.toml's [plugins] enabled list is a git/community
-# plugin - Noctalia fetches those itself on startup. This one is sourced as a
-# local path, so it needs to physically exist on disk.
-mkdir -p "$HOME/Plugins"
-if [ -e "$HOME/Plugins/happ-control" ] && [ ! -L "$HOME/Plugins/happ-control" ]; then
-    echo "Backing up existing Plugins/happ-control"
-    mv "$HOME/Plugins/happ-control" "$HOME/Plugins/happ-control.backup"
-fi
-ln -sfn "$DOTFILES_DIR/plugins/happ-control" "$HOME/Plugins/happ-control"
-
 step "Linking scripts into ~/.local/bin"
 mkdir -p "$HOME/.local/bin"
 for script in "$DOTFILES_DIR"/bin/*; do

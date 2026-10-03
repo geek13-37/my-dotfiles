@@ -20,7 +20,7 @@ margin_edge = 6
 margin_ends = 14
 padding = 3
 radius = 0
-start = [ "workspaces", "tray", "ram", "cpu", "status" ]
+start = [ "workspaces", "tray", "ram", "cpu" ]
 thickness = 35
 
 [calendar]
@@ -144,8 +144,7 @@ enabled = [
     "yuuto/calculator",
     "yuuto/arch-updater",
     "jrohland/claudecode",
-    "3ri4ng0ld/ip-monitor",
-    "andrey/happ-control"
+    "3ri4ng0ld/ip-monitor"
 ]
 
     [[plugins.source]]
@@ -157,11 +156,6 @@ enabled = [
     kind = "git"
     location = "https://github.com/noctalia-dev/community-plugins"
     name = "community"
-
-    [[plugins.source]]
-    kind = "path"
-    location = "~/Plugins/happ-control"
-    name = "happ-control"
 
 [shell]
 button_borders = false
@@ -215,9 +209,6 @@ enabled = false
 
 [widget.mini-docker]
 type = "8bury/mini-docker:mini-docker"
-
-[widget.status]
-type = "andrey/happ-control:status"
 
 [widget.tray]
 drawer = true

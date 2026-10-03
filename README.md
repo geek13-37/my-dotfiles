@@ -29,8 +29,7 @@ cd ~/my-dotfiles
 - `config/hypr` - Hyprland (Lua-конфиг, раскладка dwindle)
 - `config/noctalia` + `state/noctalia/settings.toml` - настройки Noctalia,
   включая раскладку бара и список плагинов (плагины из `[plugins]` Noctalia
-  подтягивает сама; `plugins/happ-control` - единственный, что не подтянется
-  само, т.к. подключен как локальный путь)
+  подтягивает сама)
 - `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из Noctalia)
 - `config/fish` - конфиг fish (prompt на tide); `config/fish/cachyos` - копия
   fish-конфига CachyOS (алиасы eza/bat и т.п.), чтобы работало и на чистом Arch
