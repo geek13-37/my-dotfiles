@@ -2,3 +2,7 @@
 *.save
 *.bak
 *.backup
+
+# fish rewrites this on every `set -U` (and leaves fish_variables<random>
+# temp files around) - tide settings live in config/fish/tide-settings.fish
+config/fish/fish_variables*

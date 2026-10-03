@@ -180,7 +180,7 @@ popup_borders = false
 
 [theme]
 builtin = "Kanagawa"
-community_palette = "Catppuccin Mocha Blue"
+community_palette = "Atuel"
 mode = "dark"
 source = "community"
 wallpaper_scheme = "dysfunctional"

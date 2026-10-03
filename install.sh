@@ -244,6 +244,10 @@ fi
 ln -sfn "$DOTFILES_DIR/$NOCTALIA_STATE_REPO" "$NOCTALIA_STATE"
 echo "Linked noctalia/settings.toml"
 
+# Noctalia saves absolute paths (wallpaper folder etc.) - point any
+# /home/<someone>/ in there at this user's home
+sed -i -E "s|\"/home/[^/\"]+/|\"$HOME/|g" "$DOTFILES_DIR/$NOCTALIA_STATE_REPO"
+
 step "Linking scripts into ~/.local/bin"
 mkdir -p "$HOME/.local/bin"
 for script in "$DOTFILES_DIR"/bin/*; do
@@ -306,11 +310,6 @@ else
     warn "spicetify-cli is not installed - skipped"
 fi
 
-# Wallpapers are not in the repo - download one with the Wallhaven plugin
-# (the desktop stays black until then)
-if [ "$HOME" != "/home/geekd" ]; then
-    warn "state/noctalia/settings.toml points the wallpaper folder at /home/geekd/Pictures - change it in Noctalia"
-fi
 
 if [ "$SKIP_PACKAGES" -eq 0 ] && command -v systemctl >/dev/null 2>&1; then
     step "Enabling services"
@@ -356,6 +355,8 @@ fi
 if command -v fish >/dev/null 2>&1; then
     step "Installing fish plugins (fisher)"
     fish -c "fisher update" || warn "fisher update failed"
+    # fish_variables is not in git - restore the tide prompt settings
+    fish "$DOTFILES_DIR/config/fish/tide-settings.fish" && echo "Applied tide prompt settings"
 fi
 
 echo

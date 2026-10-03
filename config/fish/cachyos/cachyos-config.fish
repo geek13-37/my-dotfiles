@@ -23,7 +23,8 @@ if test -f ~/.fish_profile
 end
 
 # Append common directories for executable files to $PATH
-fish_add_path ~/.local/bin ~/.cargo/bin ~/Applications/depot_tools
+# -g: per session, not universal - universal would bake /home/<user> into fish_variables
+fish_add_path -g ~/.local/bin ~/.cargo/bin ~/go/bin ~/Applications/depot_tools
 
 ## Functions
 # Functions needed for !! and !$ https://github.com/oh-my-fish/plugin-bang-bang
