@@ -259,14 +259,6 @@ if [ -f /usr/share/applications/spotify-launcher.desktop ]; then
         > "$HOME/.local/share/applications/spotify-launcher.desktop"
 fi
 
-step "Linking wallpaper"
-mkdir -p "$HOME/Pictures"
-if [ -e "$HOME/Pictures/Powerline.png" ] && [ ! -L "$HOME/Pictures/Powerline.png" ]; then
-    echo "Backing up existing Pictures/Powerline.png"
-    mv "$HOME/Pictures/Powerline.png" "$HOME/Pictures/Powerline.png.backup"
-fi
-ln -sfn "$DOTFILES_DIR/wallpapers/Powerline.png" "$HOME/Pictures/Powerline.png"
-
 step "Nautilus: \"Open in Terminal\" uses alacritty"
 # From a TTY there is no session bus, and gsettings would silently drop the
 # write - spin up a temporary one so dconf actually saves it
@@ -314,8 +306,10 @@ else
     warn "spicetify-cli is not installed - skipped"
 fi
 
+# Wallpapers are not in the repo - download one with the Wallhaven plugin
+# (the desktop stays black until then)
 if [ "$HOME" != "/home/geekd" ]; then
-    warn "state/noctalia/settings.toml points wallpapers at /home/geekd/Pictures - pick the wallpaper again in Noctalia"
+    warn "state/noctalia/settings.toml points the wallpaper folder at /home/geekd/Pictures - change it in Noctalia"
 fi
 
 if [ "$SKIP_PACKAGES" -eq 0 ] && command -v systemctl >/dev/null 2>&1; then
