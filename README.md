@@ -35,6 +35,8 @@ cd ~/my-dotfiles
 - `config/fish` - конфиг fish (prompt на tide); `config/fish/cachyos` - копия
   fish-конфига CachyOS (алиасы eza/bat и т.п.), чтобы работало и на чистом Arch
 - `config/fastfetch`, `config/mimeapps.list`
+- `bin/spotify` - запуск Spotify (бинд Ctrl+S и лаунчер): после обновления
+  Spotify сам заново накатывает Spicetify с темой Comfy в цветах Noctalia
 - `config/sddm/theme.conf` - выбор темы входа SDDM (where-is-my-sddm-theme,
   ставится из AUR)
 - `config/noctalia/templates/sddm.conf` + `config/sddm/noctalia-boot-theme` -

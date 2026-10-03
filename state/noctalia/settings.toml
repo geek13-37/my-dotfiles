@@ -193,7 +193,7 @@ wallpaper_scheme = "dysfunctional"
 
     [theme.templates]
     builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "hyprland", "qt", "scroll" ]
-    community_ids = [ "claude-code", "discord", "telegram", "gimp", "vscode", "zed", "fastfetch", "obs", "yazi" ]
+    community_ids = [ "spicetify", "claude-code", "discord", "telegram", "gimp", "vscode", "zed", "fastfetch", "obs", "yazi" ]
 
 [wallpaper]
 directory = "/home/geekd/Pictures"

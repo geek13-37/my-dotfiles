@@ -255,6 +255,21 @@ if [ -e "$HOME/Plugins/happ-control" ] && [ ! -L "$HOME/Plugins/happ-control" ];
 fi
 ln -sfn "$DOTFILES_DIR/plugins/happ-control" "$HOME/Plugins/happ-control"
 
+step "Linking scripts into ~/.local/bin"
+mkdir -p "$HOME/.local/bin"
+for script in "$DOTFILES_DIR"/bin/*; do
+    ln -sfn "$script" "$HOME/.local/bin/$(basename "$script")"
+    echo "Linked $(basename "$script")"
+done
+
+# Spotify from the app launcher goes through bin/spotify too (keeps Spicetify)
+mkdir -p "$HOME/.local/share/applications"
+if [ -f /usr/share/applications/spotify-launcher.desktop ]; then
+    sed "s|^Exec=spotify-launcher|Exec=$HOME/.local/bin/spotify|" \
+        /usr/share/applications/spotify-launcher.desktop \
+        > "$HOME/.local/share/applications/spotify-launcher.desktop"
+fi
+
 step "Linking wallpaper"
 mkdir -p "$HOME/Pictures"
 if [ -e "$HOME/Pictures/Powerline.png" ] && [ ! -L "$HOME/Pictures/Powerline.png" ]; then
@@ -270,6 +285,45 @@ if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then GSET=(gsettings); else GSET=(dbus-ru
 "${GSET[@]}" set com.github.stunkymonkey.nautilus-open-any-terminal terminal alacritty 2>/dev/null \
     && echo "Set alacritty as Nautilus terminal" \
     || warn "nautilus-open-any-terminal is not installed - skipped"
+
+step "Cursor: Bibata-Modern-Classic everywhere"
+# Hyprland sets XCURSOR_* (environment.lua); GTK apps read gsettings, and
+# X11/Electron apps that ignore both (Spotify) fall back to ~/.icons/default
+CURSOR_THEME="Bibata-Modern-Classic"
+CURSOR_SIZE=20
+"${GSET[@]}" set org.gnome.desktop.interface cursor-theme "$CURSOR_THEME" 2>/dev/null || true
+"${GSET[@]}" set org.gnome.desktop.interface cursor-size "$CURSOR_SIZE" 2>/dev/null || true
+mkdir -p "$HOME/.icons/default"
+printf '[Icon Theme]\nInherits=%s\n' "$CURSOR_THEME" > "$HOME/.icons/default/index.theme"
+if command -v flatpak >/dev/null 2>&1; then
+    # flatpaks can't see /usr/share/icons themes otherwise
+    flatpak override --user --filesystem=/usr/share/icons:ro \
+        --env=XCURSOR_THEME="$CURSOR_THEME" --env=XCURSOR_SIZE="$CURSOR_SIZE" 2>/dev/null || true
+fi
+echo "Cursor set to $CURSOR_THEME ($CURSOR_SIZE)"
+
+step "Spotify: Spicetify + Comfy theme in Noctalia colors"
+# Noctalia's "spicetify" template writes Themes/Comfy/color.ini and reapplies
+# on every palette change; the theme itself has to be installed by hand
+if command -v spicetify >/dev/null 2>&1; then
+    COMFY="$CONFIG_DIR/spicetify/Themes/Comfy"
+    if [ ! -d "$COMFY" ]; then
+        COMFY_SRC="$(mktemp -d)"
+        git clone -q --depth 1 https://github.com/Comfy-Themes/Spicetify "$COMFY_SRC" \
+            && mkdir -p "$(dirname "$COMFY")" && cp -r "$COMFY_SRC/Comfy" "$COMFY"
+        rm -rf "$COMFY_SRC"
+    fi
+    spicetify config current_theme Comfy color_scheme Comfy inject_css 1 replace_colors 1 \
+        overwrite_assets 1 inject_theme_js 1 >/dev/null
+    # needs Spotify launched (and logged in) once, so prefs exist
+    if [ -f "$CONFIG_DIR/spotify/prefs" ]; then
+        spicetify -q backup apply --no-restart && echo "Spicetify applied"
+    else
+        warn "Launch Spotify once, then run: spicetify backup apply"
+    fi
+else
+    warn "spicetify-cli is not installed - skipped"
+fi
 
 if [ "$HOME" != "/home/geekd" ]; then
     warn "state/noctalia/settings.toml points wallpapers at /home/geekd/Pictures - pick the wallpaper again in Noctalia"

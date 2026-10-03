@@ -26,7 +26,7 @@ bind("CTRL + G",             exec("firefox https://github.com"))
 bind("CTRL + M",             exec("firefox https://mail.proton.me"))
 bind("E",                    exec("nautilus"))
 bind("CTRL + T",             exec("Telegram"))
-bind("CTRL + S",             exec("spotify-launcher"))
+bind("CTRL + S",             exec(os.getenv("HOME") .. "/.local/bin/spotify"))  -- keeps the Spicetify theme (bin/spotify)
 bind("CTRL + D",             exec("discord"))
 bind("CTRL + SHIFT + H",     exec("happ"))
 -- Task manager on the Windows combo (no Mod)
@@ -163,6 +163,9 @@ bind("ALT + 0",              function() set_zoom(1.0) end)
 bind("SHIFT + S",            exec(noct .. "screenshot-region"))
 hl.bind("CTRL + SHIFT + 2",  exec(noct .. "screenshot-fullscreen"))
 hl.bind("CTRL + SHIFT + 3",  exec([[grim -g "$(hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')" - | wl-copy -t image/png]]))
+
+-- Color picker: click anywhere, the hex goes to the clipboard
+bind("C",                    exec("hyprpicker -a"))
 
 -- ─── Escape hatch ───
 -- Keyboard shortcuts inhibit: Hyprland has no such toggle, so

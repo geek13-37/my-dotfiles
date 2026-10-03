@@ -5,3 +5,5 @@ ventoy-bin
 hyprmod
 where-is-my-sddm-theme-git
 nautilus-open-any-terminal
+bibata-cursor-theme-bin
+spicetify-cli

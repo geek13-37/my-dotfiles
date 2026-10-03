@@ -7,16 +7,17 @@ hyprland
 noctalia
 xdg-desktop-portal-hyprland
 xdg-desktop-portal-gtk
+hyprpolkitagent
 gnome-keyring
 polkit
 wl-clipboard
 grim
+hyprpicker
 slurp
 jq
 swaybg
 awww
 adw-gtk-theme
-capitaine-cursors
 xdg-user-dirs
 xdg-utils
 
@@ -122,6 +123,8 @@ code
 nautilus
 sushi
 webp-pixbuf-loader
+gnome-disk-utility
+papers
 ffmpegthumbnailer
 libgsf
 libopenraw

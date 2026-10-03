@@ -6,8 +6,8 @@ hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
 hl.env("XDG_SESSION_TYPE", "wayland")
 
 -- Cursor
-hl.env("XCURSOR_THEME", "Adwaita")
-hl.env("XCURSOR_SIZE", "26")
+hl.env("XCURSOR_THEME", "Bibata-Modern-Classic")
+hl.env("XCURSOR_SIZE", "20")
 
 -- NVIDIA (GTX 1650): only when the nvidia driver is loaded, so the same
 -- config also works on Intel/AMD machines

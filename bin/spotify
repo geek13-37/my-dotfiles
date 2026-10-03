@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Spotify that keeps its Spicetify theme.
+# spotify-launcher downloads Spotify on first start and updates it in place,
+# which wipes Spicetify's patches. Patched installs have Apps/xpui/ instead of
+# Apps/xpui.spa - when the .spa is back, re-backup and re-apply (Spicetify
+# restarts Spotify with the theme on).
+
+APPS="$HOME/.local/share/spotify-launcher/install/usr/share/spotify/Apps"
+PREFS="$HOME/.config/spotify/prefs"
+
+spotify-launcher "$@" &
+
+command -v spicetify >/dev/null 2>&1 || { wait; exit; }
+
+# wait (up to a minute) for the download/update to finish and Spotify to start
+for _ in $(seq 120); do
+    pgrep -x spotify >/dev/null && break
+    sleep 0.5
+done
+
+# prefs only appear after the first login - until then there's nothing to patch
+if [ -e "$APPS/xpui.spa" ] && [ -f "$PREFS" ]; then
+    spicetify -q clear
+    spicetify -q backup apply
+fi
+
+wait

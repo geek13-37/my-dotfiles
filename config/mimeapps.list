@@ -39,6 +39,7 @@ image/heic=org.gnome.Loupe.desktop
 image/jxl=org.gnome.Loupe.desktop
 inode/directory=org.gnome.Nautilus.desktop
 text/plain=org.xfce.mousepad.desktop
+application/pdf=org.gnome.Papers.desktop
 
 [Added Associations]
 x-scheme-handler/http=firefox.desktop;
