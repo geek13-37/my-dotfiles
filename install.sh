@@ -266,7 +266,7 @@ fi
 step "Nautilus: \"Open in Terminal\" uses alacritty"
 # From a TTY there is no session bus, and gsettings would silently drop the
 # write - spin up a temporary one so dconf actually saves it
-if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then GSET=(gsettings); else GSET=(dbus-run-session gsettings); fi
+if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then GSET=(gsettings); else GSET=(dbus-run-session gsettings); fi
 "${GSET[@]}" set com.github.stunkymonkey.nautilus-open-any-terminal terminal alacritty 2>/dev/null \
     && echo "Set alacritty as Nautilus terminal" \
     || warn "nautilus-open-any-terminal is not installed - skipped"
@@ -325,10 +325,16 @@ if [ "$SKIP_PACKAGES" -eq 0 ] && command -v systemctl >/dev/null 2>&1; then
     done
 
     if command -v ufw >/dev/null 2>&1; then
-        sudo ufw default deny incoming >/dev/null
-        sudo ufw default allow outgoing >/dev/null
-        sudo ufw allow 53317 comment LocalSend >/dev/null
-        sudo ufw --force enable >/dev/null && echo "ufw enabled (deny incoming, LocalSend port open)"
+        # if -Syu just upgraded the kernel, iptables can't load its modules until
+        # a reboot - don't let that abort the rest of the script
+        if sudo ufw default deny incoming >/dev/null \
+            && sudo ufw default allow outgoing >/dev/null \
+            && sudo ufw allow 53317 comment LocalSend >/dev/null \
+            && sudo ufw --force enable >/dev/null; then
+            echo "ufw enabled (deny incoming, LocalSend port open)"
+        else
+            warn "ufw setup failed (new kernel?) - after reboot rerun: ./install.sh"
+        fi
     fi
 
     step "User groups"
@@ -354,9 +360,10 @@ fi
 
 if command -v fish >/dev/null 2>&1; then
     step "Installing fish plugins (fisher)"
-    fish -c "fisher update" || warn "fisher update failed"
-    # fish_variables is not in git - restore the tide prompt settings
+    # fish_variables is not in git - restore fisher's state and the tide
+    # prompt settings first, or fisher refuses to touch the committed tide files
     fish "$DOTFILES_DIR/config/fish/tide-settings.fish" && echo "Applied tide prompt settings"
+    fish -c "fisher update" || warn "fisher update failed"
 fi
 
 echo

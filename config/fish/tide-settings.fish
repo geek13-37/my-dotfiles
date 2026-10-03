@@ -1,6 +1,13 @@
-# Tide prompt settings (what `tide configure` saved). fish_variables is not
-# in git, so install.sh replays this file after fisher installs tide.
-# After changing the prompt, regenerate the set -U lines with:
+# Tide prompt + fisher state. fish_variables is not in git, so install.sh
+# replays this file before `fisher update`.
+#
+# Fisher: the tide files are committed, and without these two variables fisher
+# thinks they belong to someone else and refuses to install over them.
+set -U _fisher_plugins ilancosman/tide@v6
+set -U _fisher_ilancosman_2F_tide_40_v6_files '~/.config/fish/functions/_tide_1_line_prompt.fish' '~/.config/fish/functions/_tide_2_line_prompt.fish' '~/.config/fish/functions/_tide_cache_variables.fish' '~/.config/fish/functions/_tide_detect_os.fish' '~/.config/fish/functions/_tide_find_and_remove.fish' '~/.config/fish/functions/_tide_fish_colorize.fish' '~/.config/fish/functions/_tide_item_aws.fish' '~/.config/fish/functions/_tide_item_bun.fish' '~/.config/fish/functions/_tide_item_character.fish' '~/.config/fish/functions/_tide_item_cmd_duration.fish' '~/.config/fish/functions/_tide_item_context.fish' '~/.config/fish/functions/_tide_item_crystal.fish' '~/.config/fish/functions/_tide_item_direnv.fish' '~/.config/fish/functions/_tide_item_distrobox.fish' '~/.config/fish/functions/_tide_item_docker.fish' '~/.config/fish/functions/_tide_item_elixir.fish' '~/.config/fish/functions/_tide_item_gcloud.fish' '~/.config/fish/functions/_tide_item_git.fish' '~/.config/fish/functions/_tide_item_go.fish' '~/.config/fish/functions/_tide_item_java.fish' '~/.config/fish/functions/_tide_item_jobs.fish' '~/.config/fish/functions/_tide_item_kubectl.fish' '~/.config/fish/functions/_tide_item_nix_shell.fish' '~/.config/fish/functions/_tide_item_node.fish' '~/.config/fish/functions/_tide_item_os.fish' '~/.config/fish/functions/_tide_item_php.fish' '~/.config/fish/functions/_tide_item_private_mode.fish' '~/.config/fish/functions/_tide_item_pulumi.fish' '~/.config/fish/functions/_tide_item_python.fish' '~/.config/fish/functions/_tide_item_ruby.fish' '~/.config/fish/functions/_tide_item_rustc.fish' '~/.config/fish/functions/_tide_item_shlvl.fish' '~/.config/fish/functions/_tide_item_status.fish' '~/.config/fish/functions/_tide_item_terraform.fish' '~/.config/fish/functions/_tide_item_time.fish' '~/.config/fish/functions/_tide_item_toolbox.fish' '~/.config/fish/functions/_tide_item_vi_mode.fish' '~/.config/fish/functions/_tide_item_zig.fish' '~/.config/fish/functions/_tide_parent_dirs.fish' '~/.config/fish/functions/_tide_print_item.fish' '~/.config/fish/functions/_tide_pwd.fish' '~/.config/fish/functions/_tide_remove_unusable_items.fish' '~/.config/fish/functions/_tide_sub_bug-report.fish' '~/.config/fish/functions/_tide_sub_configure.fish' '~/.config/fish/functions/_tide_sub_reload.fish' '~/.config/fish/functions/fish_mode_prompt.fish' '~/.config/fish/functions/fish_prompt.fish' '~/.config/fish/functions/tide' '~/.config/fish/functions/tide.fish' '~/.config/fish/conf.d/_tide_init.fish' '~/.config/fish/completions/tide.fish'
+
+# Tide settings (what `tide configure` saved). After changing the prompt,
+# regenerate these lines with:
 #   for v in (set -Un | string match 'tide_*'); echo set -U $v (string escape -- $$v); end
 set -U tide_aws_bg_color normal
 set -U tide_aws_color FF9900
