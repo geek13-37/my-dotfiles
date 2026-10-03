@@ -14,7 +14,8 @@ hl.env("XCURSOR_SIZE", "26")
 local nvidia = io.open("/proc/driver/nvidia/version", "r")
 if nvidia then
     nvidia:close()
-    hl.env("LIBVA_DRIVER_NAME", "nvidia")
+    -- nvidia-vaapi-driver is not installed; a dangling LIBVA driver breaks video apps
+    -- hl.env("LIBVA_DRIVER_NAME", "nvidia")
     hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
     hl.env("GBM_BACKEND", "nvidia-drm")
 end

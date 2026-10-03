@@ -112,9 +112,6 @@ cava
 cowsay
 
 # ─── Apps ───
-ghostty
-ghostty-shell-integration
-ghostty-terminfo
 alacritty
 firefox
 telegram-desktop

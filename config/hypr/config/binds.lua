@@ -18,13 +18,13 @@ local function layout(msg)
 end
 
 -- ─── Applications ───
-bind("Return",               exec("ghostty"))
+bind("Return",               exec("alacritty"))
 bind("B",                    exec("firefox"))
 bind("CTRL + Y",             exec("firefox https://youtube.com"))
 bind("CTRL + SHIFT + C",     exec("firefox https://claude.ai"))
 bind("CTRL + G",             exec("firefox https://github.com"))
 bind("CTRL + M",             exec("firefox https://mail.proton.me"))
-bind("E",                    exec("thunar"))
+bind("E",                    exec("nautilus"))
 bind("CTRL + T",             exec("Telegram"))
 bind("CTRL + S",             exec("spotify-launcher"))
 bind("CTRL + D",             exec("discord"))

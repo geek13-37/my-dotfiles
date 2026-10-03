@@ -62,7 +62,7 @@ hl.layer_rule({
 -- keep it smaller than the screen so it reads as a drop-down
 hl.workspace_rule({
     workspace        = "special:term",
-    on_created_empty = "ghostty",
+    on_created_empty = "alacritty",
     gaps_out         = 80,
 })
 

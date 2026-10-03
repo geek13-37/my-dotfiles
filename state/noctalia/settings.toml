@@ -20,7 +20,7 @@ margin_edge = 6
 margin_ends = 14
 padding = 3
 radius = 0
-start = [ "workspaces", "tray", "ram", "cpu", "widget", "status" ]
+start = [ "workspaces", "tray", "ram", "cpu", "status" ]
 thickness = 35
 
 [calendar]
@@ -192,20 +192,20 @@ source = "community"
 wallpaper_scheme = "dysfunctional"
 
     [theme.templates]
-    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "ghostty", "hyprland", "qt", "scroll" ]
+    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "hyprland", "qt", "scroll" ]
     community_ids = [ "claude-code", "discord", "telegram", "gimp", "vscode", "zed", "fastfetch", "obs", "yazi" ]
 
 [wallpaper]
 directory = "/home/geekd/Pictures"
 
     [wallpaper.default]
-    path = "/home/geekd/Pictures/wallhaven-yqk9lk.jpg"
+    path = "/home/geekd/Pictures/wallhaven-o57kk7.png"
 
     [wallpaper.last]
-    path = "/home/geekd/Pictures/wallhaven-yqk9lk.jpg"
+    path = "/home/geekd/Pictures/wallhaven-o57kk7.png"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/geekd/Pictures/wallhaven-yqk9lk.jpg"
+    path = "/home/geekd/Pictures/wallhaven-o57kk7.png"
 
 [widget.active_window]
 enabled = false
@@ -228,6 +228,3 @@ type = "noctalia/wallhaven:wallhaven"
 
 [widget.wallpaper.actions]
 right = "wallpaper-next"
-
-[widget.widget]
-type = "blackbartblues/audio-switcher:widget"

@@ -44,7 +44,7 @@ pacman_install() {
 CONFIGS=(
     hypr
     noctalia
-    ghostty
+    alacritty
     fish
     fastfetch
     mimeapps.list

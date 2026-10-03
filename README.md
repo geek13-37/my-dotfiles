@@ -3,7 +3,7 @@
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/60dc04f1-a33b-46d8-8f3b-622c8cf993a1" />
 
 Моё окружение рабочего стола: Hyprland + noctalia, тема входа SDDM
-(where-is-my-sddm-theme), терминал ghostty, fish, fastfetch, обои - плюс все программы,
+(where-is-my-sddm-theme), терминал alacritty, fish, fastfetch, обои - плюс все программы,
 которые у меня стоят.
 
 ## Установка с нуля
@@ -31,7 +31,7 @@ cd ~/my-dotfiles
   включая раскладку бара и список плагинов (плагины из `[plugins]` Noctalia
   подтягивает сама; `plugins/happ-control` - единственный, что не подтянется
   само, т.к. подключен как локальный путь)
-- `config/ghostty` - терминал
+- `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из Noctalia)
 - `config/fish` - конфиг fish (prompt на tide); `config/fish/cachyos` - копия
   fish-конфига CachyOS (алиасы eza/bat и т.п.), чтобы работало и на чистом Arch
 - `config/fastfetch`, `config/mimeapps.list`
