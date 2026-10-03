@@ -89,6 +89,7 @@ tealdeer
 zoxide
 fastfetch
 btop
+gnome-system-monitor
 glances
 yazi
 micro
@@ -119,6 +120,8 @@ discord
 spotify-launcher
 code
 nautilus
+sushi
+webp-pixbuf-loader
 ffmpegthumbnailer
 libgsf
 libopenraw
@@ -138,7 +141,6 @@ gnome-boxes
 torbrowser-launcher
 steam
 scrcpy
-veracrypt
 pycharm-community-edition
 zaproxy
 nmap

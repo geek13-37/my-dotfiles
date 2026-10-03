@@ -4,3 +4,4 @@ localsend-bin
 ventoy-bin
 hyprmod
 where-is-my-sddm-theme-git
+nautilus-open-any-terminal

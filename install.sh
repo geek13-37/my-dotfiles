@@ -263,6 +263,14 @@ if [ -e "$HOME/Pictures/Powerline.png" ] && [ ! -L "$HOME/Pictures/Powerline.png
 fi
 ln -sfn "$DOTFILES_DIR/wallpapers/Powerline.png" "$HOME/Pictures/Powerline.png"
 
+step "Nautilus: \"Open in Terminal\" uses alacritty"
+# From a TTY there is no session bus, and gsettings would silently drop the
+# write - spin up a temporary one so dconf actually saves it
+if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then GSET=(gsettings); else GSET=(dbus-run-session gsettings); fi
+"${GSET[@]}" set com.github.stunkymonkey.nautilus-open-any-terminal terminal alacritty 2>/dev/null \
+    && echo "Set alacritty as Nautilus terminal" \
+    || warn "nautilus-open-any-terminal is not installed - skipped"
+
 if [ "$HOME" != "/home/geekd" ]; then
     warn "state/noctalia/settings.toml points wallpapers at /home/geekd/Pictures - pick the wallpaper again in Noctalia"
 fi

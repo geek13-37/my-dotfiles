@@ -29,6 +29,8 @@ bind("CTRL + T",             exec("Telegram"))
 bind("CTRL + S",             exec("spotify-launcher"))
 bind("CTRL + D",             exec("discord"))
 bind("CTRL + SHIFT + H",     exec("happ"))
+-- Task manager on the Windows combo (no Mod)
+hl.bind("CTRL + SHIFT + Escape", exec("gnome-system-monitor"))
 
 -- ─── Noctalia ───
 bind("SHIFT + Return",       exec(noct .. "panel-toggle wallpaper"))
