@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# Applies the active Noctalia palette to SDDM (where_is_my_sddm_theme) and Limine.
+# Applies the active Noctalia palette to SDDM (where_is_my_sddm_theme).
 #
-# Noctalia renders ~/.config/noctalia/templates/{sddm,limine}.conf into
+# Noctalia renders ~/.config/noctalia/templates/sddm.conf into
 # ~/.cache/noctalia/boot-theme/ and calls this script through `sudo -n`
 # (see noctalia-boot-theme.sudoers). Because it runs as root without a password,
 # it never copies user-provided text: it only picks known keys and writes
@@ -15,9 +15,6 @@ home=$(getent passwd "$user" | cut -d: -f6)
 src="$home/.cache/noctalia/boot-theme"
 
 SDDM_THEME=/usr/share/sddm/themes/where_is_my_sddm_theme
-LIMINE_CONFS=(/boot/EFI/limine/limine.conf /boot/EFI/BOOT/limine.conf
-              /boot/limine/limine.conf /boot/limine.conf
-              /efi/EFI/limine/limine.conf /efi/EFI/BOOT/limine.conf)
 
 declare -A colour
 
@@ -74,42 +71,4 @@ apply_sddm() {
     echo "sddm: updated $SDDM_THEME/theme.conf.user"
 }
 
-apply_limine() {
-    read_colours "$src/limine.conf"
-    [[ ${#colour[@]} -gt 0 ]] || return 0
-
-    local keys=(backdrop term_background term_foreground term_background_bright
-                term_foreground_bright interface_branding_colour interface_help_colour
-                term_palette term_palette_bright)
-    local block="# >>> noctalia colours (managed by noctalia-boot-theme)"$'\n'
-    local k v
-    for k in "${keys[@]}"; do
-        v=${colour[$k]:-}
-        [[ -n $v ]] || continue
-        # term_background is TTRRGGBB; 00 = opaque
-        [[ $k == term_background ]] && v="00$v"
-        block+="$k: $v"$'\n'
-    done
-    block+="# <<< noctalia colours"
-
-    local conf found=0 key_re
-    key_re="^[[:space:]]*($(IFS='|'; echo "${keys[*]}"|sed 's/colour/colou?r/g'))[[:space:]]*:"
-    for conf in "${LIMINE_CONFS[@]}"; do
-        [[ -f $conf ]] || continue
-        found=1
-        [[ -f $conf.pre-noctalia ]] || cp "$conf" "$conf.pre-noctalia"
-        # drop the previous managed block and any stray copies of our keys,
-        # then put the fresh block at the top (colour options are global)
-        { printf '%s\n' "$block"
-          sed -E -e '/^# >>> noctalia colours/,/^# <<< noctalia colours/d' \
-                 -e "/${key_re}/Id" "$conf"
-        } >"$conf.tmp"
-        cat "$conf.tmp" >"$conf"
-        rm -f "$conf.tmp"
-        echo "limine: updated $conf"
-    done
-    [[ $found == 1 ]] || echo "limine: no limine.conf found, skipped" >&2
-}
-
 apply_sddm
-apply_limine

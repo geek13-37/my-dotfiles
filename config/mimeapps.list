@@ -37,6 +37,7 @@ image/svg+xml-compressed=org.gnome.Loupe.desktop
 image/avif=org.gnome.Loupe.desktop
 image/heic=org.gnome.Loupe.desktop
 image/jxl=org.gnome.Loupe.desktop
+inode/directory=thunar.desktop
 
 [Added Associations]
 x-scheme-handler/http=firefox.desktop;

@@ -207,7 +207,7 @@ if command -v sddm >/dev/null 2>&1 || [ -d /etc/sddm.conf.d ] || pacman -Qi sddm
 
     # Noctalia renders the palette into ~/.cache/noctalia/boot-theme/ and its
     # post_hook runs this root helper (passwordless, this one script only) to
-    # recolour SDDM and Limine. The helper only writes validated hex colours.
+    # recolour SDDM. The helper only writes validated hex colours.
     sudo install -m755 "$DOTFILES_DIR/config/sddm/noctalia-boot-theme" /usr/local/bin/noctalia-boot-theme
     SUDOERS_TMP="$(mktemp)"
     echo "$USER ALL=(root) NOPASSWD: /usr/local/bin/noctalia-boot-theme" >"$SUDOERS_TMP"

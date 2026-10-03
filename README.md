@@ -37,8 +37,8 @@ cd ~/my-dotfiles
 - `config/fastfetch`, `config/mimeapps.list`
 - `config/sddm/theme.conf` - выбор темы входа SDDM (where-is-my-sddm-theme,
   ставится из AUR)
-- `config/noctalia/templates/{sddm,limine}.conf` + `config/sddm/noctalia-boot-theme` -
-  цвета SDDM и загрузчика Limine берутся из текущей палитры Noctalia и
+- `config/noctalia/templates/sddm.conf` + `config/sddm/noctalia-boot-theme` -
+  цвета SDDM берутся из текущей палитры Noctalia и
   обновляются сами при её смене (скрипт ставится в `/usr/local/bin` и
   запускается из Noctalia через sudo без пароля - только он, см. install.sh)
 - `wallpapers/` - обои
