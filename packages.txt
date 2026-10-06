@@ -51,9 +51,8 @@ networkmanager-openvpn
 bluez
 bluez-utils
 bluez-obex
-avahi
-nss-mdns
 ufw
+opensnitch
 openssh
 bind
 inetutils

@@ -1,0 +1,43 @@
+{
+    "policies": {
+        "DisableTelemetry": true,
+        "DisableFirefoxStudies": true,
+        "DisablePocket": true,
+        "DisableFeedbackCommands": true,
+        "DontCheckDefaultBrowser": true,
+        "NetworkPrediction": false,
+        "HttpsOnlyMode": "enabled",
+        "EnableTrackingProtection": {
+            "Value": true,
+            "Cryptomining": true,
+            "Fingerprinting": true,
+            "EmailTracking": true
+        },
+        "DNSOverHTTPS": {
+            "Enabled": true,
+            "ProviderURL": "https://dns.quad9.net/dns-query",
+            "Fallback": true
+        },
+        "FirefoxHome": {
+            "SponsoredTopSites": false,
+            "SponsoredPocket": false,
+            "Pocket": false
+        },
+        "FirefoxSuggest": {
+            "SponsoredSuggestions": false,
+            "ImproveSuggest": false
+        },
+        "UserMessaging": {
+            "ExtensionRecommendations": false,
+            "FeatureRecommendations": false,
+            "MoreFromMozilla": false,
+            "SkipOnboarding": true
+        },
+        "Preferences": {
+            "datareporting.policy.dataSubmissionEnabled": { "Value": false, "Status": "locked" },
+            "dom.private-attribution.submission.enabled": { "Value": false, "Status": "locked" },
+            "browser.newtabpage.activity-stream.showSponsored": { "Value": false, "Status": "locked" },
+            "browser.newtabpage.activity-stream.showSponsoredTopSites": { "Value": false, "Status": "locked" }
+        }
+    }
+}

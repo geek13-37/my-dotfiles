@@ -230,6 +230,41 @@ else
     step "sddm not installed, skipping theme setup"
 fi
 
+step "Privacy: NetworkManager, Firefox, Docker"
+
+# Copied, not linked: root reads these, and they shouldn't change just
+# because a file in ~ did
+sudo install -Dm644 "$DOTFILES_DIR/config/networkmanager/00-privacy.conf" \
+    /etc/NetworkManager/conf.d/00-privacy.conf
+echo "Installed NetworkManager privacy defaults (stable fake MAC, no hostname in DHCP)"
+
+sudo install -Dm644 "$DOTFILES_DIR/config/firefox/policies.json" /etc/firefox/policies/policies.json
+echo "Installed Firefox policies (no telemetry/studies/sponsored, DoH via Quad9)"
+
+# Docker publishes ports (-p 8080:80) straight through iptables, past ufw -
+# bind them to localhost unless an address is given (-p 0.0.0.0:8080:80)
+if command -v docker >/dev/null 2>&1; then
+    DOCKER_CONF=/etc/docker/daemon.json
+    DOCKER_TMP="$(mktemp)"
+    { sudo cat "$DOCKER_CONF" 2>/dev/null || echo '{}'; } | jq '. + {"ip": "127.0.0.1"}' >"$DOCKER_TMP"
+    sudo install -Dm644 "$DOCKER_TMP" "$DOCKER_CONF"
+    rm -f "$DOCKER_TMP"
+    echo "Docker publishes ports on 127.0.0.1 only (applies on next docker start)"
+fi
+
+# LocalSend's port is only open while LocalSend runs (bin/localsend). The
+# helper runs as root without a password, so it's copied to a root-owned path
+sudo install -m755 "$DOTFILES_DIR/config/localsend/localsend-port" /usr/local/bin/localsend-port
+SUDOERS_TMP="$(mktemp)"
+echo "$USER ALL=(root) NOPASSWD: /usr/local/bin/localsend-port open, /usr/local/bin/localsend-port close" >"$SUDOERS_TMP"
+if sudo visudo -cf "$SUDOERS_TMP" >/dev/null; then
+    sudo install -m440 "$SUDOERS_TMP" /etc/sudoers.d/localsend-port
+    echo "Installed localsend-port helper and sudoers rule"
+else
+    warn "sudoers rule for localsend-port failed validation, skipped"
+fi
+rm -f "$SUDOERS_TMP"
+
 step "Linking noctalia state (bar layout, enabled plugins)"
 
 STATE_DIR="$HOME/.local/state"
@@ -261,6 +296,13 @@ if [ -f /usr/share/applications/spotify-launcher.desktop ]; then
     sed "s|^Exec=spotify-launcher|Exec=$HOME/.local/bin/spotify|" \
         /usr/share/applications/spotify-launcher.desktop \
         > "$HOME/.local/share/applications/spotify-launcher.desktop"
+fi
+
+# Same for LocalSend: bin/localsend opens its port only while it runs
+if [ -f /usr/share/applications/localsend.desktop ]; then
+    sed "s|^Exec=localsend|Exec=$HOME/.local/bin/localsend|" \
+        /usr/share/applications/localsend.desktop \
+        > "$HOME/.local/share/applications/localsend.desktop"
 fi
 
 step "Nautilus: \"Open in Terminal\" uses alacritty"
@@ -319,19 +361,29 @@ if [ "$SKIP_PACKAGES" -eq 0 ] && command -v systemctl >/dev/null 2>&1; then
         fi
     }
     for unit in NetworkManager.service bluetooth.service sddm.service docker.service \
-                ufw.service avahi-daemon.service power-profiles-daemon.service \
+                ufw.service power-profiles-daemon.service opensnitchd.service \
                 systemd-timesyncd.service fstrim.timer happd.service; do
         enable_unit "$unit"
     done
 
+    # mDNS announces the hostname and services to the whole LAN - nothing here
+    # needs it, keep it off even if some package pulls avahi in
+    for unit in avahi-daemon.service avahi-daemon.socket; do
+        if systemctl is-enabled "$unit" >/dev/null 2>&1; then
+            sudo systemctl disable --now "$unit" >/dev/null 2>&1 && echo "Disabled $unit"
+        fi
+    done
+
     if command -v ufw >/dev/null 2>&1; then
         # if -Syu just upgraded the kernel, iptables can't load its modules until
-        # a reboot - don't let that abort the rest of the script
+        # a reboot - don't let that abort the rest of the script.
+        # The LocalSend port is not opened here (see bin/localsend); the delete
+        # drops the permanent rule older versions of this script added
         if sudo ufw default deny incoming >/dev/null \
             && sudo ufw default allow outgoing >/dev/null \
-            && sudo ufw allow 53317 comment LocalSend >/dev/null \
+            && { sudo ufw delete allow 53317 >/dev/null 2>&1 || true; } \
             && sudo ufw --force enable >/dev/null; then
-            echo "ufw enabled (deny incoming, LocalSend port open)"
+            echo "ufw enabled (deny incoming)"
         else
             warn "ufw setup failed (new kernel?) - after reboot rerun: ./install.sh"
         fi

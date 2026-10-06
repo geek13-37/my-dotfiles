@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# LocalSend with its firewall port open only while it runs.
+# Outside of that nothing listens on 53317, so on public Wi-Fi the machine
+# doesn't show up to LocalSend discovery or port scans.
+
+HELPER=/usr/local/bin/localsend-port
+
+# already running (tray) - just hand over to it, the port is open already.
+# The comm of this wrapper is "localsend" too, so skip our own PID
+if pgrep -x localsend | grep -qvx "$$"; then
+    exec /usr/bin/localsend "$@"
+fi
+
+sudo -n "$HELPER" open || notify-send LocalSend "Could not open port 53317 (rerun install.sh)"
+/usr/bin/localsend "$@"
+sudo -n "$HELPER" close

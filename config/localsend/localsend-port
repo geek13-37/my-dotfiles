@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Opens / closes LocalSend's port (53317, tcp+udp) in ufw.
+#
+# bin/localsend calls this through `sudo -n` (sudoers rule from install.sh),
+# so it runs as root without a password - that's why it accepts nothing but
+# open|close and never takes a port or rule from the caller.
+
+set -euo pipefail
+
+case "${1:-}" in
+    open)  ufw allow 53317 comment LocalSend >/dev/null ;;
+    close) ufw delete allow 53317 >/dev/null 2>&1 || true ;;
+    *)     echo "usage: localsend-port open|close" >&2; exit 1 ;;
+esac

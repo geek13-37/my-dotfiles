@@ -42,5 +42,18 @@ cd ~/my-dotfiles
   цвета SDDM берутся из текущей палитры Noctalia и
   обновляются сами при её смене (скрипт ставится в `/usr/local/bin` и
   запускается из Noctalia через sudo без пароля - только он, см. install.sh)
+- Приватность:
+  - `config/networkmanager/00-privacy.conf` -> `/etc/NetworkManager/conf.d/`:
+    свой фейковый MAC для каждой сети, hostname не уходит по DHCP, временные
+    IPv6-адреса
+  - `config/firefox/policies.json` -> `/etc/firefox/policies/`: без телеметрии,
+    Studies и спонсорского контента, HTTPS-only, DNS-over-HTTPS через Quad9
+  - Docker публикует порты только на `127.0.0.1` (иначе `-p` обходит ufw;
+    наружу - явно `-p 0.0.0.0:8080:80`)
+  - `bin/localsend` - порт LocalSend (53317) открыт в ufw только пока
+    LocalSend запущен (через `/usr/local/bin/localsend-port`, sudo без пароля
+    только для `open`/`close`)
+  - avahi (mDNS) не ставится и выключается; OpenSnitch спрашивает, каким
+    программам можно в сеть
 - Telegram, Happ, Spotify - только ставятся пакетом, их личные конфиги в
   репозиторий не попадают

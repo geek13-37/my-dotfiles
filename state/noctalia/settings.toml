@@ -8,7 +8,6 @@ blur_intensity = 0.99999997764825821
 tint_intensity = 0.069999998435378075
 
 [bar.default]
-background_opacity = 0.79999998211860657
 border = "on_surface_variant"
 capsule = true
 capsule_opacity = 0.0
@@ -173,6 +172,9 @@ popup_borders = false
 
     [shell.screen_corners]
     size = 1
+
+    [shell.screenshot]
+    save_to_file = false
 
     [shell.shadow]
     alpha = 0.099999997764825821
