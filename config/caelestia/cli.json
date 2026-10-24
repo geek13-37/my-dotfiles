@@ -1,16 +1,17 @@
 {
   "theme": {
     "enableTerm": false,
-    "enableHypr": false,
+    "enableHypr": true,
     "enableDiscord": false,
     "enableSpicetify": false,
     "enablePandora": false,
     "enableFuzzel": true,
-    "enableBtop": false,
+    "enableBtop": true,
     "enableNvtop": false,
     "enableHtop": false,
-    "enableGtk": false,
+    "enableGtk": true,
     "enableQt": false,
-    "enableWarp": false
+    "enableWarp": false,
+    "iconTheme": "Adwaita"
   }
 }

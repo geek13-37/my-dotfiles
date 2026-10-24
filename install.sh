@@ -278,6 +278,12 @@ else
     warn "caelestia-cli is not installed - rerun: yay -S caelestia-shell"
 fi
 
+# btop picks up the theme caelestia-cli writes (cli.json: theme.enableBtop)
+if [ ! -f "$CONFIG_DIR/btop/btop.conf" ]; then
+    mkdir -p "$CONFIG_DIR/btop"
+    echo 'color_theme = "caelestia"' > "$CONFIG_DIR/btop/btop.conf"
+fi
+
 step "Linking scripts into ~/.local/bin"
 mkdir -p "$HOME/.local/bin"
 for script in "$DOTFILES_DIR"/bin/*; do
@@ -332,6 +338,13 @@ if command -v spicetify >/dev/null 2>&1; then
         git clone -q --depth 1 https://github.com/Comfy-Themes/Spicetify "$COMFY_SRC" \
             && mkdir -p "$(dirname "$COMFY")" && cp -r "$COMFY_SRC/Comfy" "$COMFY"
         rm -rf "$COMFY_SRC"
+    fi
+    # Comfy's colours come from the Caelestia scheme (rendered from
+    # config/caelestia/templates/spicetify-comfy.ini; bin/spotify refreshes them)
+    COMFY_COLOURS="$HOME/.local/state/caelestia/theme/spicetify-comfy.ini"
+    if [ -f "$COMFY_COLOURS" ] && [ -d "$COMFY" ]; then
+        ln -sfn "$COMFY_COLOURS" "$COMFY/color.ini"
+        echo "Comfy colours linked to the Caelestia scheme"
     fi
     spicetify config current_theme Comfy color_scheme Comfy inject_css 1 replace_colors 1 \
         overwrite_assets 1 inject_theme_js 1 >/dev/null

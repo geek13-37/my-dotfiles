@@ -1,11 +1,74 @@
 {
     "appearance": {
         "transparency": {
-            "enabled": true
+            "enabled": false
         }
     },
-    "background": {
-        "enabled": true,
-        "wallpaperEnabled": true
+    "bar": {
+        "activeWindow": {
+            "compact": true,
+            "inverted": false,
+            "showOnHover": false
+        },
+        "clock": {
+            "background": true,
+            "showIcon": false,
+            "showSeconds": false
+        },
+        "persistent": true,
+        "popouts": {
+            "activeWindow": false,
+            "statusIcons": true,
+            "tray": true
+        },
+        "scrollActions": {
+            "brightness": false,
+            "volume": false,
+            "workspaces": true
+        },
+        "showOnHover": true,
+        "statusIcons": [
+            {
+                "enabled": true,
+                "id": "audio"
+            },
+            {
+                "enabled": true,
+                "id": "microphone"
+            },
+            {
+                "enabled": false,
+                "id": "kbLayout"
+            }
+        ],
+        "tray": {
+            "background": true,
+            "compact": true,
+            "recolour": false
+        },
+        "workspaces": {
+            "activeTrail": true,
+            "maxWindowIcons": 5,
+            "occupiedBg": true,
+            "perMonitor": true,
+            "showUnoccupied": true,
+            "showWindows": true,
+            "shown": 7
+        }
+    },
+    "dashboard": {
+        "dragThreshold": 40,
+        "performance": {
+            "showNetwork": true
+        },
+        "showWeather": true
+    },
+    "launcher": {
+        "useFuzzy": {
+            "wallpapers": false
+        }
+    },
+    "sidebar": {
+        "enabled": true
     }
 }

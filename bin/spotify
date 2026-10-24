@@ -7,6 +7,15 @@
 
 APPS="$HOME/.local/share/spotify-launcher/install/usr/share/spotify/Apps"
 PREFS="$HOME/.config/spotify/prefs"
+COLOURS="$HOME/.config/spicetify/Themes/Comfy/color.ini"
+COLOURS_STAMP="$HOME/.cache/spicetify-colours.stamp"
+
+# Comfy's color.ini is rendered by Caelestia (config/caelestia/templates) on
+# every scheme change - push new colours into the patched install before start
+if command -v spicetify >/dev/null 2>&1 && [ -d "$APPS/xpui" ] && [ -e "$COLOURS" ] \
+    && [ "$COLOURS" -nt "$COLOURS_STAMP" ] && ! pgrep -x spotify >/dev/null; then
+    spicetify -q -n refresh && mkdir -p "$(dirname "$COLOURS_STAMP")" && touch "$COLOURS_STAMP"
+fi
 
 spotify-launcher "$@" &
 

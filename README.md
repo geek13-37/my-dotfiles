@@ -29,10 +29,13 @@ cd ~/my-dotfiles
 - `config/hypr` - Hyprland (Lua-конфиг, раскладка dwindle)
 - `config/caelestia` - шелл [Caelestia](https://github.com/caelestia-dots/shell)
   (ставится из AUR `caelestia-shell`): `shell.json` - настройки шелла (то, что
-  меняешь в Nexus, Super+Shift+, сохраняется сюда же), `cli.json` - Caelestia
-  перекрашивает под обои только себя и fuzzel, терминалы/GTK/Qt/Spicetify/Discord
-  не трогает. Обои в репозиторий не входят: install.sh берёт первую картинку из
+  меняешь в Nexus, Super+Shift+, сохраняется сюда же), `cli.json` - что
+  Caelestia перекрашивает сам (иконки остаются Adwaita). Обои в репозиторий не входят: install.sh берёт первую картинку из
   `~/Pictures`, сменить - в лаунчере `>wallpaper`
+- Цвета везде из схемы Caelestia и меняются вместе с обоями: рамки окон
+  Hyprland (`config/hypr/caelestia.lua`), GTK, btop, fuzzel, а по шаблонам из
+  `config/caelestia/templates/` - alacritty, fastfetch и тема Comfy в Spotify
+  (`bin/spotify` подтягивает новые цвета при запуске)
 - Бинды шелла (`config/hypr/config/binds.lua`): Super+Ctrl+Enter - лаунчер
   (`>calc`, `>wallpaper`), Super+S - дашборд, Super+N - уведомления,
   Super+Shift+Q - выключение, Super+V - буфер обмена, Super+; - эмодзи,

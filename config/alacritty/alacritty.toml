@@ -1,6 +1,8 @@
 [general]
 import = [
-    "~/.config/alacritty/themes/noctalia.toml"
+    # static fallback, overridden by the Caelestia scheme once it is rendered
+    "~/.config/alacritty/themes/noctalia.toml",
+    "~/.local/state/caelestia/theme/alacritty.toml",
 ]
 
 [font]

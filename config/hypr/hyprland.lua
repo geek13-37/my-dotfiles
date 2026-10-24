@@ -13,5 +13,5 @@ require("config.autostart")
 -- HyprMod managed settings
 require("hyprland-gui")
 
--- For Noctalia Color templates
-require("noctalia").apply_theme()
+-- Border colours from the Caelestia scheme
+require("caelestia").apply_theme()

@@ -1,0 +1,14 @@
+--logo-color-1
+#{{ primary.hex }}
+--logo-color-2
+#{{ tertiary.hex }}
+--color-keys
+#{{ primary.hex }}
+--color-title
+#{{ tertiary.hex }}
+--percent-color-green
+#{{ term2.hex }}
+--percent-color-yellow
+#{{ term3.hex }}
+--percent-color-red
+#{{ error.hex }}
