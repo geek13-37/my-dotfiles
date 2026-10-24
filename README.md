@@ -2,7 +2,7 @@
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/60dc04f1-a33b-46d8-8f3b-622c8cf993a1" />
 
-Моё окружение рабочего стола: Hyprland + noctalia, тема входа SDDM
+Моё окружение рабочего стола: Hyprland + Caelestia, тема входа SDDM
 (where-is-my-sddm-theme), терминал alacritty, fish, fastfetch, обои - плюс все программы,
 которые у меня стоят.
 
@@ -27,21 +27,26 @@ cd ~/my-dotfiles
 ## Что внутри
 
 - `config/hypr` - Hyprland (Lua-конфиг, раскладка dwindle)
-- `config/noctalia` + `state/noctalia/settings.toml` - настройки Noctalia,
-  включая раскладку бара и список плагинов (плагины из `[plugins]` Noctalia
-  подтягивает сама)
-- `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из Noctalia)
+- `config/caelestia` - шелл [Caelestia](https://github.com/caelestia-dots/shell)
+  (ставится из AUR `caelestia-shell`): `shell.json` - настройки шелла (то, что
+  меняешь в Nexus, Super+Shift+, сохраняется сюда же), `cli.json` - Caelestia
+  перекрашивает под обои только себя и fuzzel, терминалы/GTK/Qt/Spicetify/Discord
+  не трогает. Обои в репозиторий не входят: install.sh берёт первую картинку из
+  `~/Pictures`, сменить - в лаунчере `>wallpaper`
+- Бинды шелла (`config/hypr/config/binds.lua`): Super+Ctrl+Enter - лаунчер
+  (`>calc`, `>wallpaper`), Super+S - дашборд, Super+N - уведомления,
+  Super+Shift+Q - выключение, Super+V - буфер обмена, Super+; - эмодзи,
+  Alt+L - блокировка, Super+Shift+S - скриншот области
+- `config/noctalia` + `state/noctalia/settings.toml` - старые настройки Noctalia,
+  больше не ставятся (оставлены на случай отката)
+- `config/alacritty` - терминал (JetBrainsMono Nerd Font)
 - `config/fish` - конфиг fish (prompt на tide); `config/fish/cachyos` - копия
   fish-конфига CachyOS (алиасы eza/bat и т.п.), чтобы работало и на чистом Arch
 - `config/fastfetch`, `config/mimeapps.list`
 - `bin/spotify` - запуск Spotify (бинд Ctrl+S и лаунчер): после обновления
-  Spotify сам заново накатывает Spicetify с темой Comfy в цветах Noctalia
+  Spotify сам заново накатывает Spicetify с темой Comfy
 - `config/sddm/theme.conf` - выбор темы входа SDDM (where-is-my-sddm-theme,
   ставится из AUR)
-- `config/noctalia/templates/sddm.conf` + `config/sddm/noctalia-boot-theme` -
-  цвета SDDM берутся из текущей палитры Noctalia и
-  обновляются сами при её смене (скрипт ставится в `/usr/local/bin` и
-  запускается из Noctalia через sudo без пароля - только он, см. install.sh)
 - Приватность:
   - `config/networkmanager/00-privacy.conf` -> `/etc/NetworkManager/conf.d/`:
     свой фейковый MAC для каждой сети, hostname не уходит по DHCP, временные

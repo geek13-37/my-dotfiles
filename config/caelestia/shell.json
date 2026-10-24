@@ -1,0 +1,11 @@
+{
+    "appearance": {
+        "transparency": {
+            "enabled": true
+        }
+    },
+    "background": {
+        "enabled": true,
+        "wallpaperEnabled": true
+    }
+}

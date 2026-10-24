@@ -28,11 +28,11 @@ hl.config({
 
     decoration = {
         -- window corner radius
-        rounding = 0,
+        rounding = 8,
 
         -- slight transparency so the blur behind windows shows through
-        active_opacity     = 0.95,
-        inactive_opacity   = 0.90,
+        active_opacity     = 0.85,
+        inactive_opacity   = 0.80,
         fullscreen_opacity = 1.0,
 
         shadow = {

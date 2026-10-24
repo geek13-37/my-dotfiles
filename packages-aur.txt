@@ -1,4 +1,6 @@
 # AUR packages, installed with yay (install.sh bootstraps yay itself).
+# Shell: pulls in caelestia-cli and quickshell-git (conflicts with repo quickshell)
+caelestia-shell
 happ-desktop-bin
 localsend-bin
 ventoy-bin

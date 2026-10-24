@@ -3,7 +3,7 @@
 -- so they work the same with the Russian layout active.
 
 local mod  = "SUPER"
-local noct = "noctalia msg "
+local cae  = "caelestia shell "
 
 local function bind(keys, action, flags)
     hl.bind(mod .. " + " .. keys, action, flags)
@@ -32,29 +32,29 @@ bind("CTRL + SHIFT + H",     exec("happ"))
 -- Task manager on the Windows combo (no Mod)
 hl.bind("CTRL + SHIFT + Escape", exec("gnome-system-monitor"))
 
--- ─── Noctalia ───
-bind("SHIFT + Return",       exec(noct .. "panel-toggle wallpaper"))
-bind("S",                    exec(noct .. "panel-toggle control-center"))
-bind("CTRL + Return",        exec(noct .. "panel-toggle launcher"))
-bind("ALT + L",              exec(noct .. "session lock"))
-bind("SHIFT + Q",            exec(noct .. "panel-toggle session"))
-bind("V",                    exec(noct .. "panel-toggle clipboard"))
-bind("semicolon",            exec(noct .. "panel-toggle launcher /emo"))
-bind("Z",                    exec(noct .. "panel-toggle yuuto/calculator:panel"))
--- Window overview: Noctalia's window switcher
-bind("O",                    exec(noct .. "window-switcher"))
+-- ─── Caelestia ───
+bind("SHIFT + Return",       exec(cae .. "drawers toggle launcher"))   -- type ">wallpaper" for the picker
+bind("S",                    exec(cae .. "drawers toggle dashboard"))
+bind("CTRL + Return",        exec(cae .. "drawers toggle launcher"))
+bind("ALT + L",              exec(cae .. "lock lock"))
+bind("SHIFT + Q",            exec(cae .. "drawers toggle session"))
+bind("V",                    exec("caelestia clipboard"))
+bind("semicolon",            exec("caelestia emoji -p"))
+bind("Z",                    exec(cae .. "drawers toggle launcher"))   -- type ">calc"
+bind("N",                    exec(cae .. "drawers toggle sidebar"))
+bind("SHIFT + comma",        exec(cae .. "nexus open"))
 
 -- ─── Media / brightness (work on the lock screen too) ───
-hl.bind("XF86AudioRaiseVolume",  exec(noct .. "volume-up"),       { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume",  exec(noct .. "volume-down"),     { locked = true, repeating = true })
-hl.bind("XF86AudioMute",         exec(noct .. "volume-mute"),     { locked = true })
-hl.bind("XF86AudioMicMute",      exec(noct .. "mic-mute"),        { locked = true })
-hl.bind("XF86AudioNext",         exec(noct .. "media next"),      { locked = true })
-hl.bind("XF86AudioPrev",         exec(noct .. "media previous"),  { locked = true })
-hl.bind("XF86AudioPlay",         exec(noct .. "media play"),      { locked = true })
-hl.bind("XF86AudioPause",        exec(noct .. "media stop"),      { locked = true })
-hl.bind("XF86MonBrightnessUp",   exec(noct .. "brightness-up"),   { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", exec(noct .. "brightness-down"), { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume",  exec("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume",  exec("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
+hl.bind("XF86AudioMute",         exec("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true })
+hl.bind("XF86AudioMicMute",      exec("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true })
+hl.bind("XF86AudioNext",         exec(cae .. "mpris next"),      { locked = true })
+hl.bind("XF86AudioPrev",         exec(cae .. "mpris previous"),  { locked = true })
+hl.bind("XF86AudioPlay",         exec(cae .. "mpris playPause"), { locked = true })
+hl.bind("XF86AudioPause",        exec(cae .. "mpris pause"),     { locked = true })
+hl.bind("XF86MonBrightnessUp",   exec("brightnessctl set 5%+"),  { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", exec("brightnessctl set 5%-"),  { locked = true, repeating = true })
 
 -- ─── Window focus / movement ───
 bind("Q",                    hl.dsp.window.close())
@@ -160,8 +160,8 @@ bind("ALT + mouse_down",     function() set_zoom(zoom / 1.25) end)
 bind("ALT + 0",              function() set_zoom(1.0) end)
 
 -- ─── Screenshots (to clipboard) ───
-bind("SHIFT + S",            exec(noct .. "screenshot-region"))
-hl.bind("CTRL + SHIFT + 2",  exec(noct .. "screenshot-fullscreen"))
+bind("SHIFT + S",            exec(cae .. "picker openFreezeClip"))
+hl.bind("CTRL + SHIFT + 2",  exec("caelestia screenshot"))
 hl.bind("CTRL + SHIFT + 3",  exec([[grim -g "$(hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')" - | wl-copy -t image/png]]))
 
 -- Color picker: click anywhere, the hex goes to the clipboard
@@ -178,4 +178,4 @@ end)
 
 -- ─── Exit / power ───
 hl.bind("CTRL + ALT + Delete", exec("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
-bind("SHIFT + P",            exec(noct .. "dpms-off"))
+bind("SHIFT + P",            hl.dsp.dpms({ action = "off" }))

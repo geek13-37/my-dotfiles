@@ -8,13 +8,14 @@ blur_intensity = 0.99999997764825821
 tint_intensity = 0.069999998435378075
 
 [bar.default]
+background_opacity = 0.79999998211860657
 border = "on_surface_variant"
 capsule = true
 capsule_opacity = 0.0
 capsule_padding = 8.0
 capsule_radius = 0
 capsule_thickness = 0.69999998807907104
-end = [ "mini-docker", "privacy", "wallpaper", "wallhaven", "clipboard", "volume", "brightness", "session" ]
+end = [ "mini-docker", "privacy", "wallpaper", "clipboard", "volume", "brightness", "session" ]
 margin_edge = 6
 margin_ends = 14
 padding = 3
@@ -27,10 +28,10 @@ enabled = true
 
 [desktop_widgets]
 schema_version = 2
-widget_order = [ "desktop-widget-0000000000000001", "desktop-widget-0000000000000002" ]
+widget_order = [ "desktop-widget-0000000000000001" ]
 
     [desktop_widgets.grid]
-    cell_size = 16
+    cell_size = 8
     major_interval = 4
     visible = true
 
@@ -46,23 +47,16 @@ widget_order = [ "desktop-widget-0000000000000001", "desktop-widget-000000000000
     type = "audio_visualizer"
 
         [desktop_widgets.widget.desktop-widget-0000000000000001.settings]
-        bands = 32
+        background_radius = 0
+        bands = 4
         show_when_idle = true
-
-    [desktop_widgets.widget.desktop-widget-0000000000000002]
-    box_height = 128.0
-    box_width = 256.0
-    cx = 142.0
-    cy = 252.0
-    output = "HDMI-A-1"
-    placement_height = 1080.0
-    placement_width = 1920.0
-    rotation = 0.0
-    type = "clock"
 
 [dock]
 radius = 0
 smart_auto_hide = true
+
+[hot_corners]
+enabled = true
 
 [location]
 address = "Severodvinsk"
@@ -181,9 +175,10 @@ popup_borders = false
     direction = "up"
 
 [theme]
-builtin = "Kanagawa"
-community_palette = "Atuel"
-source = "community"
+builtin = "Catppuccin"
+community_palette = "Ayu Blue"
+mode = "dark"
+source = "builtin"
 wallpaper_scheme = "dysfunctional"
 
     [theme.templates]
@@ -191,16 +186,16 @@ wallpaper_scheme = "dysfunctional"
     community_ids = [ "spicetify", "claude-code", "discord", "telegram", "gimp", "vscode", "zed", "fastfetch", "obs", "yazi" ]
 
 [wallpaper]
-directory = "/home/geekd/Pictures"
+directory = "/home/g33k/Pictures"
 
     [wallpaper.default]
-    path = "/home/geekd/Pictures/wallhaven-o57kk7.png"
+    path = "/home/g33k/Pictures/12259305(1).png"
 
     [wallpaper.last]
-    path = "/home/geekd/Pictures/wallhaven-o57kk7.png"
+    path = "/home/g33k/Pictures/12259305(1).png"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/geekd/Pictures/wallhaven-o57kk7.png"
+    path = "/home/g33k/Pictures/12259305(1).png"
 
 [widget.active_window]
 enabled = false
@@ -214,9 +209,6 @@ type = "8bury/mini-docker:mini-docker"
 [widget.tray]
 drawer = true
 match_adjacent_spacing = true
-
-[widget.wallhaven]
-type = "noctalia/wallhaven:wallhaven"
 
 [widget.wallpaper.actions]
 right = "wallpaper-next"

@@ -1,0 +1,213 @@
+config_version = 14
+
+[audio]
+enable_sounds = true
+
+[backdrop]
+blur_intensity = 0.99999997764825821
+tint_intensity = 0.069999998435378075
+
+[bar.default]
+background_opacity = 0.89999997988343239
+border = "on_surface_variant"
+capsule = true
+capsule_opacity = 0.0
+capsule_padding = 8.0
+capsule_radius = 0
+capsule_thickness = 0.69999998807907104
+end = [ "mini-docker", "privacy", "wallpaper", "clipboard", "volume", "brightness", "session" ]
+margin_edge = 6
+margin_ends = 14
+padding = 3
+radius = 0
+start = [ "workspaces", "tray", "ram", "cpu" ]
+thickness = 35
+
+[calendar]
+enabled = true
+
+[desktop_widgets]
+schema_version = 2
+widget_order = [ "desktop-widget-0000000000000001" ]
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget.desktop-widget-0000000000000001]
+    box_height = 0.0
+    box_width = 0.0
+    cx = 144.0
+    cy = 118.0
+    output = "HDMI-A-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "audio_visualizer"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000001.settings]
+        bands = 32
+        show_when_idle = true
+
+[dock]
+radius = 0
+smart_auto_hide = true
+
+[hot_corners]
+enabled = true
+
+[location]
+address = "Severodvinsk"
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [ "lockscreen-login-box@winit", "lockscreen-login-box@HDMI-A-1" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 960.0
+    cy = 898.0
+    output = "HDMI-A-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@winit"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 472.50003051757812
+    cy = 854.32830810546875
+    output = "winit"
+    placement_height = 1060.0
+    placement_width = 945.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@winit".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+[plugins]
+auto_update = "official"
+enabled = [
+    "noctalia/notes",
+    "noctalia/wallhaven",
+    "yocraft/desktop-launcher",
+    "blackbartblues/audio-switcher",
+    "nightwatch75/file-search",
+    "8bury/mini-docker",
+    "yuuto/calculator",
+    "yuuto/arch-updater",
+    "jrohland/claudecode",
+    "3ri4ng0ld/ip-monitor"
+]
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/official-plugins"
+    name = "official"
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/community-plugins"
+    name = "community"
+
+[shell]
+button_borders = false
+corner_radius_scale = 0.0
+font_family = "JetBrainsMono NF"
+input_borders = false
+niri_overview_type_to_launch_enabled = true
+popup_borders = false
+
+    [shell.launcher]
+    show_app_origin_indicator = false
+
+    [shell.panel]
+    transparency_mode = "soft"
+
+    [shell.screen_corners]
+    size = 1
+
+    [shell.screenshot]
+    save_to_file = false
+
+    [shell.shadow]
+    alpha = 0.099999997764825821
+    direction = "up"
+
+[theme]
+builtin = "Tokyo-Night"
+community_palette = "ADW"
+mode = "dark"
+source = "community"
+wallpaper_scheme = "dysfunctional"
+
+    [theme.templates]
+    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "hyprland", "qt", "scroll" ]
+    community_ids = [ "spicetify", "claude-code", "discord", "telegram", "gimp", "vscode", "zed", "fastfetch", "obs", "yazi" ]
+
+[wallpaper]
+directory = "/home/g33k/Pictures"
+
+    [wallpaper.default]
+    path = "/home/g33k/Pictures/farzad-mohsenvand-TbuescuqMjA-unsplash.jpg"
+
+    [wallpaper.last]
+    path = "/home/g33k/Pictures/farzad-mohsenvand-TbuescuqMjA-unsplash.jpg"
+
+    [wallpaper.monitors.HDMI-A-1]
+    path = "/home/g33k/Pictures/farzad-mohsenvand-TbuescuqMjA-unsplash.jpg"
+
+[widget.active_window]
+enabled = false
+
+[widget.clipboard]
+enabled = false
+
+[widget.mini-docker]
+type = "8bury/mini-docker:mini-docker"
+
+[widget.tray]
+drawer = true
+match_adjacent_spacing = true
+
+[widget.wallpaper.actions]
+right = "wallpaper-next"
