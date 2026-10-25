@@ -2,17 +2,16 @@
 # pacman --needed. Kernel, bootloader and GPU drivers are NOT listed here:
 # archinstall sets up the first two, install.sh detects the GPU itself.
 
-# ─── Desktop: Hyprland + Caelestia (caelestia-shell itself is in packages-aur.txt) ───
+# ─── Desktop: Hyprland + Noctalia ───
 hyprland
+noctalia
 xdg-desktop-portal-hyprland
 xdg-desktop-portal-gtk
 hyprpolkitagent
 gnome-keyring
 polkit
 wl-clipboard
-cliphist
-fuzzel
-brightnessctl
+wl-clip-persist
 grim
 hyprpicker
 slurp

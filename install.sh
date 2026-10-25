@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Bootstraps a fresh Arch Linux install (e.g. right after archinstall) into
-# this desktop: Hyprland + Caelestia, SDDM, apps, dev tools, dotfiles.
+# this desktop: Hyprland + Noctalia, SDDM, apps, dev tools, dotfiles.
 # Safe to rerun: everything is --needed / idempotent.
 #
 # Usage: ./install.sh [--no-packages]
@@ -43,7 +43,7 @@ pacman_install() {
 
 CONFIGS=(
     hypr
-    caelestia
+    noctalia
     alacritty
     fish
     fastfetch
@@ -134,11 +134,6 @@ if [ "$SKIP_PACKAGES" -eq 0 ]; then
     fi
 
     step "Installing AUR packages from packages-aur.txt"
-    # caelestia-shell needs quickshell-git, which conflicts with the repo
-    # quickshell - --noconfirm would answer "no" to replacing it
-    if pacman -Q quickshell >/dev/null 2>&1; then
-        sudo pacman -R --noconfirm quickshell || warn "Could not remove repo quickshell (needed for quickshell-git)"
-    fi
     mapfile -t AUR_PACKAGES < <(read_list "$DOTFILES_DIR/packages-aur.txt")
     if [ ${#AUR_PACKAGES[@]} -gt 0 ]; then
         yay -S --needed --noconfirm --answerdiff None --answerclean None --removemake "${AUR_PACKAGES[@]}" \
@@ -199,7 +194,7 @@ for name in "${CONFIGS[@]}"; do
 done
 
 if command -v sddm >/dev/null 2>&1 || [ -d /etc/sddm.conf.d ] || pacman -Qi sddm >/dev/null 2>&1; then
-    step "Setting up SDDM theme (where_is_my_sddm_theme)"
+    step "Setting up SDDM theme (where_is_my_sddm_theme, colours from Noctalia)"
 
     # The theme itself comes from packages-aur.txt (where-is-my-sddm-theme-git)
     if [ ! -d /usr/share/sddm/themes/where_is_my_sddm_theme ]; then
@@ -209,6 +204,20 @@ if command -v sddm >/dev/null 2>&1 || [ -d /etc/sddm.conf.d ] || pacman -Qi sddm
     sudo mkdir -p /etc/sddm.conf.d
     sudo ln -sfn "$DOTFILES_DIR/config/sddm/theme.conf" /etc/sddm.conf.d/theme.conf
     echo "Linked sddm theme.conf"
+
+    # Noctalia renders the palette into ~/.cache/noctalia/boot-theme/ and its
+    # post_hook runs this root helper (passwordless, this one script only) to
+    # recolour SDDM. The helper only writes validated hex colours.
+    sudo install -m755 "$DOTFILES_DIR/config/sddm/noctalia-boot-theme" /usr/local/bin/noctalia-boot-theme
+    SUDOERS_TMP="$(mktemp)"
+    echo "$USER ALL=(root) NOPASSWD: /usr/local/bin/noctalia-boot-theme" >"$SUDOERS_TMP"
+    if sudo visudo -cf "$SUDOERS_TMP" >/dev/null; then
+        sudo install -m440 "$SUDOERS_TMP" /etc/sudoers.d/noctalia-boot-theme
+        echo "Installed noctalia-boot-theme helper and sudoers rule"
+    else
+        warn "sudoers rule for noctalia-boot-theme failed validation, skipped"
+    fi
+    rm -f "$SUDOERS_TMP"
 
     # /etc/sddm.conf takes precedence over /etc/sddm.conf.d/*, so a leftover
     # Current= from a previously installed theme there would silently win.
@@ -256,33 +265,23 @@ else
 fi
 rm -f "$SUDOERS_TMP"
 
-step "Caelestia: wallpaper and colour scheme"
-# config/caelestia/cli.json keeps Caelestia from recolouring other apps
-# (terminals, GTK/Qt, Spicetify, Discord) - only the shell and fuzzel follow
-# the wallpaper. Wallpapers are not in the repo: take the first one in
-# ~/Pictures, or pick one later from the launcher (">wallpaper").
-if command -v caelestia >/dev/null 2>&1; then
-    if [ ! -s "$HOME/.local/state/caelestia/wallpaper/path.txt" ]; then
-        WALLPAPER="$(find "$HOME/Pictures" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) 2>/dev/null | sort | head -n 1)"
-        if [ -n "$WALLPAPER" ]; then
-            caelestia wallpaper -f "$WALLPAPER" >/dev/null 2>&1 \
-                && echo "Wallpaper: $WALLPAPER" \
-                || warn "caelestia wallpaper failed - pick one from the launcher (>wallpaper)"
-        else
-            warn "No images in ~/Pictures - pick a wallpaper from the launcher (>wallpaper)"
-        fi
-    else
-        echo "Wallpaper already set"
-    fi
-else
-    warn "caelestia-cli is not installed - rerun: yay -S caelestia-shell"
-fi
+step "Linking noctalia state (bar layout, enabled plugins)"
 
-# btop picks up the theme caelestia-cli writes (cli.json: theme.enableBtop)
-if [ ! -f "$CONFIG_DIR/btop/btop.conf" ]; then
-    mkdir -p "$CONFIG_DIR/btop"
-    echo 'color_theme = "caelestia"' > "$CONFIG_DIR/btop/btop.conf"
+STATE_DIR="$HOME/.local/state"
+NOCTALIA_STATE_REPO="state/noctalia/settings.toml"
+NOCTALIA_STATE="$STATE_DIR/noctalia/settings.toml"
+
+mkdir -p "$STATE_DIR/noctalia"
+if [ -e "$NOCTALIA_STATE" ] && [ ! -L "$NOCTALIA_STATE" ]; then
+    echo "Backing up existing noctalia settings.toml"
+    mv "$NOCTALIA_STATE" "$STATE_DIR/noctalia/settings.toml.backup"
 fi
+ln -sfn "$DOTFILES_DIR/$NOCTALIA_STATE_REPO" "$NOCTALIA_STATE"
+echo "Linked noctalia/settings.toml"
+
+# Noctalia saves absolute paths (wallpaper folder etc.) - point any
+# /home/<someone>/ in there at this user's home
+sed -i -E "s|\"/home/[^/\"]+/|\"$HOME/|g" "$DOTFILES_DIR/$NOCTALIA_STATE_REPO"
 
 step "Linking scripts into ~/.local/bin"
 mkdir -p "$HOME/.local/bin"
@@ -330,7 +329,9 @@ if command -v flatpak >/dev/null 2>&1; then
 fi
 echo "Cursor set to $CURSOR_THEME ($CURSOR_SIZE)"
 
-step "Spotify: Spicetify + Comfy theme"
+step "Spotify: Spicetify + Comfy theme in Noctalia colors"
+# Noctalia's "spicetify" template writes Themes/Comfy/color.ini and reapplies
+# on every palette change; the theme itself has to be installed by hand
 if command -v spicetify >/dev/null 2>&1; then
     COMFY="$CONFIG_DIR/spicetify/Themes/Comfy"
     if [ ! -d "$COMFY" ]; then
@@ -338,13 +339,6 @@ if command -v spicetify >/dev/null 2>&1; then
         git clone -q --depth 1 https://github.com/Comfy-Themes/Spicetify "$COMFY_SRC" \
             && mkdir -p "$(dirname "$COMFY")" && cp -r "$COMFY_SRC/Comfy" "$COMFY"
         rm -rf "$COMFY_SRC"
-    fi
-    # Comfy's colours come from the Caelestia scheme (rendered from
-    # config/caelestia/templates/spicetify-comfy.ini; bin/spotify refreshes them)
-    COMFY_COLOURS="$HOME/.local/state/caelestia/theme/spicetify-comfy.ini"
-    if [ -f "$COMFY_COLOURS" ] && [ -d "$COMFY" ]; then
-        ln -sfn "$COMFY_COLOURS" "$COMFY/color.ini"
-        echo "Comfy colours linked to the Caelestia scheme"
     fi
     spicetify config current_theme Comfy color_scheme Comfy inject_css 1 replace_colors 1 \
         overwrite_assets 1 inject_theme_js 1 >/dev/null
