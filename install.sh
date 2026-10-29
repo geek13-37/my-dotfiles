@@ -43,6 +43,8 @@ pacman_install() {
 
 CONFIGS=(
     hypr
+    quickshell
+    rofi
     noctalia
     alacritty
     fish
@@ -282,6 +284,10 @@ echo "Linked noctalia/settings.toml"
 # Noctalia saves absolute paths (wallpaper folder etc.) - point any
 # /home/<someone>/ in there at this user's home
 sed -i -E "s|\"/home/[^/\"]+/|\"$HOME/|g" "$DOTFILES_DIR/$NOCTALIA_STATE_REPO"
+
+# boxshell's app themes point at this home's paths; rebuild the list
+python3 -I "$DOTFILES_DIR/config/quickshell/boxshell/theming/gen-templates.py" >/dev/null \
+    || warn "boxshell app theming: gen-templates.py failed"
 
 step "Linking scripts into ~/.local/bin"
 mkdir -p "$HOME/.local/bin"

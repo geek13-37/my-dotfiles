@@ -2,7 +2,7 @@
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/60dc04f1-a33b-46d8-8f3b-622c8cf993a1" />
 
-Моё окружение рабочего стола: Hyprland + noctalia, тема входа SDDM
+Моё окружение рабочего стола: Hyprland + boxshell (свой shell на Quickshell), тема входа SDDM
 (where-is-my-sddm-theme), терминал alacritty, fish, fastfetch, обои - плюс все программы,
 которые у меня стоят.
 
@@ -27,9 +27,17 @@ cd ~/my-dotfiles
 ## Что внутри
 
 - `config/hypr` - Hyprland (Lua-конфиг, раскладка dwindle)
-- `config/noctalia` + `state/noctalia/settings.toml` - настройки Noctalia,
-  включая раскладку бара и список плагинов (плагины из `[plugins]` Noctalia
-  подтягивает сама)
+- `config/quickshell/boxshell` - свой shell на Quickshell (`qs -c boxshell`):
+  бар (воркспейсы, трей, Docker, сеть, громкость, на ноутбуке батарея и
+  яркость), уведомления, OSD, меню питания, выбор обоев (Super+Shift+Enter).
+  Все цвета из обоев: бар, рамки окон Hyprland, rofi и темы приложений
+  (alacritty, GTK, Spotify, Telegram... через `noctalia theme`, список в
+  `theming/templates.toml`, собирается `theming/gen-templates.py`)
+- `config/rofi` - лаунчер (Super+Ctrl+Enter), калькулятор (Super+Z), история
+  буфера обмена (Super+V)
+- `bin/screenshot` - скриншоты в буфер и в `~/Pictures/Screenshots`
+- `config/noctalia` + `state/noctalia/settings.toml` - настройки Noctalia
+  (сама больше не запускается, оставлена ради шаблонов тем)
 - `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из Noctalia)
 - `config/fish` - конфиг fish (prompt на tide); `config/fish/cachyos` - копия
   fish-конфига CachyOS (алиасы eza/bat и т.п.), чтобы работало и на чистом Arch

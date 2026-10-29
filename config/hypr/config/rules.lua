@@ -58,6 +58,18 @@ hl.layer_rule({
     ignore_alpha = 0.5,
 })
 
+-- boxshell surfaces and rofi: Hyprland's own blur behind them, the same as
+-- behind windows. Their backgrounds are see-through (alpha 0.55 and up);
+-- ignore_alpha 0.3 skips the fully transparent parts of fullscreen layers
+-- (menus, wallpaper picker) so only the boxes get blurred.
+hl.layer_rule({
+    name  = "boxshell",
+    match = { namespace = "^(boxshell-(bar|osd|notifications|session|tray|wallpapers)|rofi)$" },
+    blur         = true,
+    blur_popups  = true,
+    ignore_alpha = 0.3,
+})
+
 -- Scratchpad (Mod+`): opening it empty spawns a terminal; wide outer gaps
 -- keep it smaller than the screen so it reads as a drop-down
 hl.workspace_rule({

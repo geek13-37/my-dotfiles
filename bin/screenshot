@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Screenshot to ~/Pictures/Screenshots and the clipboard, with a notification.
+# Usage: screenshot region|full|window
+#   region  drag a rectangle (Esc cancels); the frame is in the wallpaper accent
+#   full    the monitor under the cursor
+#   window  the focused window
+
+set -euo pipefail
+
+dir="$HOME/Pictures/Screenshots"
+file="$dir/Screenshot_$(date +%Y-%m-%d-%H%M%S).png"
+mkdir -p "$dir"
+
+case "${1:-region}" in
+    region)
+        # boxshell writes the current palette for rofi; reuse its accent
+        accent=$(grep -oP '^\s*accent:\s*#\K[0-9a-fA-F]{6}' "$HOME/.cache/boxshell/colors.rasi" 2>/dev/null || echo 76946a)
+        geometry=$(slurp -d -b 00000066 -c "${accent}ff" -w 2) || exit 0
+        grim -g "$geometry" "$file"
+        ;;
+    full)
+        monitor=$(hyprctl -j monitors | jq -r '.[] | select(.focused) | .name')
+        grim -o "$monitor" "$file"
+        ;;
+    window)
+        geometry=$(hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
+        grim -g "$geometry" "$file"
+        ;;
+    *)
+        echo "usage: screenshot region|full|window" >&2
+        exit 1
+        ;;
+esac
+
+wl-copy -t image/png < "$file"
+notify-send -a Screenshot -i "$file" "Screenshot" "Copied to clipboard, saved as $(basename "$file")"

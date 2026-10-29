@@ -1,0 +1,75 @@
+// boxshell launcher: square, colours follow the wallpaper
+// (boxshell writes them to ~/.cache/boxshell/colors.rasi).
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    drun-display-format: "{name}";
+    display-drun: "apps";
+    display-run: "run";
+    display-window: "windows";
+}
+
+* {
+    bg: #1F1F28; glass: rgba(31, 31, 40, 70%); surface: #2A2A37; fg: #DCD7BA; dim: #727169;
+    accent: #76946A; on-accent: #1F1F28;
+    font: "JetBrains Mono 12";
+}
+@import "~/.cache/boxshell/colors.rasi"
+
+* {
+    background-color: transparent;
+    text-color: @fg;
+    border-color: @surface;
+
+    // rofi's built-in theme colours some widgets through these; without them
+    // typed text and rofi-calc's result line come out dark on black
+    foreground: @fg;
+    normal-foreground: @fg;
+    alternate-normal-foreground: @fg;
+    active-foreground: @accent;
+    alternate-active-foreground: @accent;
+    selected-normal-foreground: @on-accent;
+    selected-active-foreground: @on-accent;
+    separatorcolor: @surface;
+}
+
+window {
+    width: 560px;
+    // see-through; Hyprland blurs behind it (rules.lua)
+    background-color: @glass;
+    border: 1px;
+    border-color: @surface;
+    border-radius: 0;
+}
+
+mainbox { padding: 10px; spacing: 8px; }
+
+inputbar {
+    padding: 8px 10px;
+    background-color: @surface;
+    children: [ prompt, entry ];
+    spacing: 10px;
+}
+prompt { text-color: @accent; }
+entry { placeholder: "search"; placeholder-color: @dim; text-color: @fg; cursor-color: @accent; }
+case-indicator, num-filtered-rows, num-rows, textbox-num-sep, textbox-prompt-colon { text-color: @dim; }
+
+// rofi-calc puts its "Result: ..." line here
+message { border: 0; padding: 6px 10px; background-color: @surface; }
+textbox { text-color: @fg; }
+
+listview { lines: 8; spacing: 2px; scrollbar: false; border: 0; }
+
+element { padding: 6px 10px; spacing: 10px; }
+element-icon { size: 20px; }
+// override rofi's built-in theme, which paints rows light/yellow
+element normal.normal, element alternate.normal, element normal.active,
+element alternate.active, element normal.urgent, element alternate.urgent {
+    background-color: transparent;
+    text-color: @fg;
+}
+element selected.normal, element selected.active, element selected.urgent {
+    background-color: @accent;
+    text-color: @on-accent;
+}
+element-text, element-icon { background-color: inherit; text-color: inherit; }

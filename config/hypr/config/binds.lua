@@ -33,28 +33,31 @@ bind("CTRL + SHIFT + H",     exec("happ"))
 hl.bind("CTRL + SHIFT + Escape", exec("gnome-system-monitor"))
 
 -- ─── Noctalia ───
-bind("SHIFT + Return",       exec(noct .. "panel-toggle wallpaper"))
+bind("SHIFT + Return",       exec("qs -c boxshell ipc call wallpapers toggle"))
 bind("S",                    exec(noct .. "panel-toggle control-center"))
-bind("CTRL + Return",        exec(noct .. "panel-toggle launcher"))
+bind("CTRL + Return",        exec("rofi -show drun"))
 bind("ALT + L",              exec(noct .. "session lock"))
-bind("SHIFT + Q",            exec(noct .. "panel-toggle session"))
-bind("V",                    exec(noct .. "panel-toggle clipboard"))
+bind("SHIFT + Q",            exec("qs -c boxshell ipc call session toggle"))
+-- clipboard history: pick an entry, it goes back into the clipboard
+bind("V",                    exec("cliphist list | rofi -dmenu -p clipboard -display-columns 2 | cliphist decode | wl-copy"))
 bind("semicolon",            exec(noct .. "panel-toggle launcher /emo"))
-bind("Z",                    exec(noct .. "panel-toggle yuuto/calculator:panel"))
+-- calculator (rofi-calc): Enter copies the result
+bind("Z",                    exec("rofi -show calc -modi calc -no-show-match -no-sort -calc-command \"echo -n '{result}' | wl-copy\""))
 -- Window overview: Noctalia's window switcher
 bind("O",                    exec(noct .. "window-switcher"))
 
 -- ─── Media / brightness (work on the lock screen too) ───
-hl.bind("XF86AudioRaiseVolume",  exec(noct .. "volume-up"),       { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume",  exec(noct .. "volume-down"),     { locked = true, repeating = true })
-hl.bind("XF86AudioMute",         exec(noct .. "volume-mute"),     { locked = true })
-hl.bind("XF86AudioMicMute",      exec(noct .. "mic-mute"),        { locked = true })
-hl.bind("XF86AudioNext",         exec(noct .. "media next"),      { locked = true })
-hl.bind("XF86AudioPrev",         exec(noct .. "media previous"),  { locked = true })
-hl.bind("XF86AudioPlay",         exec(noct .. "media play"),      { locked = true })
-hl.bind("XF86AudioPause",        exec(noct .. "media stop"),      { locked = true })
-hl.bind("XF86MonBrightnessUp",   exec(noct .. "brightness-up"),   { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", exec(noct .. "brightness-down"), { locked = true, repeating = true })
+-- volume goes straight to PipeWire; boxshell shows the OSD on any change
+hl.bind("XF86AudioRaiseVolume",  exec("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"),    { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume",  exec("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),         { locked = true, repeating = true })
+hl.bind("XF86AudioMute",         exec("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),        { locked = true })
+hl.bind("XF86AudioMicMute",      exec("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),      { locked = true })
+hl.bind("XF86AudioNext",         exec("playerctl next"),                                    { locked = true })
+hl.bind("XF86AudioPrev",         exec("playerctl previous"),                                { locked = true })
+hl.bind("XF86AudioPlay",         exec("playerctl play-pause"),                              { locked = true })
+hl.bind("XF86AudioPause",        exec("playerctl pause"),                                   { locked = true })
+hl.bind("XF86MonBrightnessUp",   exec("brightnessctl -q -c backlight set 5%+"),            { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", exec("brightnessctl -q -c backlight -n 1 set 5%-"),       { locked = true, repeating = true })
 
 -- ─── Window focus / movement ───
 bind("Q",                    hl.dsp.window.close())
@@ -159,10 +162,10 @@ bind("ALT + mouse_up",       function() set_zoom(zoom * 1.25) end)
 bind("ALT + mouse_down",     function() set_zoom(zoom / 1.25) end)
 bind("ALT + 0",              function() set_zoom(1.0) end)
 
--- ─── Screenshots (to clipboard) ───
-bind("SHIFT + S",            exec(noct .. "screenshot-region"))
-hl.bind("CTRL + SHIFT + 2",  exec(noct .. "screenshot-fullscreen"))
-hl.bind("CTRL + SHIFT + 3",  exec([[grim -g "$(hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')" - | wl-copy -t image/png]]))
+-- ─── Screenshots (clipboard + ~/Pictures/Screenshots, bin/screenshot) ───
+bind("SHIFT + S",            exec("screenshot region"))
+hl.bind("CTRL + SHIFT + 2",  exec("screenshot full"))
+hl.bind("CTRL + SHIFT + 3",  exec("screenshot window"))
 
 -- Color picker: click anywhere, the hex goes to the clipboard
 bind("C",                    exec("hyprpicker -a"))

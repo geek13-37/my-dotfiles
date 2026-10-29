@@ -1,4 +1,4 @@
-config_version = 14
+config_version = 16
 
 [audio]
 enable_sounds = true
@@ -15,7 +15,7 @@ capsule_opacity = 0.0
 capsule_padding = 8.0
 capsule_radius = 0
 capsule_thickness = 0.69999998807907104
-end = [ "mini-docker", "privacy", "wallpaper", "clipboard", "volume", "brightness", "session" ]
+end = [ "network_tx", "network_rx", "mini-docker", "privacy", "wallpaper", "clipboard", "brightness", "session" ]
 margin_edge = 6
 margin_ends = 14
 padding = 3
@@ -53,7 +53,6 @@ widget_order = [ "desktop-widget-0000000000000001" ]
 
 [dock]
 radius = 0
-smart_auto_hide = true
 
 [hot_corners]
 enabled = true
@@ -83,7 +82,7 @@ widget_order = [ "lockscreen-login-box@winit", "lockscreen-login-box@HDMI-A-1" ]
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -110,7 +109,7 @@ widget_order = [ "lockscreen-login-box@winit", "lockscreen-login-box@HDMI-A-1" ]
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@winit".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -183,7 +182,20 @@ wallpaper_scheme = "dysfunctional"
 
     [theme.templates]
     builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "hyprland", "qt", "scroll" ]
-    community_ids = [ "spicetify", "claude-code", "discord", "telegram", "gimp", "vscode", "zed", "fastfetch", "obs", "yazi" ]
+    community_ids = [
+        "claude-code",
+        "opencode",
+        "spicetify",
+        "discord",
+        "telegram",
+        "gimp",
+        "vscode",
+        "zed",
+        "steam",
+        "fastfetch",
+        "obs",
+        "yazi"
+    ]
 
 [wallpaper]
 directory = "/home/g33k/Pictures"

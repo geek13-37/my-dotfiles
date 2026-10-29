@@ -1,7 +1,8 @@
 source (status dirname)/cachyos/cachyos-config.fish
 
-# overwrite greeting
-# potentially disabling fastfetch
+# no greeting (used to run fastfetch)
 function fish_greeting
-    fastfetch
 end
+
+# opencode
+fish_add_path /home/g33k/.opencode/bin
