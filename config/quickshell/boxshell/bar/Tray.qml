@@ -14,8 +14,8 @@ MouseArea {
     property bool open: false
 
     visible: SystemTray.items.values.length > 0
-    implicitWidth: chevron.implicitWidth
-    implicitHeight: chevron.implicitHeight
+    implicitWidth: chevron.implicitWidth + Theme.itemPadding * 2
+    implicitHeight: Theme.itemHeight
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
     onClicked: {
@@ -24,8 +24,11 @@ MouseArea {
         open = !open
     }
 
+    HoverBox { active: root.containsMouse || root.open }
+
     Icon {
         id: chevron
+        anchors.centerIn: parent
         text: "expand_more"
         color: root.containsMouse || root.open ? Theme.accent : Theme.fg
         rotation: root.open ? 180 : 0

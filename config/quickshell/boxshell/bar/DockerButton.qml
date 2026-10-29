@@ -12,8 +12,8 @@ MouseArea {
     required property var bar
     property bool open: false
 
-    implicitWidth: row.implicitWidth
-    implicitHeight: row.implicitHeight
+    implicitWidth: row.implicitWidth + Theme.itemPadding * 2
+    implicitHeight: Theme.itemHeight
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
 
@@ -26,8 +26,11 @@ MouseArea {
     readonly property color tint: !Docker.available ? Theme.dim
                                 : containsMouse || open ? Theme.accent : Theme.fg
 
+    HoverBox { active: root.containsMouse || root.open }
+
     Row {
         id: row
+        anchors.centerIn: parent
         spacing: 3
         // the whale; Material Symbols has none, the Nerd Font does
         Text {

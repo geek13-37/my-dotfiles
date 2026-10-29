@@ -9,13 +9,18 @@ MouseArea {
     readonly property bool muted: sink?.audio?.muted ?? true
     readonly property int percent: Math.round((sink?.audio?.volume ?? 0) * 100)
 
-    implicitWidth: row.implicitWidth
-    implicitHeight: row.implicitHeight
+    implicitWidth: row.implicitWidth + Theme.itemPadding * 2
+    implicitHeight: Theme.itemHeight
+    hoverEnabled: true
+    cursorShape: Qt.PointingHandCursor
 
     PwObjectTracker { objects: [sink] }
 
+    HoverBox { active: containsMouse }
+
     Row {
         id: row
+        anchors.centerIn: parent
         spacing: 4
         Icon {
             anchors.verticalCenter: parent.verticalCenter

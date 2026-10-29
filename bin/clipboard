@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Clipboard history (cliphist) in rofi, images shown as thumbnails.
+# The picked entry goes back into the clipboard. Bound to Super+V.
+
+set -euo pipefail
+
+cache="$HOME/.cache/boxshell/cliphist"
+mkdir -p "$cache"
+
+# "[[ binary data 1 MiB png 1920x1080 ]]"
+image_re='^\[\[ binary data ([0-9.]+ [KMG]?i?B) (png|jpe?g|webp|bmp|gif) ([0-9]+x[0-9]+) \]\]$'
+
+entries() {
+    local id text thumb
+    while IFS=$'\t' read -r id text; do
+        if [[ $text =~ $image_re ]]; then
+            thumb="$cache/$id.png"
+            # thumbnails are made once; ids never get reused
+            [ -s "$thumb" ] || cliphist decode "$id" | magick - -thumbnail 256x256 "$thumb" 2>/dev/null || true
+            # cliphist decode only needs the id before the tab
+            printf '%s\timage  %s  ·  %s\0icon\x1f%s\n' "$id" "${BASH_REMATCH[3]}" "${BASH_REMATCH[1]}" "$thumb"
+        else
+            # an icon for text too, so every row lines up
+            printf '%s\t%s\0icon\x1ftext-x-generic\n' "$id" "$text"
+        fi
+    done < <(cliphist list)
+}
+
+choice=$(entries | rofi -dmenu -p clipboard -display-columns 2 -show-icons \
+    -theme-str 'element-icon { size: 48px; } window { width: 640px; }') || exit 0
+printf '%s\n' "$choice" | cliphist decode | wl-copy
+
+# drop thumbnails of entries that left the history
+ids=$(cliphist list | cut -f1)
+for thumb in "$cache"/*.png; do
+    [ -e "$thumb" ] || break
+    grep -qx "$(basename "$thumb" .png)" <<<"$ids" || rm -f "$thumb"
+done

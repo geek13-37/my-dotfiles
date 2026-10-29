@@ -53,6 +53,7 @@ PanelWindow {
             RowLayout {
                 anchors { right: parent.right; verticalCenter: parent.verticalCenter; rightMargin: 10 }
                 spacing: Theme.spacing
+                PrivacyIndicator { bar: bar }
                 DockerButton { bar: bar }
                 Network {}
                 // laptop only, hidden on a desktop

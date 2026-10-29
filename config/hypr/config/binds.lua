@@ -38,8 +38,8 @@ bind("S",                    exec(noct .. "panel-toggle control-center"))
 bind("CTRL + Return",        exec("rofi -show drun"))
 bind("ALT + L",              exec(noct .. "session lock"))
 bind("SHIFT + Q",            exec("qs -c boxshell ipc call session toggle"))
--- clipboard history: pick an entry, it goes back into the clipboard
-bind("V",                    exec("cliphist list | rofi -dmenu -p clipboard -display-columns 2 | cliphist decode | wl-copy"))
+-- clipboard history with image thumbnails (bin/clipboard)
+bind("V",                    exec("clipboard"))
 bind("semicolon",            exec(noct .. "panel-toggle launcher /emo"))
 -- calculator (rofi-calc): Enter copies the result
 bind("Z",                    exec("rofi -show calc -modi calc -no-show-match -no-sort -calc-command \"echo -n '{result}' | wl-copy\""))

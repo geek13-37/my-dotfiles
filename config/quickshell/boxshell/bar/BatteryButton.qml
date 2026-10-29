@@ -14,8 +14,8 @@ MouseArea {
     property bool open: false
 
     visible: Battery.present
-    implicitWidth: row.implicitWidth
-    implicitHeight: row.implicitHeight
+    implicitWidth: row.implicitWidth + Theme.itemPadding * 2
+    implicitHeight: Theme.itemHeight
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
 
@@ -27,8 +27,11 @@ MouseArea {
     readonly property color tint: Battery.low ? Theme.error
                                 : containsMouse || open ? Theme.accent : Theme.fg
 
+    HoverBox { active: root.containsMouse || root.open }
+
     Row {
         id: row
+        anchors.centerIn: parent
         spacing: 2
         Icon {
             anchors.verticalCenter: parent.verticalCenter

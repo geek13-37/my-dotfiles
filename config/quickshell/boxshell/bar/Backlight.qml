@@ -6,11 +6,12 @@ import qs.widgets
 // Screen brightness, laptops only; scroll to change it.
 MouseArea {
     visible: Brightness.available
-    implicitWidth: row.implicitWidth
-    implicitHeight: row.implicitHeight
+    implicitWidth: row.implicitWidth + Theme.itemPadding * 2
+    implicitHeight: Theme.itemHeight
 
     Row {
         id: row
+        anchors.centerIn: parent
         spacing: 4
         Icon {
             anchors.verticalCenter: parent.verticalCenter

@@ -35,6 +35,10 @@ Singleton {
     // match Hyprland gaps_out so the bar lines up with windows
     readonly property int gapSide: 14
     readonly property int gapTop: 6
-    readonly property int spacing: 12
+    // bar items get this much room on each side (the hover square fills it),
+    // plus `spacing` between them
+    readonly property int itemPadding: 6
+    readonly property int itemHeight: 24
+    readonly property int spacing: 4
     readonly property int border: 1
 }

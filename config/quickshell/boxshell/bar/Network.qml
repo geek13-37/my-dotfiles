@@ -9,6 +9,8 @@ Row {
     property string type: ""      // "wifi", "ethernet" or "" when offline
     property string connection: ""
     spacing: 4
+    leftPadding: Theme.itemPadding
+    rightPadding: Theme.itemPadding
 
     Icon {
 
