@@ -14,13 +14,13 @@ MouseArea {
     property bool open: false
 
     visible: SystemTray.items.values.length > 0
-    implicitWidth: chevron.implicitWidth + Theme.itemPadding * 2
+    implicitWidth: Theme.itemHeight
     implicitHeight: Theme.itemHeight
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
     onClicked: {
         // the bar is laid out by now, so this lands right under the chevron
-        drawer.anchorX = Theme.gapSide + mapToItem(null, 0, 0).x - drawer.padding
+        drawer.anchorX = Theme.gapSide + mapToItem(null, 0, 0).x
         open = !open
     }
 
@@ -74,7 +74,7 @@ MouseArea {
 
                     Rectangle {
                         anchors.fill: parent
-                        color: item.containsMouse ? Theme.surface : "transparent"
+                        color: item.containsMouse ? Theme.accent : Theme.clear(Theme.accent)
                         Behavior on color { ColorAnimation { duration: 120 } }
                     }
 
@@ -82,22 +82,6 @@ MouseArea {
                         anchors.centerIn: parent
                         implicitSize: 18
                         source: item.modelData.icon
-                    }
-
-                    // icons pop in one after another
-                    Connections {
-                        target: root
-                        function onOpenChanged() { if (root.open) pop.restart() }
-                    }
-                    SequentialAnimation {
-                        id: pop
-                        PropertyAction { target: item; property: "scale"; value: 0.6 }
-                        PropertyAction { target: item; property: "opacity"; value: 0 }
-                        PauseAnimation { duration: item.index * 30 }
-                        ParallelAnimation {
-                            NumberAnimation { target: item; property: "scale"; to: 1; duration: 260; easing.type: Easing.OutBack }
-                            NumberAnimation { target: item; property: "opacity"; to: 1; duration: 160 }
-                        }
                     }
                 }
             }

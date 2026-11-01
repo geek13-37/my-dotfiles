@@ -16,7 +16,7 @@ PanelWindow {
     property real anchorX: 0
     property bool alignRight: false
     property int boxWidth: 220
-    property int padding: 6
+    property int padding: Theme.menuPadding
     default property alias content: column.data
     property alias spacing: column.spacing
 
@@ -24,8 +24,10 @@ PanelWindow {
 
     screen: Quickshell.screens.find(s => Hyprland.monitorFor(s) === Hyprland.focusedMonitor)
             ?? Quickshell.screens[0]
-    // keep the window until the closing animation has finished
-    visible: open || box.opacity > 0
+    // Hyprland fades the whole layer in and out (layers animation), blur
+    // included; fading the box ourselves first left the blur to vanish in a
+    // jump at the end
+    visible: open
 
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: open ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
@@ -50,12 +52,8 @@ PanelWindow {
         border.color: Theme.surface
         border.width: Theme.border
 
-        // drop down from the bar
-        readonly property int openY: Theme.gapTop + Theme.barHeight + 4
-        y: root.open ? openY : openY - 8
-        opacity: root.open ? 1 : 0
-        Behavior on y { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
-        Behavior on opacity { NumberAnimation { duration: 160 } }
+        // just under the bar
+        y: Theme.gapTop + Theme.barHeight + Theme.menuGap
 
         focus: true
         Keys.onEscapePressed: root.closeRequested()

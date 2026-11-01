@@ -6,8 +6,10 @@ import qs
 import qs.widgets
 
 // One popup. Left click runs the default action, right click dismisses.
-// The line along the bottom counts down to expiry and pauses on hover.
-// Slides in from the right on creation and out again before closing.
+// Every notification goes away by itself: the line along the bottom counts
+// down (5s, 10s for critical ones, at most 10s whatever the app asks) and
+// pauses only while the mouse is moving over it.
+// Fades in on creation and out again before closing.
 Rectangle {
     id: card
     required property Notification modelData
@@ -30,17 +32,15 @@ Rectangle {
 
     Component.onCompleted: enter.start()
 
-    ParallelAnimation {
+    NumberAnimation {
         id: enter
-        NumberAnimation { target: card; property: "x"; from: 380; to: 0; duration: 320; easing.type: Easing.OutBack }
-        NumberAnimation { target: card; property: "opacity"; from: 0; to: 1; duration: 200 }
+        target: card; property: "opacity"; from: 0; to: 1; duration: 120
     }
 
-    ParallelAnimation {
+    NumberAnimation {
         id: leave
         property var done
-        NumberAnimation { target: card; property: "x"; to: 380; duration: 220; easing.type: Easing.InCubic }
-        NumberAnimation { target: card; property: "opacity"; to: 0; duration: 220 }
+        target: card; property: "opacity"; to: 0; duration: 120
         onFinished: done()
     }
 
@@ -54,7 +54,21 @@ Rectangle {
         return Quickshell.iconPath(icon, true)
     }
 
-    HoverHandler { id: hover }
+    // true while the pointer moves over the card, false a moment after it
+    // stops, so a cursor left lying here doesn't hold the card forever
+    property bool touched: false
+    HoverHandler {
+        onPointChanged: {
+            card.touched = true
+            untouch.restart()
+        }
+        onHoveredChanged: if (!hovered) card.touched = false
+    }
+    Timer {
+        id: untouch
+        interval: 1500
+        onTriggered: card.touched = false
+    }
 
     // behind the content so action buttons get their clicks first
     MouseArea {
@@ -143,20 +157,20 @@ Rectangle {
         }
     }
 
-    // countdown line; critical notifications stay until dismissed
+    // countdown line
     Rectangle {
         anchors { left: parent.left; bottom: parent.bottom; margins: Theme.border }
         height: 2
-        visible: !card.critical
-        color: Theme.accent
+        color: card.critical ? Theme.error : Theme.accent
 
         NumberAnimation on width {
             from: card.width - 2 * Theme.border
             to: 0
-            // expireTimeout is in seconds, -1 means "server decides"
-            duration: (card.n?.expireTimeout ?? -1) > 0 ? card.n.expireTimeout * 1000 : 5000
-            running: !card.critical
-            paused: running && hover.hovered
+            // expireTimeout is in seconds; -1 "server decides", 0 "never"
+            duration: card.critical ? 10000
+                    : Math.min(10000, (card.n?.expireTimeout ?? -1) > 0 ? card.n.expireTimeout * 1000 : 5000)
+            running: true
+            paused: card.touched
             onFinished: card.close(() => card.n?.expire())
         }
     }

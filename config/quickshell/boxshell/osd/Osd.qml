@@ -5,13 +5,17 @@ import Quickshell.Hyprland
 import qs
 import qs.widgets
 
-// Popup with a label, a percentage and a slider at the bottom of the focused
+// Popup with an icon, a slider and a percentage in one row at the bottom of the focused
 // monitor (volume, brightness). Call show() when the value changes; dragging
 // or scrolling the slider emits requested(value) for the owner to apply.
+//
+// It just fades in and out quickly. The slider is a row of square segments
+// that light up in a wave, the percentage ticks up or down to the new value.
 Scope {
     id: root
 
-    property string label
+    // Material Symbols name
+    property string icon
     property real value: 0
     // greyed out, e.g. muted
     property bool dimmed: false
@@ -38,13 +42,13 @@ Scope {
         interval: 1500
         // stay open while the slider is being dragged; scrolling changes
         // the value, which restarts the timer anyway
-        onTriggered: drag.pressed ? restart() : root.open = false
+        onTriggered: slider.pressed ? restart() : root.open = false
     }
 
     PanelWindow {
         screen: Quickshell.screens.find(s => Hyprland.monitorFor(s) === Hyprland.focusedMonitor)
                 ?? Quickshell.screens[0]
-        // keep the window until the hide animation has finished
+        // keep the window until the closing animation has finished
         visible: root.open || box.opacity > 0
 
         WlrLayershell.layer: WlrLayer.Overlay
@@ -53,85 +57,51 @@ Scope {
         anchors.bottom: true
         margins.bottom: 80
         implicitWidth: 360
-        implicitHeight: 80
+        implicitHeight: 44
         color: "transparent"
 
         Rectangle {
             id: box
-            width: parent.width
-            height: 64
+            anchors.fill: parent
             color: Theme.glass
             border.color: Theme.surface
             border.width: Theme.border
-
-            // slide up with a small overshoot, fade and grow a little
-            y: root.open ? 0 : 16
             opacity: root.open ? 1 : 0
-            scale: root.open ? 1 : 0.94
-            Behavior on y { NumberAnimation { duration: 280; easing.type: Easing.OutBack } }
-            Behavior on opacity { NumberAnimation { duration: 180 } }
-            Behavior on scale { NumberAnimation { duration: 280; easing.type: Easing.OutBack } }
+            Behavior on opacity { NumberAnimation { duration: 120 } }
 
-            Label {
-                anchors { left: parent.left; top: parent.top; leftMargin: 14; topMargin: 12 }
-                text: root.label
-                color: root.dimmed ? Theme.dim : Theme.fg
-            }
+            Item {
+                anchors.fill: parent
 
-            Label {
-                id: percent
-                anchors { right: parent.right; top: parent.top; rightMargin: 14; topMargin: 12 }
-                text: `${Math.round(root.value * 100)}%`
-                color: root.dimmed ? Theme.dim : Theme.accent
-                font.bold: true
-                transformOrigin: Item.Right
-
-                // little jump on every change
-                onTextChanged: bump.restart()
-                SequentialAnimation {
-                    id: bump
-                    NumberAnimation { target: percent; property: "scale"; to: 1.25; duration: 70; easing.type: Easing.OutQuad }
-                    NumberAnimation { target: percent; property: "scale"; to: 1; duration: 220; easing.type: Easing.OutBack }
-                }
-            }
-
-            Rectangle {
-                id: track
-                anchors { left: parent.left; right: parent.right; bottom: parent.bottom
-                          leftMargin: 14; rightMargin: 14; bottomMargin: 14 }
-                height: 6
-                color: Theme.surface
-
-                Rectangle {
-                    id: fill
-                    width: track.width * Math.max(0, Math.min(root.value, 1))
-                    height: parent.height
-                    color: root.dimmed ? Theme.dim : Theme.accent
-                    Behavior on width { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+                Icon {
+                    id: icon
+                    anchors { left: parent.left; leftMargin: 12; verticalCenter: parent.verticalCenter }
+                    text: root.icon
+                    font.pixelSize: 20
+                    color: root.dimmed ? Theme.dim : Theme.fg
                     Behavior on color { ColorAnimation { duration: 200 } }
                 }
 
-                // square knob at the end of the fill
-                Rectangle {
-                    x: fill.width - width / 2
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 12
-                    height: 12
-                    color: fill.color
-                    border.color: Theme.bg
-                    border.width: 2
-                    scale: drag.pressed ? 1.3 : 1
-                    Behavior on scale { NumberAnimation { duration: 120 } }
+                TickingLabel {
+                    id: percent
+                    value: root.value
+
+                    anchors { right: parent.right; rightMargin: 14; verticalCenter: parent.verticalCenter }
+                    // as wide as "100%", so the slider doesn't shift as it ticks
+                    width: sizer.implicitWidth
+                    horizontalAlignment: Text.AlignRight
+                    color: root.dimmed ? Theme.dim : Theme.accent
+                    font.bold: true
+                    Label { id: sizer; visible: false; text: "100%"; font: percent.font }
                 }
 
-                MouseArea {
-                    id: drag
-                    // bigger hit area than the thin track
-                    anchors { fill: parent; topMargin: -10; bottomMargin: -10 }
-                    cursorShape: Qt.PointingHandCursor
-                    onPressed: mouse => root.request(mouse.x / track.width)
-                    onPositionChanged: mouse => { if (pressed) root.request(mouse.x / track.width) }
-                    onWheel: wheel => root.request(root.value + (wheel.angleDelta.y > 0 ? 0.05 : -0.05))
+                // 20 square segments, 5% each
+                SegmentSlider {
+                    id: slider
+                    anchors { left: icon.right; right: percent.left; leftMargin: 12; rightMargin: 12
+                              verticalCenter: parent.verticalCenter }
+                    value: root.value
+                    dimmed: root.dimmed
+                    onMoved: v => root.request(v)
                 }
             }
         }

@@ -120,7 +120,7 @@ Singleton {
             anchors.fill: parent
             color: "black"
             opacity: root.open ? 0.5 : 0
-            Behavior on opacity { NumberAnimation { duration: 220 } }
+            Behavior on opacity { NumberAnimation { duration: 120 } }
 
             MouseArea {
                 anchors.fill: parent
@@ -153,13 +153,8 @@ Singleton {
             preferredHighlightEnd: (width + cardWidth) / 2
             highlightMoveDuration: 280
 
-            // rise into place when opening
             opacity: root.open ? 1 : 0
-            transform: Translate {
-                y: root.open ? 0 : 40
-                Behavior on y { NumberAnimation { duration: 320; easing.type: Easing.OutCubic } }
-            }
-            Behavior on opacity { NumberAnimation { duration: 220 } }
+            Behavior on opacity { NumberAnimation { duration: 120 } }
 
             // ListView turns its own key navigation off with interactive: false
             Keys.onPressed: event => {
@@ -210,7 +205,7 @@ Singleton {
                     // side cards shrink and fade
                     scale: card.current ? 1 : 0.82
                     opacity: card.current ? 1 : 0.55
-                    Behavior on scale { NumberAnimation { duration: 280; easing.type: Easing.OutBack } }
+                    Behavior on scale { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                     Behavior on opacity { NumberAnimation { duration: 200 } }
 
                     Image {

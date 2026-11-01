@@ -23,13 +23,13 @@ MouseArea {
         anchors.centerIn: parent
         spacing: 4
         Icon {
-            anchors.verticalCenter: parent.verticalCenter
+            height: Theme.itemHeight
             text: muted || percent === 0 ? "volume_off" : percent < 50 ? "volume_down" : "volume_up"
             color: muted ? Theme.dim : Theme.fg
         }
-        Label {
-            anchors.verticalCenter: parent.verticalCenter
-            text: `${percent}%`
+        TickingLabel {
+            height: Theme.itemHeight
+            value: sink?.audio?.volume ?? 0
             color: muted ? Theme.dim : Theme.fg
         }
     }

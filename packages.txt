@@ -3,7 +3,8 @@
 # archinstall sets up the first two, install.sh detects the GPU itself.
 
 # ─── Desktop: Hyprland + boxshell (config/quickshell/boxshell) ───
-# noctalia isn't run any more but boxshell uses `noctalia theme` for colours
+# noctalia is never started: boxshell only uses `noctalia theme` as its colour
+# engine (palette from the wallpaper + app theme templates)
 hyprland
 quickshell
 noctalia

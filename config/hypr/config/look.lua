@@ -4,13 +4,13 @@ hl.config({
         layout = "dwindle",
 
         -- tight tiling: 3px between windows; outer gaps line windows up with the
-        -- Noctalia bar (margin_ends = 14), 6px below it like its margin_edge
+        -- boxshell bar (14px from the sides), 6px below it
         gaps_in  = 3,
         gaps_out = { top = 6, right = 14, bottom = 14, left = 14 },
 
         border_size = 1,
         col = {
-            -- kanagawa (noctalia primary / surface variant)
+            -- kanagawa; boxshell overrides these with the wallpaper's colours
             active_border   = "rgb(76946A)",
             inactive_border = "rgb(2A2A37)",
         },
@@ -60,7 +60,7 @@ hl.config({
     misc = {
         disable_hyprland_logo   = true,
         force_default_wallpaper = 0,
-        -- let apps (e.g. Noctalia notifications) focus their windows
+        -- let apps (e.g. clicked notifications) focus their windows
         focus_on_activate = true,
     },
 

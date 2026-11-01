@@ -14,13 +14,13 @@ Row {
 
     Icon {
 
-        anchors.verticalCenter: parent.verticalCenter
+        height: Theme.itemHeight
         text: root.type === "wifi" ? "wifi" : root.type === "ethernet" ? "lan" : "wifi_off"
         color: root.type === "" ? Theme.dim : Theme.fg
     }
     Label {
         color: Theme.fg
-        anchors.verticalCenter: parent.verticalCenter
+        height: Theme.itemHeight
         visible: root.type === "wifi"
         text: root.connection
     }

@@ -31,25 +31,23 @@ cd ~/my-dotfiles
   бар (воркспейсы, трей, Docker, сеть, громкость, на ноутбуке батарея и
   яркость), уведомления, OSD, меню питания, выбор обоев (Super+Shift+Enter).
   Все цвета из обоев: бар, рамки окон Hyprland, rofi и темы приложений
-  (alacritty, GTK, Spotify, Telegram... через `noctalia theme`, список в
-  `theming/templates.toml`, собирается `theming/gen-templates.py`)
+  (alacritty, GTK, Spotify, Telegram, SDDM... шаблоны в `theming/`, рендерит
+  `noctalia theme` - пакет noctalia нужен только для этого, сам не запускается)
 - `config/rofi` - лаунчер (Super+Ctrl+Enter), калькулятор (Super+Z), история
   буфера обмена (Super+V)
 - `bin/screenshot` - скриншоты в буфер и в `~/Pictures/Screenshots`
-- `config/noctalia` + `state/noctalia/settings.toml` - настройки Noctalia
-  (сама больше не запускается, оставлена ради шаблонов тем)
-- `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из Noctalia)
+- `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из обоев)
 - `config/fish` - конфиг fish (prompt на tide); `config/fish/cachyos` - копия
   fish-конфига CachyOS (алиасы eza/bat и т.п.), чтобы работало и на чистом Arch
 - `config/fastfetch`, `config/mimeapps.list`
 - `bin/spotify` - запуск Spotify (бинд Ctrl+S и лаунчер): после обновления
-  Spotify сам заново накатывает Spicetify с темой Comfy в цветах Noctalia
+  Spotify сам заново накатывает Spicetify с темой Comfy в цветах обоев
 - `config/sddm/theme.conf` - выбор темы входа SDDM (where-is-my-sddm-theme,
   ставится из AUR)
-- `config/noctalia/templates/sddm.conf` + `config/sddm/noctalia-boot-theme` -
-  цвета SDDM берутся из текущей палитры Noctalia и
+- `config/quickshell/boxshell/theming/sddm.conf` + `config/sddm/noctalia-boot-theme` -
+  цвета SDDM берутся из палитры обоев и
   обновляются сами при её смене (скрипт ставится в `/usr/local/bin` и
-  запускается из Noctalia через sudo без пароля - только он, см. install.sh)
+  запускается из boxshell через sudo без пароля - только он, см. install.sh)
 - Приватность:
   - `config/networkmanager/00-privacy.conf` -> `/etc/NetworkManager/conf.d/`:
     свой фейковый MAC для каждой сети, hostname не уходит по DHCP, временные

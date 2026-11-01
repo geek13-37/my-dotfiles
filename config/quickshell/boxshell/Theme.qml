@@ -25,20 +25,39 @@ Singleton {
     readonly property real glassAlpha: 0.55 + 0.35 * Scheme.brightness
     readonly property color glass: Qt.rgba(bg.r, bg.g, bg.b, glassAlpha)
 
+    // `c` fully transparent. Fade hover colours to this instead of
+    // "transparent", which is transparent black: a ColorAnimation from it
+    // passes through dark shades on the way.
+    function clear(c: color): color {
+        return Qt.rgba(c.r, c.g, c.b, 0)
+    }
+
+    // Dropdown menus: box padding around the rows (row highlights reach this
+    // close to the box edge), where text/graphs/sliders start inside a row or
+    // the box, and the gap between bar and menu. A menu's edge lines up with
+    // the edge of the bar item that opened it.
+    readonly property int menuPadding: 6
+    readonly property int menuInset: 10
+    readonly property int menuGap: 4
+
     readonly property string font: "JetBrains Mono"
-    readonly property int fontSize: 12
+    readonly property int fontSize: 13
     // sharp corners to match the square look; icons are ligature names
     readonly property string iconFont: "Material Symbols Sharp"
-    readonly property int iconSize: 16
+    readonly property int iconSize: 18
 
     readonly property int barHeight: 32
     // match Hyprland gaps_out so the bar lines up with windows
     readonly property int gapSide: 14
     readonly property int gapTop: 6
-    // bar items get this much room on each side (the hover square fills it),
-    // plus `spacing` between them
-    readonly property int itemPadding: 6
-    readonly property int itemHeight: 24
+    // Bar items: all itemHeight tall, centred in the bar on whole pixels
+    // ((barHeight - itemHeight) / 2 must stay whole). An item that is a single
+    // icon is an itemHeight square; items with text get itemPadding on each
+    // side. `spacing` goes between items.
+    readonly property int itemHeight: 26
+    // the same gap on all four sides of the bar's end items
+    readonly property int itemInset: (barHeight - itemHeight) / 2
+    readonly property int itemPadding: 8
     readonly property int spacing: 4
     readonly property int border: 1
 }

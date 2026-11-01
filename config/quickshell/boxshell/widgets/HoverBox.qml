@@ -1,11 +1,22 @@
 import QtQuick
-import qs
 
-// Square highlight behind a clickable bar item while it's hovered or its
-// menu is open. Put it first so it sits under the item's content.
-Rectangle {
+// Marks a clickable bar item. While `active` (hovered, or its menu is open)
+// the bar's one hover square glides over to this item, like the macOS menu
+// bar; Bar.qml draws it. Put it inside the item, it fills it.
+Item {
+    id: root
     property bool active: false
     anchors.fill: parent
-    color: Qt.rgba(Theme.fg.r, Theme.fg.g, Theme.fg.b, active ? 0.14 : 0)
-    Behavior on color { ColorAnimation { duration: 120 } }
+
+    // the bar item that draws the square, found by walking up
+    property Item host: null
+
+    Component.onCompleted: {
+        let p = parent
+        while (p && p.isHoverHost !== true) p = p.parent
+        host = p
+        if (active) host?.hoverOn(root)
+    }
+    onActiveChanged: active ? host?.hoverOn(root) : host?.hoverOff(root)
+    Component.onDestruction: host?.hoverOff(root)
 }

@@ -6,7 +6,7 @@ import qs.services
 Scope {
     Osd {
         id: osd
-        label: "brightness"
+        icon: value < 0.34 ? "brightness_low" : value < 0.67 ? "brightness_medium" : "brightness_high"
         value: Brightness.value
         onRequested: v => Brightness.set(v)
     }

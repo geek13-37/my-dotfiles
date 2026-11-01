@@ -1,13 +1,5 @@
 -- Window and layer rules
 
--- Floating Noctalia settings window
-hl.window_rule({
-    match = { class = "^(dev\\.)?noctalia\\.Noctalia(\\.Settings)?$" },
-    float = true,
-    size  = { 1080, 920 },
-    center = true,
-})
-
 -- Browser Picture-in-Picture: float in the bottom-right corner
 hl.window_rule({
     match = { title = "^Picture-in-Picture$" },
@@ -47,15 +39,6 @@ hl.window_rule({
         pin        = false,
     },
     no_focus = true,
-})
-
--- Noctalia bar/panels/OSD blur
-hl.layer_rule({
-    name  = "noctalia",
-    match = { namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd|window-switcher)$" },
-    blur         = true,
-    blur_popups  = true,
-    ignore_alpha = 0.5,
 })
 
 -- boxshell surfaces and rofi: Hyprland's own blur behind them, the same as

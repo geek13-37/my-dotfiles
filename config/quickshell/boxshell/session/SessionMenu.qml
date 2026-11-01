@@ -37,8 +37,8 @@ Singleton {
         id: panel
         screen: Quickshell.screens.find(s => Hyprland.monitorFor(s) === Hyprland.focusedMonitor)
                 ?? Quickshell.screens[0]
-        // keep the window until the closing animation has finished
-        visible: root.open || box.opacity > 0
+        // Hyprland fades the layer in and out, blur included (see Dropdown)
+        visible: root.open
 
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.namespace: "boxshell-session"
@@ -55,20 +55,16 @@ Singleton {
 
         Rectangle {
             id: box
-            // under the bar's power button
-            x: parent.width - width - Theme.gapSide
+            // right edge on the power button's right edge
+            x: parent.width - width - Theme.gapSide - Theme.itemInset
             width: 220
-            height: column.implicitHeight + 12
+            height: column.implicitHeight + 2 * Theme.menuPadding
             color: Theme.glass
             border.color: Theme.surface
             border.width: Theme.border
 
-            // drop down from the bar
-            readonly property int openY: Theme.gapTop + Theme.barHeight + 4
-            y: root.open ? openY : openY - 8
-            opacity: root.open ? 1 : 0
-            Behavior on y { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
-            Behavior on opacity { NumberAnimation { duration: 160 } }
+            // just under the bar
+            y: Theme.gapTop + Theme.barHeight + Theme.menuGap
 
             focus: true
             Keys.onEscapePressed: root.open = false
@@ -78,7 +74,7 @@ Singleton {
 
             Column {
                 id: column
-                anchors { left: parent.left; right: parent.right; top: parent.top; margins: 6 }
+                anchors { left: parent.left; right: parent.right; top: parent.top; margins: Theme.menuPadding }
                 spacing: 2
 
                 Repeater {
@@ -109,40 +105,25 @@ Singleton {
 
                         Connections {
                             target: root
-                            function onOpenChanged() {
-                                if (root.open) enter.restart()
-                                else button.armed = false
-                            }
-                        }
-
-                        // rows slide in one after another
-                        SequentialAnimation {
-                            id: enter
-                            PropertyAction { target: button; property: "opacity"; value: 0 }
-                            PropertyAction { target: button; property: "x"; value: 14 }
-                            PauseAnimation { duration: button.index * 40 }
-                            ParallelAnimation {
-                                NumberAnimation { target: button; property: "opacity"; to: 1; duration: 180 }
-                                NumberAnimation { target: button; property: "x"; to: 0; duration: 280; easing.type: Easing.OutBack }
-                            }
+                            function onOpenChanged() { if (!root.open) button.armed = false }
                         }
 
                         Rectangle {
                             anchors.fill: parent
-                            color: button.armed ? Theme.error : button.containsMouse ? Theme.surface : "transparent"
+                            color: button.armed ? Theme.error : button.containsMouse ? Theme.accent : Theme.clear(Theme.accent)
                             Behavior on color { ColorAnimation { duration: 120 } }
                         }
 
                         Row {
-                            anchors { left: parent.left; leftMargin: 10; verticalCenter: parent.verticalCenter }
+                            anchors { left: parent.left; leftMargin: Theme.menuInset; verticalCenter: parent.verticalCenter }
                             spacing: 10
                             Icon {
                                 text: button.modelData.icon
-                                color: button.armed ? Theme.errorText : Theme.fg
+                                color: button.armed ? Theme.errorText : button.containsMouse ? Theme.accentText : Theme.fg
                             }
                             Label {
                                 text: button.armed ? "click again" : button.modelData.label
-                                color: button.armed ? Theme.errorText : Theme.fg
+                                color: button.armed ? Theme.errorText : button.containsMouse ? Theme.accentText : Theme.fg
                             }
                         }
                     }

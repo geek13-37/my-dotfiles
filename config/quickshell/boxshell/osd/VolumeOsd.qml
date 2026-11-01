@@ -12,7 +12,7 @@ Scope {
 
     Osd {
         id: osd
-        label: dimmed ? "muted" : "volume"
+        icon: dimmed || value === 0 ? "volume_off" : value < 0.5 ? "volume_down" : "volume_up"
         value: root.sink?.audio?.volume ?? 0
         dimmed: root.sink?.audio?.muted ?? false
         onRequested: v => { if (root.sink?.audio) root.sink.audio.volume = v }

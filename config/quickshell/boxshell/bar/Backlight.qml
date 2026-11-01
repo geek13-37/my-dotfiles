@@ -14,12 +14,12 @@ MouseArea {
         anchors.centerIn: parent
         spacing: 4
         Icon {
-            anchors.verticalCenter: parent.verticalCenter
+            height: Theme.itemHeight
             text: "brightness_6"
         }
-        Label {
-            anchors.verticalCenter: parent.verticalCenter
-            text: `${Math.round(Brightness.value * 100)}%`
+        TickingLabel {
+            height: Theme.itemHeight
+            value: Brightness.value
         }
     }
 

@@ -20,7 +20,7 @@ MouseArea {
     cursorShape: Qt.PointingHandCursor
 
     onClicked: {
-        drawer.anchorX = Theme.gapSide + mapToItem(null, width, 0).x + drawer.padding
+        drawer.anchorX = Theme.gapSide + mapToItem(null, width, 0).x
         open = !open
     }
 
@@ -34,13 +34,13 @@ MouseArea {
         anchors.centerIn: parent
         spacing: 2
         Icon {
-            anchors.verticalCenter: parent.verticalCenter
+            height: Theme.itemHeight
             text: Battery.icon
             color: root.tint
         }
-        Label {
-            anchors.verticalCenter: parent.verticalCenter
-            text: `${Math.round(Battery.level * 100)}%`
+        TickingLabel {
+            height: Theme.itemHeight
+            value: Battery.level
             color: root.tint
         }
     }
@@ -55,17 +55,23 @@ MouseArea {
         boxWidth: 240
         spacing: 6
 
-        Label {
-            leftPadding: 6
-            topPadding: 4
-            font.bold: true
-            text: `${Math.round(Battery.level * 100)}%  ·  ${Battery.full ? "full" : Battery.charging ? "charging" : "on battery"}`
+        MenuHeader {
+            icon: Battery.icon
+            title: `${Math.round(Battery.level * 100)}%  ·  ${Battery.full ? "full" : Battery.charging ? "charging" : "on battery"}`
         }
         Label {
-            leftPadding: 6
+            leftPadding: Theme.menuInset
             visible: text !== ""
             color: Theme.dim
             text: Battery.timeText
+        }
+
+        Segments {
+            x: Theme.menuInset
+            width: parent.width - 2 * Theme.menuInset
+            height: 8
+            value: Battery.level
+            onColor: Battery.low ? Theme.error : Theme.accent
         }
 
         Row {
@@ -91,7 +97,7 @@ MouseArea {
 
                     Rectangle {
                         anchors.fill: parent
-                        color: profileButton.active ? Theme.accent : profileButton.containsMouse ? Theme.surface : "transparent"
+                        color: profileButton.active || profileButton.containsMouse ? Theme.accent : Theme.clear(Theme.accent)
                         Behavior on color { ColorAnimation { duration: 120 } }
                     }
                     Column {
@@ -100,13 +106,13 @@ MouseArea {
                         Icon {
                             anchors.horizontalCenter: parent.horizontalCenter
                             text: profileButton.modelData.icon
-                            color: profileButton.active ? Theme.accentText : Theme.fg
+                            color: profileButton.active || profileButton.containsMouse ? Theme.accentText : Theme.fg
                         }
                         Label {
                             anchors.horizontalCenter: parent.horizontalCenter
                             text: profileButton.modelData.label
                             font.pixelSize: Theme.fontSize - 2
-                            color: profileButton.active ? Theme.accentText : Theme.fg
+                            color: profileButton.active || profileButton.containsMouse ? Theme.accentText : Theme.fg
                         }
                     }
                 }

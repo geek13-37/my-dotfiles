@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import qs
@@ -12,18 +13,24 @@ MouseArea {
     required property var bar
     property bool open: false
 
-    visible: Privacy.active || scale > 0
-    implicitWidth: row.implicitWidth + Theme.itemPadding * 2
+    // 0 hidden .. 1 shown: it opens up its room in the bar (spacing included)
+    // and fades in, so the neighbours slide instead of jumping
+    property real shown: Privacy.active ? 1 : 0
+    Behavior on shown { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    visible: shown > 0
+    Layout.leftMargin: (shown - 1) * Theme.spacing
+    clip: true
+    readonly property int kindsActive: kinds.filter(k => Privacy.users[k.key].length > 0).length
+    // a square for a single icon
+    implicitWidth: shown * (kindsActive > 1 ? row.implicitWidth + Theme.itemPadding * 2 : Theme.itemHeight)
     implicitHeight: Theme.itemHeight
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
 
-    // pop in and out
-    scale: Privacy.active ? 1 : 0
-    Behavior on scale { NumberAnimation { duration: 260; easing.type: Easing.OutBack } }
+    opacity: shown
 
     onClicked: {
-        drawer.anchorX = Theme.gapSide + mapToItem(null, width, 0).x + drawer.padding
+        drawer.anchorX = Theme.gapSide + mapToItem(null, width, 0).x
         open = !open
     }
 
@@ -44,18 +51,10 @@ MouseArea {
             model: root.kinds
             Icon {
                 required property var modelData
-                anchors.verticalCenter: parent.verticalCenter
+                height: Theme.itemHeight
                 visible: Privacy.users[modelData.key].length > 0
                 text: modelData.icon
                 color: Theme.error
-
-                // slow breathing so it catches the eye
-                SequentialAnimation on opacity {
-                    running: Privacy.active
-                    loops: Animation.Infinite
-                    NumberAnimation { to: 0.45; duration: 900; easing.type: Easing.InOutSine }
-                    NumberAnimation { to: 1; duration: 900; easing.type: Easing.InOutSine }
-                }
             }
         }
     }
@@ -75,7 +74,7 @@ MouseArea {
 
             Row {
                 required property var modelData
-                leftPadding: 6
+                leftPadding: Theme.menuInset
                 spacing: 8
                 Icon {
                     anchors.verticalCenter: parent.verticalCenter

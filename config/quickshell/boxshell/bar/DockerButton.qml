@@ -12,13 +12,17 @@ MouseArea {
     required property var bar
     property bool open: false
 
-    implicitWidth: row.implicitWidth + Theme.itemPadding * 2
+    // a square while it's just the whale
+    implicitWidth: Docker.running > 0 ? row.implicitWidth + Theme.itemPadding * 2 : Theme.itemHeight
+    // the count appearing or going doesn't make the neighbours jump
+    Behavior on implicitWidth { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    clip: true
     implicitHeight: Theme.itemHeight
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
 
     onClicked: {
-        drawer.anchorX = Theme.gapSide + mapToItem(null, width, 0).x + drawer.padding
+        drawer.anchorX = Theme.gapSide + mapToItem(null, width, 0).x
         open = !open
         if (open) Docker.refresh()
     }
@@ -32,16 +36,32 @@ MouseArea {
         id: row
         anchors.centerIn: parent
         spacing: 3
-        // the whale; Material Symbols has none, the Nerd Font does
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            text: "\uf308"
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: Theme.iconSize
-            color: root.tint
+        // the whale; Material Symbols has none, the Nerd Font does. Its glyph
+        // box doesn't match the drawing, so centre the drawing itself.
+        Item {
+            width: Theme.iconSize
+            height: Theme.itemHeight
+
+            TextMetrics {
+                id: ink
+                font: whale.font
+                text: whale.text
+            }
+
+            Text {
+                id: whale
+                text: "\uf308"
+                font.family: "JetBrainsMono Nerd Font"
+                font.pixelSize: Theme.iconSize
+                renderType: Text.NativeRendering
+                color: root.tint
+                // tightBoundingRect is relative to the pen position on the baseline
+                x: Math.floor((parent.width - ink.tightBoundingRect.width) / 2 - ink.tightBoundingRect.x)
+                y: Math.round((parent.height - ink.tightBoundingRect.height) / 2 - ink.tightBoundingRect.y - baselineOffset)
+            }
         }
         Label {
-            anchors.verticalCenter: parent.verticalCenter
+            height: Theme.itemHeight
             visible: Docker.running > 0
             text: Docker.running
             color: root.tint
@@ -57,13 +77,10 @@ MouseArea {
         alignRight: true
         boxWidth: 380
 
-        Label {
-            leftPadding: 6
-            topPadding: 4
-            bottomPadding: 4
-            font.bold: true
-            text: !Docker.available ? "docker isn't running"
-                : `containers  ·  ${Docker.running} running`
+        MenuHeader {
+            icon: "deployed_code"
+            title: !Docker.available ? "docker isn't running"
+                 : `containers  ·  ${Docker.running} running`
         }
 
         Flickable {
@@ -89,7 +106,9 @@ MouseArea {
 
                         width: list.width
                         height: 44
-                        color: hover.hovered ? Theme.surface : "transparent"
+                        color: hover.hovered ? Theme.accent : Theme.clear(Theme.accent)
+                        // what goes on top of the row's colour
+                        readonly property color ink: hover.hovered ? Theme.accentText : Theme.fg
                         Behavior on color { ColorAnimation { duration: 120 } }
                         HoverHandler { id: hover }
 
@@ -104,10 +123,11 @@ MouseArea {
 
                         Rectangle {
                             id: dot
-                            anchors { left: parent.left; leftMargin: 8; verticalCenter: parent.verticalCenter }
+                            anchors { left: parent.left; leftMargin: Theme.menuInset; verticalCenter: parent.verticalCenter }
                             width: 8
                             height: 8
                             color: entry.modelData.health === "unhealthy" ? Theme.error
+                                 : hover.hovered ? entry.ink
                                  : entry.running ? Theme.accent : Theme.dim
                         }
 
@@ -118,6 +138,7 @@ MouseArea {
                             Label {
                                 width: parent.width
                                 elide: Text.ElideRight
+                                color: entry.ink
                                 text: entry.modelData.project !== ""
                                       ? `${entry.modelData.name}  ·  ${entry.modelData.project}`
                                       : entry.modelData.name
@@ -126,14 +147,15 @@ MouseArea {
                                 width: parent.width
                                 elide: Text.ElideRight
                                 font.pixelSize: Theme.fontSize - 2
-                                color: Theme.dim
+                                color: hover.hovered ? entry.ink : Theme.dim
+                                opacity: hover.hovered ? 0.75 : 1
                                 text: entry.modelData.status
                             }
                         }
 
                         Row {
                             id: buttons
-                            anchors { right: parent.right; rightMargin: 4; verticalCenter: parent.verticalCenter }
+                            anchors { right: parent.right; rightMargin: Theme.menuInset - 5; verticalCenter: parent.verticalCenter }
                             spacing: 2
 
                             Repeater {
@@ -154,13 +176,13 @@ MouseArea {
 
                                     Rectangle {
                                         anchors.fill: parent
-                                        color: button.containsMouse ? Theme.accent : "transparent"
+                                        color: button.containsMouse ? entry.ink : Theme.clear(entry.ink)
                                         Behavior on color { ColorAnimation { duration: 120 } }
                                     }
                                     Icon {
                                         anchors.centerIn: parent
                                         text: button.modelData.icon
-                                        color: button.containsMouse ? Theme.accentText : Theme.fg
+                                        color: button.containsMouse ? Theme.accent : entry.ink
                                     }
                                 }
                             }

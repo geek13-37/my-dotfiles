@@ -7,4 +7,5 @@ Text {
     font.family: Theme.iconFont
     font.pixelSize: Theme.iconSize
     verticalAlignment: Text.AlignVCenter
+    renderType: Text.NativeRendering
 }

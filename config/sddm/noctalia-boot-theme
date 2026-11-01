@@ -1,8 +1,9 @@
 #!/bin/bash
 #
-# Applies the active Noctalia palette to SDDM (where_is_my_sddm_theme).
+# Applies the wallpaper palette to SDDM (where_is_my_sddm_theme).
+# (Named after Noctalia, which used to call it; boxshell does now.)
 #
-# Noctalia renders ~/.config/noctalia/templates/sddm.conf into
+# boxshell renders config/quickshell/boxshell/theming/sddm.conf into
 # ~/.cache/noctalia/boot-theme/ and calls this script through `sudo -n`
 # (see noctalia-boot-theme.sudoers). Because it runs as root without a password,
 # it never copies user-provided text: it only picks known keys and writes

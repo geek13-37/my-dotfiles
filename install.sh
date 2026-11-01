@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Bootstraps a fresh Arch Linux install (e.g. right after archinstall) into
-# this desktop: Hyprland + Noctalia, SDDM, apps, dev tools, dotfiles.
+# this desktop: Hyprland + boxshell, SDDM, apps, dev tools, dotfiles.
 # Safe to rerun: everything is --needed / idempotent.
 #
 # Usage: ./install.sh [--no-packages]
@@ -45,7 +45,6 @@ CONFIGS=(
     hypr
     quickshell
     rofi
-    noctalia
     alacritty
     fish
     fastfetch
@@ -196,7 +195,7 @@ for name in "${CONFIGS[@]}"; do
 done
 
 if command -v sddm >/dev/null 2>&1 || [ -d /etc/sddm.conf.d ] || pacman -Qi sddm >/dev/null 2>&1; then
-    step "Setting up SDDM theme (where_is_my_sddm_theme, colours from Noctalia)"
+    step "Setting up SDDM theme (where_is_my_sddm_theme, colours from the wallpaper)"
 
     # The theme itself comes from packages-aur.txt (where-is-my-sddm-theme-git)
     if [ ! -d /usr/share/sddm/themes/where_is_my_sddm_theme ]; then
@@ -207,9 +206,10 @@ if command -v sddm >/dev/null 2>&1 || [ -d /etc/sddm.conf.d ] || pacman -Qi sddm
     sudo ln -sfn "$DOTFILES_DIR/config/sddm/theme.conf" /etc/sddm.conf.d/theme.conf
     echo "Linked sddm theme.conf"
 
-    # Noctalia renders the palette into ~/.cache/noctalia/boot-theme/ and its
+    # boxshell renders the palette into ~/.cache/noctalia/boot-theme/ and its
     # post_hook runs this root helper (passwordless, this one script only) to
-    # recolour SDDM. The helper only writes validated hex colours.
+    # recolour SDDM. The helper only writes validated hex colours. (The names
+    # are from when Noctalia did this; kept so the sudoers rule stays valid.)
     sudo install -m755 "$DOTFILES_DIR/config/sddm/noctalia-boot-theme" /usr/local/bin/noctalia-boot-theme
     SUDOERS_TMP="$(mktemp)"
     echo "$USER ALL=(root) NOPASSWD: /usr/local/bin/noctalia-boot-theme" >"$SUDOERS_TMP"
@@ -267,24 +267,6 @@ else
 fi
 rm -f "$SUDOERS_TMP"
 
-step "Linking noctalia state (bar layout, enabled plugins)"
-
-STATE_DIR="$HOME/.local/state"
-NOCTALIA_STATE_REPO="state/noctalia/settings.toml"
-NOCTALIA_STATE="$STATE_DIR/noctalia/settings.toml"
-
-mkdir -p "$STATE_DIR/noctalia"
-if [ -e "$NOCTALIA_STATE" ] && [ ! -L "$NOCTALIA_STATE" ]; then
-    echo "Backing up existing noctalia settings.toml"
-    mv "$NOCTALIA_STATE" "$STATE_DIR/noctalia/settings.toml.backup"
-fi
-ln -sfn "$DOTFILES_DIR/$NOCTALIA_STATE_REPO" "$NOCTALIA_STATE"
-echo "Linked noctalia/settings.toml"
-
-# Noctalia saves absolute paths (wallpaper folder etc.) - point any
-# /home/<someone>/ in there at this user's home
-sed -i -E "s|\"/home/[^/\"]+/|\"$HOME/|g" "$DOTFILES_DIR/$NOCTALIA_STATE_REPO"
-
 # boxshell's app themes point at this home's paths; rebuild the list
 python3 -I "$DOTFILES_DIR/config/quickshell/boxshell/theming/gen-templates.py" >/dev/null \
     || warn "boxshell app theming: gen-templates.py failed"
@@ -335,8 +317,8 @@ if command -v flatpak >/dev/null 2>&1; then
 fi
 echo "Cursor set to $CURSOR_THEME ($CURSOR_SIZE)"
 
-step "Spotify: Spicetify + Comfy theme in Noctalia colors"
-# Noctalia's "spicetify" template writes Themes/Comfy/color.ini and reapplies
+step "Spotify: Spicetify + Comfy theme in the wallpaper's colours"
+# boxshell's "spicetify" template writes Themes/Comfy/color.ini and reapplies
 # on every palette change; the theme itself has to be installed by hand
 if command -v spicetify >/dev/null 2>&1; then
     COMFY="$CONFIG_DIR/spicetify/Themes/Comfy"

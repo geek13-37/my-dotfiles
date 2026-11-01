@@ -4,6 +4,7 @@
 import QtQuick
 import Quickshell
 import qs.bar
+import qs.control
 import qs.notifications
 import qs.osd
 import qs.services
@@ -29,5 +30,6 @@ ShellRoot {
         Rofi.text
         HyprColors.lua
         WallpaperPicker.open
+        ControlCenter.open
     }
 }

@@ -3,7 +3,6 @@
 -- so they work the same with the Russian layout active.
 
 local mod  = "SUPER"
-local noct = "noctalia msg "
 
 local function bind(keys, action, flags)
     hl.bind(mod .. " + " .. keys, action, flags)
@@ -32,19 +31,15 @@ bind("CTRL + SHIFT + H",     exec("happ"))
 -- Task manager on the Windows combo (no Mod)
 hl.bind("CTRL + SHIFT + Escape", exec("gnome-system-monitor"))
 
--- ─── Noctalia ───
+-- ─── Shell (boxshell) and rofi ───
 bind("SHIFT + Return",       exec("qs -c boxshell ipc call wallpapers toggle"))
-bind("S",                    exec(noct .. "panel-toggle control-center"))
 bind("CTRL + Return",        exec("rofi -show drun"))
-bind("ALT + L",              exec(noct .. "session lock"))
+bind("S",                    exec("qs -c boxshell ipc call control toggle"))
 bind("SHIFT + Q",            exec("qs -c boxshell ipc call session toggle"))
 -- clipboard history with image thumbnails (bin/clipboard)
 bind("V",                    exec("clipboard"))
-bind("semicolon",            exec(noct .. "panel-toggle launcher /emo"))
 -- calculator (rofi-calc): Enter copies the result
 bind("Z",                    exec("rofi -show calc -modi calc -no-show-match -no-sort -calc-command \"echo -n '{result}' | wl-copy\""))
--- Window overview: Noctalia's window switcher
-bind("O",                    exec(noct .. "window-switcher"))
 
 -- ─── Media / brightness (work on the lock screen too) ───
 -- volume goes straight to PipeWire; boxshell shows the OSD on any change
@@ -181,4 +176,4 @@ end)
 
 -- ─── Exit / power ───
 hl.bind("CTRL + ALT + Delete", exec("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
-bind("SHIFT + P",            exec(noct .. "dpms-off"))
+bind("SHIFT + P",            hl.dsp.dpms({ action = "disable" }))
