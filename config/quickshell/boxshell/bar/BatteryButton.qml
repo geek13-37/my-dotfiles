@@ -97,8 +97,7 @@ MouseArea {
 
                     Rectangle {
                         anchors.fill: parent
-                        color: profileButton.active || profileButton.containsMouse ? Theme.accent : Theme.clear(Theme.accent)
-                        Behavior on color { ColorAnimation { duration: 120 } }
+                        color: profileButton.active ? Theme.accent : profileButton.containsMouse ? Theme.hover : "transparent"
                     }
                     Column {
                         anchors.centerIn: parent
@@ -106,13 +105,13 @@ MouseArea {
                         Icon {
                             anchors.horizontalCenter: parent.horizontalCenter
                             text: profileButton.modelData.icon
-                            color: profileButton.active || profileButton.containsMouse ? Theme.accentText : Theme.fg
+                            color: profileButton.active ? Theme.accentText : Theme.fg
                         }
                         Label {
                             anchors.horizontalCenter: parent.horizontalCenter
                             text: profileButton.modelData.label
                             font.pixelSize: Theme.fontSize - 2
-                            color: profileButton.active || profileButton.containsMouse ? Theme.accentText : Theme.fg
+                            color: profileButton.active ? Theme.accentText : Theme.fg
                         }
                     }
                 }

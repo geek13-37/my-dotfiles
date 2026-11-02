@@ -23,6 +23,8 @@ ShellRoot {
 
     VolumeOsd {}
     BrightnessOsd {}
+    LanguageOsd {}
+    CapsOsd {}
     Notifications {}
 
     // touch the singletons so they start (rofi and Hyprland colours, picker IPC)

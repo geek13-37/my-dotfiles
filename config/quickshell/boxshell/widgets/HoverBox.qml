@@ -1,7 +1,7 @@
 import QtQuick
 
 // Marks a clickable bar item. While `active` (hovered, or its menu is open)
-// the bar's one hover square glides over to this item, like the macOS menu
+// the bar's one hover square jumps to this item, like the macOS menu
 // bar; Bar.qml draws it. Put it inside the item, it fills it.
 Item {
     id: root

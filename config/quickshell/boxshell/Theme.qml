@@ -22,6 +22,17 @@ Singleton {
     // what's behind it (layer rule in hypr/config/rules.lua), like behind
     // Alacritty. Denser the lighter the wallpaper under the bar, so the light
     // text always reads.
+    // hover on bar items and menu rows: a faint light square, text keeps
+    // its colour
+    readonly property color hover: Qt.rgba(fg.r, fg.g, fg.b, 0.14)
+
+    // traffic light for load (0..1): plain text up to 30%, then green,
+    // yellow from 70%, red from 90%. Fixed colours, not from the palette, so
+    // they always mean the same.
+    function level(v: real): color {
+        return v >= 0.9 ? "#FF5D62" : v >= 0.7 ? "#E6C384" : v >= 0.3 ? "#98BB6C" : fg
+    }
+
     readonly property real glassAlpha: 0.55 + 0.35 * Scheme.brightness
     readonly property color glass: Qt.rgba(bg.r, bg.g, bg.b, glassAlpha)
 
@@ -43,7 +54,11 @@ Singleton {
     readonly property string font: "JetBrains Mono"
     readonly property int fontSize: 13
     // sharp corners to match the square look; icons are ligature names
-    readonly property string iconFont: "Material Symbols Sharp"
+    // Phosphor icons, shipped with the shell (widgets/Icon.qml maps names)
+    readonly property string iconFont: phosphor.name
+    readonly property string iconFontBold: phosphorBold.name
+    property FontLoader phosphor: FontLoader { source: Qt.resolvedUrl("assets/phosphor/Phosphor.ttf") }
+    property FontLoader phosphorBold: FontLoader { source: Qt.resolvedUrl("assets/phosphor/Phosphor-Bold.ttf") }
     readonly property int iconSize: 18
 
     readonly property int barHeight: 32
@@ -58,6 +73,6 @@ Singleton {
     // the same gap on all four sides of the bar's end items
     readonly property int itemInset: (barHeight - itemHeight) / 2
     readonly property int itemPadding: 8
-    readonly property int spacing: 4
+    readonly property int spacing: 10
     readonly property int border: 1
 }

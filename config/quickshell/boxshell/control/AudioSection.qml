@@ -49,15 +49,14 @@ Column {
 
             Rectangle {
                 anchors.fill: parent
-                color: mute.containsMouse ? Theme.accent : Theme.clear(Theme.accent)
-                Behavior on color { ColorAnimation { duration: 120 } }
+                color: mute.containsMouse ? Theme.hover : "transparent"
             }
             Icon {
                 anchors.centerIn: parent
                 text: root.output
                       ? (root.muted || root.volume === 0 ? "volume_off" : root.volume < 0.5 ? "volume_down" : "volume_up")
                       : (root.muted ? "mic_off" : "mic")
-                color: mute.containsMouse ? Theme.accentText : root.muted ? Theme.dim : Theme.fg
+                color: root.muted ? Theme.dim : Theme.fg
             }
         }
 
@@ -98,12 +97,11 @@ Column {
                 else Pipewire.preferredDefaultAudioSource = modelData
             }
 
-            readonly property color ink: containsMouse ? Theme.accentText : Theme.fg
+            readonly property color ink: Theme.fg
 
             Rectangle {
                 anchors.fill: parent
-                color: device.containsMouse ? Theme.accent : Theme.clear(Theme.accent)
-                Behavior on color { ColorAnimation { duration: 120 } }
+                color: device.containsMouse ? Theme.hover : "transparent"
             }
 
             Icon {
@@ -125,7 +123,7 @@ Column {
                 anchors { right: parent.right; rightMargin: Theme.menuInset; verticalCenter: parent.verticalCenter }
                 visible: device.selected
                 text: "check"
-                color: device.containsMouse ? Theme.accentText : Theme.accent
+                color: Theme.accent
             }
         }
     }

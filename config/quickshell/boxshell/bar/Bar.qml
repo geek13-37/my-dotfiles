@@ -32,7 +32,7 @@ PanelWindow {
             anchors.fill: parent
 
             // One hover square for the whole bar (see widgets/HoverBox.qml):
-            // items say when they're active, the square glides to the latest.
+            // items say when they're active, the square sits on the latest.
             readonly property bool isHoverHost: true
             property var hoverStack: []
             readonly property Item hoverTarget: hoverStack.length ? hoverStack[hoverStack.length - 1] : null
@@ -43,17 +43,13 @@ PanelWindow {
                 hoverStack = hoverStack.filter(i => i !== item)
             }
 
+            // no glide or fade: it just sits on whatever is hovered
             Rectangle {
                 id: hoverSquare
                 readonly property Item target: content.hoverTarget
-                // slide only when it's already showing; otherwise appear in place
-                property bool glide: false
 
-                color: Qt.rgba(Theme.fg.r, Theme.fg.g, Theme.fg.b, 0.14)
-                opacity: target ? 1 : 0
-                Behavior on opacity { NumberAnimation { duration: 120 } }
-                Behavior on x { enabled: hoverSquare.glide; NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
-                Behavior on width { enabled: hoverSquare.glide; NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
+                color: Theme.hover
+                visible: target !== null
 
                 function follow() {
                     if (!target) return
@@ -64,11 +60,7 @@ PanelWindow {
                     height = target.height
                 }
 
-                onTargetChanged: {
-                    if (!target) return
-                    glide = opacity > 0.05
-                    follow()
-                }
+                onTargetChanged: follow()
 
                 // items change size as their numbers update and the bar lays
                 // itself out after startup: keep matching the target
@@ -101,6 +93,7 @@ PanelWindow {
                 PrivacyIndicator { bar: bar }
                 DockerButton { bar: bar }
                 Network {}
+                LayoutButton {}
                 // laptop only, hidden on a desktop
                 Backlight {}
                 Volume {}

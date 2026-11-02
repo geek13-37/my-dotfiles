@@ -37,8 +37,7 @@ window {
     width: 560px;
     // see-through; Hyprland blurs behind it (rules.lua)
     background-color: @glass;
-    border: 1px;
-    border-color: @surface;
+    border: 0;
     border-radius: 0;
 }
 

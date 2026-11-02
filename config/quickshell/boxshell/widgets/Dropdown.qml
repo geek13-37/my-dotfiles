@@ -49,8 +49,6 @@ PanelWindow {
         x: Math.max(Theme.gapSide, Math.min(root.alignRight ? root.anchorX - width : root.anchorX,
                                             root.width - width - Theme.gapSide))
         color: Theme.glass
-        border.color: Theme.surface
-        border.width: Theme.border
 
         // just under the bar
         y: Theme.gapTop + Theme.barHeight + Theme.menuGap

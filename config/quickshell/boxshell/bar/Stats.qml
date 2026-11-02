@@ -28,26 +28,30 @@ MouseArea {
 
     HoverBox { active: root.containsMouse || root.open }
 
+    readonly property color ramColor: Theme.level(SysStats.ramTotal > 0 ? SysStats.ramUsed / SysStats.ramTotal : 0)
+    readonly property color cpuColor: Theme.level(SysStats.cpu)
+
     Row {
         id: row
         anchors.centerIn: parent
         spacing: 4
 
-        Icon { height: Theme.itemHeight; text: "memory" }
+        Icon { height: Theme.itemHeight; text: "memory"; color: root.ramColor }
         Label {
             height: Theme.itemHeight
             text: `${SysStats.ramUsed.toFixed(1)} GiB`
+            color: root.ramColor
         }
 
         Item { width: 8; height: 1 }
 
-        Icon { height: Theme.itemHeight; text: "speed" }
+        Icon { height: Theme.itemHeight; text: "speed"; color: root.cpuColor }
         // no reserved width: the padding stays even on both sides (the hover
         // square follows the width when the digits change)
         TickingLabel {
             height: Theme.itemHeight
             value: SysStats.cpu
-            color: SysStats.cpu > 0.85 ? Theme.error : Theme.fg
+            color: root.cpuColor
         }
     }
 

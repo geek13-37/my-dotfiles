@@ -3,7 +3,8 @@ import Quickshell.Services.Pipewire
 import qs
 import qs.widgets
 
-// Scroll to change volume, click to mute.
+// Volume as a bare percentage (grey when muted). Scroll to change it,
+// click to mute.
 MouseArea {
     readonly property PwNode sink: Pipewire.defaultAudioSink
     readonly property bool muted: sink?.audio?.muted ?? true
@@ -22,11 +23,6 @@ MouseArea {
         id: row
         anchors.centerIn: parent
         spacing: 4
-        Icon {
-            height: Theme.itemHeight
-            text: muted || percent === 0 ? "volume_off" : percent < 50 ? "volume_down" : "volume_up"
-            color: muted ? Theme.dim : Theme.fg
-        }
         TickingLabel {
             height: Theme.itemHeight
             value: sink?.audio?.volume ?? 0

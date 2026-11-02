@@ -5,8 +5,10 @@ import qs
 import qs.services
 import qs.widgets
 
-// Docker containers, like Noctalia's mini-docker: the bar shows how many run,
-// the menu starts, stops and restarts them.
+// Docker containers: the bar shows the whale and how many run. The menu
+// groups them by compose project (the rest under "other"); a group with
+// nothing running starts folded. A row is one line, name and a short status;
+// hovering swaps the status for its buttons.
 MouseArea {
     id: root
     required property var bar
@@ -14,9 +16,6 @@ MouseArea {
 
     // a square while it's just the whale
     implicitWidth: Docker.running > 0 ? row.implicitWidth + Theme.itemPadding * 2 : Theme.itemHeight
-    // the count appearing or going doesn't make the neighbours jump
-    Behavior on implicitWidth { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
-    clip: true
     implicitHeight: Theme.itemHeight
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
@@ -26,6 +25,8 @@ MouseArea {
         open = !open
         if (open) Docker.refresh()
     }
+
+    Binding { target: Docker; property: "statsWanted"; value: root.open }
 
     readonly property color tint: !Docker.available ? Theme.dim
                                 : containsMouse || open ? Theme.accent : Theme.fg
@@ -50,7 +51,7 @@ MouseArea {
 
             Text {
                 id: whale
-                text: "\uf308"
+                text: ""
                 font.family: "JetBrainsMono Nerd Font"
                 font.pixelSize: Theme.iconSize
                 renderType: Text.NativeRendering
@@ -68,6 +69,37 @@ MouseArea {
         }
     }
 
+    // a square icon button for rows and group headers; `danger` asks for a
+    // second click and goes red in between
+    component RowButton: MouseArea {
+        id: button
+        property string icon
+        property bool danger: false
+        property bool armed: false
+        signal activated()
+
+        width: Theme.itemHeight
+        height: Theme.itemHeight
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
+        onClicked: {
+            if (danger && !armed) { armed = true; return }
+            armed = false
+            activated()
+        }
+        onContainsMouseChanged: if (!containsMouse) armed = false
+
+        Rectangle {
+            anchors.fill: parent
+            color: button.armed ? Theme.error : button.containsMouse ? Theme.hover : "transparent"
+        }
+        Icon {
+            anchors.centerIn: parent
+            text: button.icon
+            color: button.armed ? Theme.errorText : Theme.fg
+        }
+    }
+
     Dropdown {
         id: drawer
         screen: root.bar.screen
@@ -79,13 +111,19 @@ MouseArea {
 
         MenuHeader {
             icon: "deployed_code"
-            title: !Docker.available ? "docker isn't running"
-                 : `containers  ·  ${Docker.running} running`
+            title: "Docker"
+            Label {
+                anchors { right: parent.right; verticalCenter: parent.verticalCenter }
+                color: Theme.dim
+                text: !Docker.available ? "not running"
+                    : Docker.containers.length === 0 ? "no containers"
+                    : `${Docker.running} of ${Docker.containers.length} running`
+            }
         }
 
         Flickable {
             width: parent.width
-            height: Math.min(contentHeight, 420)
+            height: Math.min(contentHeight, 480)
             contentHeight: list.implicitHeight
             clip: true
             boundsBehavior: Flickable.StopAtBounds
@@ -96,93 +134,176 @@ MouseArea {
                 spacing: 2
 
                 Repeater {
-                    model: Docker.containers
+                    model: Docker.groups
 
-                    Rectangle {
-                        id: entry
+                    Column {
+                        id: group
                         required property var modelData
-                        readonly property bool running: modelData.state === "running"
-                        readonly property bool busy: Docker.busy[modelData.id] === true
-
+                        readonly property bool expanded: Docker.isExpanded(modelData)
+                        readonly property int stopped: modelData.containers.length - modelData.running
                         width: list.width
-                        height: 44
-                        color: hover.hovered ? Theme.accent : Theme.clear(Theme.accent)
-                        // what goes on top of the row's colour
-                        readonly property color ink: hover.hovered ? Theme.accentText : Theme.fg
-                        Behavior on color { ColorAnimation { duration: 120 } }
-                        HoverHandler { id: hover }
+                        spacing: 2
 
-                        // pulse while docker is working on it
-                        SequentialAnimation on opacity {
-                            running: entry.busy
-                            loops: Animation.Infinite
-                            onRunningChanged: if (!running) entry.opacity = 1
-                            NumberAnimation { to: 0.4; duration: 400 }
-                            NumberAnimation { to: 1; duration: 400 }
-                        }
+                        // group header: click to fold
+                        MouseArea {
+                            id: header
+                            width: parent.width
+                            height: 32
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: Docker.toggle(group.modelData)
 
-                        Rectangle {
-                            id: dot
-                            anchors { left: parent.left; leftMargin: Theme.menuInset; verticalCenter: parent.verticalCenter }
-                            width: 8
-                            height: 8
-                            color: entry.modelData.health === "unhealthy" ? Theme.error
-                                 : hover.hovered ? entry.ink
-                                 : entry.running ? Theme.accent : Theme.dim
-                        }
+                            Rectangle {
+                                anchors.fill: parent
+                                color: header.containsMouse ? Theme.hover : "transparent"
+                            }
 
-                        Column {
-                            anchors { left: dot.right; leftMargin: 10; right: buttons.left; rightMargin: 8
-                                      verticalCenter: parent.verticalCenter }
-                            spacing: 2
-                            Label {
-                                width: parent.width
-                                elide: Text.ElideRight
-                                color: entry.ink
-                                text: entry.modelData.project !== ""
-                                      ? `${entry.modelData.name}  ·  ${entry.modelData.project}`
-                                      : entry.modelData.name
+                            Icon {
+                                id: chevron
+                                anchors { left: parent.left; leftMargin: Theme.menuInset - 4; verticalCenter: parent.verticalCenter }
+                                text: group.expanded ? "keyboard_arrow_down" : "chevron_right"
+                                color: Theme.dim
                             }
                             Label {
-                                width: parent.width
+                                anchors { left: chevron.right; leftMargin: 4; right: headerSide.left; rightMargin: 8
+                                          verticalCenter: parent.verticalCenter }
                                 elide: Text.ElideRight
-                                font.pixelSize: Theme.fontSize - 2
-                                color: hover.hovered ? entry.ink : Theme.dim
-                                opacity: hover.hovered ? 0.75 : 1
-                                text: entry.modelData.status
+                                text: group.modelData.name
+                                font.bold: true
+                                color: group.modelData.compose ? Theme.fg : Theme.dim
                             }
-                        }
 
-                        Row {
-                            id: buttons
-                            anchors { right: parent.right; rightMargin: Theme.menuInset - 5; verticalCenter: parent.verticalCenter }
-                            spacing: 2
+                            Item {
+                                id: headerSide
+                                anchors { right: parent.right; rightMargin: 3; verticalCenter: parent.verticalCenter }
+                                width: header.containsMouse && headerButtons.width > 0 ? headerButtons.width : count.width + Theme.menuInset - 3
+                                height: Theme.itemHeight
 
-                            Repeater {
-                                model: [
-                                    entry.running ? { icon: "stop", action: "stop" } : { icon: "play_arrow", action: "start" },
-                                    { icon: "restart_alt", action: "restart" },
-                                ]
+                                Label {
+                                    id: count
+                                    anchors { right: parent.right; rightMargin: Theme.menuInset - 3; verticalCenter: parent.verticalCenter }
+                                    visible: !(header.containsMouse && headerButtons.width > 0)
+                                    color: Theme.dim
+                                    text: `${group.modelData.running}/${group.modelData.containers.length}`
+                                }
 
-                                MouseArea {
-                                    id: button
-                                    required property var modelData
-                                    width: 28
-                                    height: 28
-                                    hoverEnabled: true
-                                    cursorShape: Qt.PointingHandCursor
-                                    enabled: !entry.busy
-                                    onClicked: Docker.act(modelData.action, entry.modelData.id)
+                                Row {
+                                    id: headerButtons
+                                    anchors.right: parent.right
+                                    visible: header.containsMouse
+                                    spacing: 2
 
-                                    Rectangle {
-                                        anchors.fill: parent
-                                        color: button.containsMouse ? entry.ink : Theme.clear(entry.ink)
-                                        Behavior on color { ColorAnimation { duration: 120 } }
+                                    RowButton {
+                                        visible: group.modelData.compose && group.stopped > 0
+                                        icon: "play_arrow"
+                                        onActivated: Docker.actProject("start", group.modelData)
                                     }
-                                    Icon {
-                                        anchors.centerIn: parent
-                                        text: button.modelData.icon
-                                        color: button.containsMouse ? Theme.accent : entry.ink
+                                    RowButton {
+                                        visible: group.modelData.compose && group.modelData.running > 0
+                                        icon: "stop"
+                                        onActivated: Docker.actProject("stop", group.modelData)
+                                    }
+                                    RowButton {
+                                        visible: !group.modelData.compose && group.stopped > 0
+                                        icon: "delete_sweep"
+                                        danger: true
+                                        onActivated: Docker.removeStopped(group.modelData)
+                                    }
+                                }
+                            }
+                        }
+
+                        Repeater {
+                            model: group.expanded ? group.modelData.containers : []
+
+                            MouseArea {
+                                id: entry
+                                required property var modelData
+                                readonly property bool running: modelData.state === "running"
+                                readonly property string busy: Docker.busy[modelData.id] ?? ""
+                                readonly property var stat: Docker.stats[modelData.name]
+
+                                width: list.width
+                                height: 32
+                                hoverEnabled: true
+
+                                Rectangle {
+                                    anchors.fill: parent
+                                    color: entry.containsMouse ? Theme.hover : "transparent"
+                                }
+
+                                Rectangle {
+                                    id: dot
+                                    anchors { left: parent.left; leftMargin: Theme.menuInset + 18 + 4 + 4; verticalCenter: parent.verticalCenter }
+                                    width: 6
+                                    height: 6
+                                    color: entry.modelData.health === "unhealthy" ? Theme.error
+                                         : entry.running ? Theme.accent : Theme.dim
+                                }
+
+                                Label {
+                                    anchors { left: dot.right; leftMargin: 10; right: side.left; rightMargin: 8
+                                              verticalCenter: parent.verticalCenter }
+                                    elide: Text.ElideRight
+                                    text: entry.modelData.name
+                                    color: entry.running ? Theme.fg : Theme.dim
+                                }
+
+                                Item {
+                                    id: side
+                                    readonly property bool showButtons: entry.containsMouse && entry.busy === ""
+                                    anchors { right: parent.right; rightMargin: 3; verticalCenter: parent.verticalCenter }
+                                    width: showButtons ? buttons.width : status.width + Theme.menuInset - 3
+                                    height: Theme.itemHeight
+
+                                    Label {
+                                        id: status
+                                        anchors { right: parent.right; rightMargin: Theme.menuInset - 3; verticalCenter: parent.verticalCenter }
+                                        visible: !side.showButtons
+                                        color: entry.busy !== "" ? Theme.fg
+                                             : entry.modelData.health === "unhealthy" ? Theme.error : Theme.dim
+                                        font.pixelSize: Theme.fontSize - 1
+                                        text: entry.busy !== "" ? `${entry.busy}…`
+                                            : entry.modelData.health === "unhealthy" ? "unhealthy"
+                                            : entry.running && entry.stat ? `${entry.stat.cpu}  ${entry.stat.mem}`
+                                            : Docker.shortStatus(entry.modelData)
+                                    }
+
+                                    Row {
+                                        id: buttons
+                                        anchors.right: parent.right
+                                        visible: side.showButtons
+                                        spacing: 2
+
+                                        RowButton {
+                                            visible: entry.running && entry.modelData.port !== ""
+                                            icon: "open_in_new"
+                                            onActivated: { Docker.openPort(entry.modelData); root.open = false }
+                                        }
+                                        RowButton {
+                                            icon: "article"
+                                            onActivated: { Docker.logs(entry.modelData); root.open = false }
+                                        }
+                                        RowButton {
+                                            visible: entry.running
+                                            icon: "terminal"
+                                            onActivated: { Docker.shell(entry.modelData); root.open = false }
+                                        }
+                                        RowButton {
+                                            visible: entry.running
+                                            icon: "restart_alt"
+                                            onActivated: Docker.act("restart", entry.modelData)
+                                        }
+                                        RowButton {
+                                            icon: entry.running ? "stop" : "play_arrow"
+                                            onActivated: Docker.act(entry.running ? "stop" : "start", entry.modelData)
+                                        }
+                                        RowButton {
+                                            visible: !entry.running
+                                            icon: "delete"
+                                            danger: true
+                                            onActivated: Docker.act("rm", entry.modelData)
+                                        }
                                     }
                                 }
                             }

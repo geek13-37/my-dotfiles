@@ -4,9 +4,9 @@ import Quickshell.Hyprland
 import qs
 import qs.widgets
 
-// Workspaces of this monitor as numbered squares. The accent square glides to
-// the active one, like Apple's tab selection: quick, soft stop, and the
-// numbers turn dark exactly where the square covers them, even mid-move.
+// Workspaces of this monitor as numbered squares. The active one is filled
+// with the accent; on a switch the old square fades out and the new one in
+// where they are, nothing slides.
 Item {
     id: root
     required property ShellScreen screen
@@ -14,7 +14,6 @@ Item {
     // special ones (scratchpad) left out
     readonly property var workspaces: Hyprland.workspaces.values.filter(ws => ws.id > 0 && ws.monitor === root.monitor)
     readonly property int activeIndex: workspaces.indexOf(monitor?.activeWorkspace)
-    readonly property int step: Theme.itemHeight + row.spacing
 
     // grow and shrink smoothly when workspaces come and go, so the items
     // next to it slide over instead of jumping
@@ -26,17 +25,6 @@ Item {
     // a bright filled square looks bigger than the faint hover one of the
     // same size, so it's inset a pixel on each side to look the same
     readonly property int inset: 1
-
-    Rectangle {
-        id: highlight
-        visible: root.activeIndex >= 0
-        x: Math.max(0, root.activeIndex) * root.step + root.inset
-        y: root.inset
-        width: Theme.itemHeight - 2 * root.inset
-        height: Theme.itemHeight - 2 * root.inset
-        color: Theme.accent
-        Behavior on x { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
-    }
 
     Row {
         id: row
@@ -62,44 +50,24 @@ Item {
                 // the same hover square as the other bar items
                 HoverBox { active: hover.hovered && !workspace.active }
 
+                Rectangle {
+                    anchors { fill: parent; margins: root.inset }
+                    color: Theme.accent
+                    opacity: workspace.active ? 1 : 0
+                    Behavior on opacity { NumberAnimation { duration: 120 } }
+                }
+
                 Label {
                     anchors.centerIn: parent
                     text: workspace.modelData.id
+                    color: workspace.active ? Theme.accentText : Theme.fg
+                    Behavior on color { ColorAnimation { duration: 120 } }
                 }
 
                 HoverHandler { id: hover; cursorShape: Qt.PointingHandCursor }
                 TapHandler {
                     // Hyprland 0.56 config is Lua, so dispatch takes Lua too
                     onTapped: Hyprland.dispatch(`hl.dsp.focus({ workspace = ${workspace.modelData.id} })`)
-                }
-            }
-        }
-    }
-
-    // the same numbers in the dark colour, showing only inside the square
-    Item {
-        x: highlight.x
-        y: highlight.y
-        width: highlight.width
-        height: highlight.height
-        visible: highlight.visible
-        clip: true
-
-        Repeater {
-            model: root.workspaces
-
-            Item {
-                required property HyprlandWorkspace modelData
-                required property int index
-                x: index * root.step - highlight.x
-                y: -highlight.y
-                width: Theme.itemHeight
-                height: Theme.itemHeight
-
-                Label {
-                    anchors.centerIn: parent
-                    text: parent.modelData.id
-                    color: Theme.accentText
                 }
             }
         }

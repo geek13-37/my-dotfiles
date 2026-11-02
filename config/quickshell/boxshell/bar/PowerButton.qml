@@ -13,10 +13,9 @@ MouseArea {
 
     HoverBox { active: parent.containsMouse || SessionMenu.open }
 
-    // square power symbol to go with the square buttons
-    SquarePower {
+    Icon {
         anchors.centerIn: parent
+        text: "power_settings_new"
         color: parent.containsMouse || SessionMenu.open ? Theme.accent : Theme.fg
-        Behavior on color { ColorAnimation { duration: 120 } }
     }
 }

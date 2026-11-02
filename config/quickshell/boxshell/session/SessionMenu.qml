@@ -60,8 +60,6 @@ Singleton {
             width: 220
             height: column.implicitHeight + 2 * Theme.menuPadding
             color: Theme.glass
-            border.color: Theme.surface
-            border.width: Theme.border
 
             // just under the bar
             y: Theme.gapTop + Theme.barHeight + Theme.menuGap
@@ -110,8 +108,7 @@ Singleton {
 
                         Rectangle {
                             anchors.fill: parent
-                            color: button.armed ? Theme.error : button.containsMouse ? Theme.accent : Theme.clear(Theme.accent)
-                            Behavior on color { ColorAnimation { duration: 120 } }
+                            color: button.armed ? Theme.error : button.containsMouse ? Theme.hover : "transparent"
                         }
 
                         Row {
@@ -119,11 +116,11 @@ Singleton {
                             spacing: 10
                             Icon {
                                 text: button.modelData.icon
-                                color: button.armed ? Theme.errorText : button.containsMouse ? Theme.accentText : Theme.fg
+                                color: button.armed ? Theme.errorText : Theme.fg
                             }
                             Label {
                                 text: button.armed ? "click again" : button.modelData.label
-                                color: button.armed ? Theme.errorText : button.containsMouse ? Theme.accentText : Theme.fg
+                                color: button.armed ? Theme.errorText : Theme.fg
                             }
                         }
                     }

@@ -20,8 +20,9 @@ Rectangle {
     width: parent?.width ?? 0
     height: content.implicitHeight + 24
     color: Theme.glass
-    border.color: critical ? Theme.error : Theme.surface
-    border.width: Theme.border
+    // no outline on the glass; a critical one keeps a red edge
+    border.color: Theme.error
+    border.width: critical ? Theme.border : 0
 
     // play the exit animation, then run `done` (dismiss, expire, invoke...)
     function close(done) {
@@ -142,14 +143,13 @@ Rectangle {
 
                         Rectangle {
                             anchors.fill: parent
-                            color: action.containsMouse ? Theme.accent : Theme.surface
-                            Behavior on color { ColorAnimation { duration: 120 } }
+                            color: action.containsMouse ? Qt.tint(Theme.surface, Theme.hover) : Theme.surface
                         }
                         Label {
                             id: actionLabel
                             anchors.centerIn: parent
                             text: action.modelData.text
-                            color: action.containsMouse ? Theme.accentText : Theme.fg
+                            color: Theme.fg
                         }
                     }
                 }
@@ -159,12 +159,12 @@ Rectangle {
 
     // countdown line
     Rectangle {
-        anchors { left: parent.left; bottom: parent.bottom; margins: Theme.border }
+        anchors { left: parent.left; bottom: parent.bottom; margins: card.border.width }
         height: 2
         color: card.critical ? Theme.error : Theme.accent
 
         NumberAnimation on width {
-            from: card.width - 2 * Theme.border
+            from: card.width - 2 * card.border.width
             to: 0
             // expireTimeout is in seconds; -1 "server decides", 0 "never"
             duration: card.critical ? 10000

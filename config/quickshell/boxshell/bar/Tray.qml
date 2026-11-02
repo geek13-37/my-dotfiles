@@ -74,8 +74,7 @@ MouseArea {
 
                     Rectangle {
                         anchors.fill: parent
-                        color: item.containsMouse ? Theme.accent : Theme.clear(Theme.accent)
-                        Behavior on color { ColorAnimation { duration: 120 } }
+                        color: item.containsMouse ? Theme.hover : "transparent"
                     }
 
                     IconImage {
