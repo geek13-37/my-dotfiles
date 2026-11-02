@@ -7,20 +7,20 @@
       "right": 2
     },
     "color": {
-      "1": "#d663fb",
-      "2": "#ce63da"
+      "1": "#ffb663",
+      "2": "#e6be63"
     }
   },
   "display": {
     "separator": "  ",
     "color": {
-      "keys": "#d6bbfb",
-      "title": "#cec2da"
+      "keys": "#ffb68e",
+      "title": "#e6beab"
     },
     "percent": {
       "color": {
-        "green": "#f1b7c2",
-        "yellow": "#d6bbfb",
+        "green": "#cec991",
+        "yellow": "#ffb68e",
         "red": "#ffb4ab"
       }
     }
