@@ -15,12 +15,12 @@ capsule_opacity = 0.0
 capsule_padding = 8.0
 capsule_radius = 0
 capsule_thickness = 0.69999998807907104
-end = [ "mini_docker_2", "network_tx", "network_rx", "privacy", "wallpaper", "clipboard", "brightness", "session" ]
+end = [ "mini_docker_2", "network_rx", "network_tx", "session" ]
 margin_edge = 6
 margin_ends = 14
 padding = 3
 radius = 0
-start = [ "workspaces", "tray", "ram", "cpu", "tray" ]
+start = [ "workspaces", "tray", "ram", "cpu" ]
 thickness = 35
 
 [calendar]
@@ -157,6 +157,10 @@ input_borders = false
 niri_overview_type_to_launch_enabled = true
 popup_borders = false
 
+    [shell.animation]
+    enabled = false
+    speed = 4.0
+
     [shell.launcher]
     categories = false
     layout = "simple"
@@ -203,13 +207,13 @@ wallpaper_scheme = "dysfunctional"
 directory = "/home/g33k/Pictures"
 
     [wallpaper.default]
-    path = "/home/g33k/Pictures/abstract-swirls.jpg"
+    path = "/home/g33k/Pictures/12259305(1).png"
 
     [wallpaper.last]
-    path = "/home/g33k/Pictures/abstract-swirls.jpg"
+    path = "/home/g33k/Pictures/12259305(1).png"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/g33k/Pictures/abstract-swirls.jpg"
+    path = "/home/g33k/Pictures/12259305(1).png"
 
 [widget.active_window]
 enabled = false
