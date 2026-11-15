@@ -49,8 +49,16 @@ hl.window_rule({
     no_focus = true,
 })
 
--- Noctalia draws its own surfaces; blur is off globally (see look.lua), so no
--- layer rules are needed here.
+-- Noctalia surfaces (bar, panels, OSD, notifications) are see-through, so let
+-- Hyprland blur what is behind them; ignore_alpha skips fully transparent parts
+-- of fullscreen layers (wallpaper, desktop widgets) so only real boxes blur.
+hl.layer_rule({
+    name  = "noctalia",
+    match = { namespace = "^noctalia-(bar-.+|panel|attached-panel|notification|dock|osd|window-switcher|desktop-widget-.+)$" },
+    blur         = true,
+    blur_popups  = true,
+    ignore_alpha = 0.3,
+})
 
 -- Scratchpad (Mod+`): opening it empty spawns a terminal; wide outer gaps
 -- keep it smaller than the screen so it reads as a drop-down

@@ -15,12 +15,12 @@ capsule_opacity = 0.0
 capsule_padding = 8.0
 capsule_radius = 0
 capsule_thickness = 0.69999998807907104
-end = [ "network_tx", "network_rx", "taskbar", "privacy", "wallpaper", "clipboard", "brightness", "session" ]
+end = [ "mini_docker_2", "network_tx", "network_rx", "privacy", "wallpaper", "clipboard", "brightness", "session" ]
 margin_edge = 6
 margin_ends = 14
 padding = 3
 radius = 0
-start = [ "workspaces", "tray", "ram", "cpu" ]
+start = [ "workspaces", "tray", "ram", "cpu", "tray" ]
 thickness = 35
 
 [calendar]
@@ -203,13 +203,13 @@ wallpaper_scheme = "dysfunctional"
 directory = "/home/g33k/Pictures"
 
     [wallpaper.default]
-    path = "/home/g33k/Pictures/12259305(1).png"
+    path = "/home/g33k/Pictures/abstract-swirls.jpg"
 
     [wallpaper.last]
-    path = "/home/g33k/Pictures/12259305(1).png"
+    path = "/home/g33k/Pictures/abstract-swirls.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/g33k/Pictures/12259305(1).png"
+    path = "/home/g33k/Pictures/abstract-swirls.jpg"
 
 [widget.active_window]
 enabled = false
@@ -218,6 +218,9 @@ enabled = false
 enabled = false
 
 [widget.mini-docker]
+type = "8bury/mini-docker:mini-docker"
+
+[widget.mini_docker_2]
 type = "8bury/mini-docker:mini-docker"
 
 [widget.tray]
