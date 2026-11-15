@@ -9,6 +9,14 @@ hl.window_rule({
     move  = { "monitor_w-window_w-16", "monitor_h-window_h-16" },
 })
 
+-- Noctalia settings window: floats in the middle like a dialog
+hl.window_rule({
+    match  = { class = "^(dev\\.)?noctalia\\.Noctalia(\\.Settings)?$" },
+    float  = true,
+    size   = { 1080, 920 },
+    center = true,
+})
+
 -- Steam: everything except the main window floats
 hl.window_rule({
     match = { class = "^steam$", title = "negative:^[Ss]team$" },
@@ -41,17 +49,8 @@ hl.window_rule({
     no_focus = true,
 })
 
--- boxshell surfaces and rofi: Hyprland's own blur behind them, the same as
--- behind windows. Their backgrounds are see-through (alpha 0.55 and up);
--- ignore_alpha 0.3 skips the fully transparent parts of fullscreen layers
--- (menus, wallpaper picker) so only the boxes get blurred.
-hl.layer_rule({
-    name  = "boxshell",
-    match = { namespace = "^(boxshell-(bar|osd|notifications|session|tray|wallpapers)|rofi)$" },
-    blur         = true,
-    blur_popups  = true,
-    ignore_alpha = 0.3,
-})
+-- Noctalia draws its own surfaces; blur is off globally (see look.lua), so no
+-- layer rules are needed here.
 
 -- Scratchpad (Mod+`): opening it empty spawns a terminal; wide outer gaps
 -- keep it smaller than the screen so it reads as a drop-down
@@ -100,4 +99,13 @@ hl.window_rule({
     match   = { class = "^org\\.gnome\\.Loupe$" },
     no_blur = true,
     opaque  = true,
+})
+
+-- Dota 2 (native, XWayland): fullscreen, opaque, no blur — otherwise every
+-- frame gets composited at 85% opacity over a blurred background (big FPS hit)
+hl.window_rule({
+    match      = { class = "^(dota2|steam_app_570)$" },
+    no_blur    = true,
+    opaque     = true,
+    fullscreen = true,
 })

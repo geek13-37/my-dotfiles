@@ -2,11 +2,10 @@
 # pacman --needed. Kernel, bootloader and GPU drivers are NOT listed here:
 # archinstall sets up the first two, install.sh detects the GPU itself.
 
-# ─── Desktop: Hyprland + boxshell (config/quickshell/boxshell) ───
-# noctalia is never started: boxshell only uses `noctalia theme` as its colour
-# engine (palette from the wallpaper + app theme templates)
+# ─── Desktop: Hyprland + Noctalia (config/noctalia) ───
+# noctalia is the shell: bar, launcher, notifications, OSD, lock screen,
+# wallpapers; it also renders the palette into app themes and SDDM
 hyprland
-quickshell
 noctalia
 rofi
 rofi-calc

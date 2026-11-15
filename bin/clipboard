@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Clipboard history (cliphist) in rofi, images shown as thumbnails.
-# The picked entry goes back into the clipboard. Bound to Super+V.
+# Noctalia has its own clipboard on Super+V; this is the rofi fallback.
 
 set -euo pipefail
 
-cache="$HOME/.cache/boxshell/cliphist"
+cache="$HOME/.cache/cliphist"
 mkdir -p "$cache"
 
 # "[[ binary data 1 MiB png 1920x1080 ]]"

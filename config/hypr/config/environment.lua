@@ -18,4 +18,8 @@ if nvidia then
     -- hl.env("LIBVA_DRIVER_NAME", "nvidia")
     hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
     hl.env("GBM_BACKEND", "nvidia-drm")
+    -- shader cache: the driver's default 1 GB cap is too small for Dota 2,
+    -- so it evicted shaders and Steam recompiled them on every launch
+    hl.env("__GL_SHADER_DISK_CACHE_SIZE", "12000000000")
+    hl.env("__GL_SHADER_DISK_CACHE_SKIP_CLEANUP", "1")
 end

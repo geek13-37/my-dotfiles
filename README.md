@@ -2,7 +2,7 @@
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/60dc04f1-a33b-46d8-8f3b-622c8cf993a1" />
 
-Моё окружение рабочего стола: Hyprland + boxshell (свой shell на Quickshell), тема входа SDDM
+Моё окружение рабочего стола: Hyprland + Noctalia Shell, тема входа SDDM
 (where-is-my-sddm-theme), терминал alacritty, fish, fastfetch, обои - плюс все программы,
 которые у меня стоят.
 
@@ -27,14 +27,13 @@ cd ~/my-dotfiles
 ## Что внутри
 
 - `config/hypr` - Hyprland (Lua-конфиг, раскладка dwindle)
-- `config/quickshell/boxshell` - свой shell на Quickshell (`qs -c boxshell`):
-  бар (воркспейсы, трей, Docker, сеть, громкость, на ноутбуке батарея и
-  яркость), уведомления, OSD, меню питания, выбор обоев (Super+Shift+Enter).
-  Все цвета из обоев: бар, рамки окон Hyprland, rofi и темы приложений
-  (alacritty, GTK, Spotify, Telegram, SDDM... шаблоны в `theming/`, рендерит
-  `noctalia theme` - пакет noctalia нужен только для этого, сам не запускается)
-- `config/rofi` - лаунчер (Super+Ctrl+Enter), калькулятор (Super+Z), история
-  буфера обмена (Super+V)
+- `config/noctalia` + `state/noctalia/settings.toml` - Noctalia Shell (`noctalia --daemon`):
+  бар (воркспейсы, трей, RAM/CPU, сеть, Docker, буфер, яркость, питание),
+  лаунчер (Super+Ctrl+Enter), калькулятор (Super+Z), история буфера (Super+V),
+  уведомления, OSD, меню питания (Super+Shift+Q), выбор обоев (Super+Shift+Enter),
+  центр управления (Super+S). Палитра берётся из обоев и рендерится в темы
+  приложений (alacritty, GTK, Spotify, Telegram, SDDM...)
+- `config/rofi` - запасной dmenu-лаунчер (Noctalia - основной)
 - `bin/screenshot` - скриншоты в буфер и в `~/Pictures/Screenshots`
 - `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из обоев)
 - `config/fish` - конфиг fish (prompt на tide); `config/fish/cachyos` - копия
@@ -44,10 +43,10 @@ cd ~/my-dotfiles
   Spotify сам заново накатывает Spicetify с темой Comfy в цветах обоев
 - `config/sddm/theme.conf` - выбор темы входа SDDM (where-is-my-sddm-theme,
   ставится из AUR)
-- `config/quickshell/boxshell/theming/sddm.conf` + `config/sddm/noctalia-boot-theme` -
+- `config/noctalia/templates/sddm.conf` + `config/sddm/noctalia-boot-theme` -
   цвета SDDM берутся из палитры обоев и
   обновляются сами при её смене (скрипт ставится в `/usr/local/bin` и
-  запускается из boxshell через sudo без пароля - только он, см. install.sh)
+  запускается из Noctalia через sudo без пароля - только он, см. install.sh)
 - Приватность:
   - `config/networkmanager/00-privacy.conf` -> `/etc/NetworkManager/conf.d/`:
     свой фейковый MAC для каждой сети, hostname не уходит по DHCP, временные

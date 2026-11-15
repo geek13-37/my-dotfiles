@@ -4,13 +4,13 @@ hl.config({
         layout = "dwindle",
 
         -- tight tiling: 3px between windows; outer gaps line windows up with the
-        -- boxshell bar (14px from the sides), 6px below it
+        -- Noctalia bar (14px from the sides), 6px below it
         gaps_in  = 3,
         gaps_out = { top = 6, right = 14, bottom = 14, left = 14 },
 
         border_size = 1,
         col = {
-            -- kanagawa; boxshell overrides these with the wallpaper's colours
+            -- kanagawa; Noctalia recolours these from the wallpaper palette
             active_border   = "rgb(76946A)",
             inactive_border = "rgb(2A2A37)",
         },
@@ -30,9 +30,9 @@ hl.config({
         -- window corner radius
         rounding = 0,
 
-        -- slight transparency so the blur behind windows shows through
-        active_opacity     = 0.85,
-        inactive_opacity   = 0.80,
+        -- fully opaque windows (no blur, no transparency)
+        active_opacity     = 1.0,
+        inactive_opacity   = 1.0,
         fullscreen_opacity = 1.0,
 
         shadow = {
@@ -44,7 +44,7 @@ hl.config({
         },
 
         blur = {
-            enabled = true,
+            enabled = false,
             size    = 4,
             passes  = 2,
             noise   = 0.02,

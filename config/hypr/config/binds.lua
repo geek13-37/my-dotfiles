@@ -31,18 +31,18 @@ bind("CTRL + SHIFT + H",     exec("happ"))
 -- Task manager on the Windows combo (no Mod)
 hl.bind("CTRL + SHIFT + Escape", exec("gnome-system-monitor"))
 
--- ─── Shell (boxshell) and rofi ───
-bind("SHIFT + Return",       exec("qs -c boxshell ipc call wallpapers toggle"))
-bind("CTRL + Return",        exec("rofi -show drun"))
-bind("S",                    exec("qs -c boxshell ipc call control toggle"))
-bind("SHIFT + Q",            exec("qs -c boxshell ipc call session toggle"))
--- clipboard history with image thumbnails (bin/clipboard)
-bind("V",                    exec("clipboard"))
--- calculator (rofi-calc): Enter copies the result
-bind("Z",                    exec("rofi -show calc -modi calc -no-show-match -no-sort -calc-command \"echo -n '{result}' | wl-copy\""))
+-- ─── Shell (Noctalia) ───
+bind("SHIFT + Return",       exec("noctalia msg panel-toggle wallpaper"))
+bind("CTRL + Return",        exec("noctalia msg panel-toggle launcher"))
+bind("S",                    exec("noctalia msg panel-toggle control-center"))
+bind("SHIFT + Q",            exec("noctalia msg panel-toggle session"))
+-- clipboard history (Noctalia's own, images included)
+bind("V",                    exec("noctalia msg panel-toggle clipboard"))
+-- calculator: opens the launcher in calculator mode, Enter copies the result
+bind("Z",                    exec("noctalia msg panel-open launcher ="))
 
 -- ─── Media / brightness (work on the lock screen too) ───
--- volume goes straight to PipeWire; boxshell shows the OSD on any change
+-- volume goes straight to PipeWire; Noctalia shows the OSD on any change
 hl.bind("XF86AudioRaiseVolume",  exec("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"),    { locked = true, repeating = true })
 hl.bind("XF86AudioLowerVolume",  exec("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),         { locked = true, repeating = true })
 hl.bind("XF86AudioMute",         exec("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),        { locked = true })

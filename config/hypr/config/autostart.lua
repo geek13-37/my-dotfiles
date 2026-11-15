@@ -1,7 +1,7 @@
 -- Autostart
 hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd --all")
-    hl.exec_cmd("qs -c boxshell -d")
+    hl.exec_cmd("noctalia --daemon")
     -- keep the clipboard after the app it was copied from closes
     hl.exec_cmd("wl-clip-persist --clipboard regular")
     -- clipboard history for Super+V (cliphist + rofi)

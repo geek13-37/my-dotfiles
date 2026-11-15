@@ -1,5 +1,4 @@
-// boxshell launcher: square, colours follow the wallpaper
-// (boxshell writes them to ~/.cache/boxshell/colors.rasi).
+// rofi: square, kanagawa colours (Noctalia's launcher is the main one)
 configuration {
     modi: "drun,run,window";
     show-icons: true;
@@ -14,7 +13,6 @@ configuration {
     accent: #76946A; on-accent: #1F1F28;
     font: "JetBrains Mono 12";
 }
-@import "~/.cache/boxshell/colors.rasi"
 
 * {
     background-color: transparent;
