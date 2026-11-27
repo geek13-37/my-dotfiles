@@ -9,13 +9,8 @@ local error = "rgb(f38ba8)"
 local on_error = "rgb(11111b)"
 
 local function apply_theme()
+    -- no window borders (look.lua: border_size = 0), so none are set here
     hl.config({
-        general = {
-            col = {
-                active_border = primary,
-                inactive_border = surface,
-            },
-        },
         group = {
             col = {
                 border_active = secondary,

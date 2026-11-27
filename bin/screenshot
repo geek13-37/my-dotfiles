@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Screenshot to ~/Pictures/Screenshots and the clipboard, with a notification.
 # Usage: screenshot region|full|window
-#   region  drag a rectangle (Esc cancels); the frame is in the wallpaper accent
+#   region  drag a rectangle (Esc cancels); no frame is drawn around it
 #   full    the monitor under the cursor
 #   window  the focused window
 
@@ -13,9 +13,8 @@ mkdir -p "$dir"
 
 case "${1:-region}" in
     region)
-        # accent for the selection frame (kanagawa, like the static theme)
-        accent=76946a
-        geometry=$(slurp -d -b 00000066 -c "${accent}ff" -w 2) || exit 0
+        # no border around the selection: 1px, same colour as the dim overlay
+        geometry=$(slurp -d -b 00000066 -c 00000066 -w 1) || exit 0
         grim -g "$geometry" "$file"
         ;;
     full)

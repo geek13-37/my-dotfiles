@@ -83,6 +83,7 @@ yay -S --needed $(grep -vE '^\s*(#|$)' extras.txt)  # Steam, Lutris
   приложений (alacritty, GTK, Spotify, Telegram, SDDM...)
 - `config/rofi` - запасной dmenu-лаунчер (Noctalia - основной)
 - `bin/screenshot` - скриншоты в буфер и в `~/Pictures/Screenshots`
+  (выделение области - без рамки); у окон в Hyprland рамок нет
 - `bin/clipboard` - история буфера в rofi (запасной вариант к Super+V)
 - `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из обоев)
 - `config/fish` - конфиг fish (prompt на tide); `config/fish/cachyos` - копия
