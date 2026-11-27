@@ -7,9 +7,6 @@
 # wallpapers; it also renders the palette into app themes and SDDM
 hyprland
 noctalia
-rofi
-rofi-calc
-cliphist
 imagemagick
 playerctl
 xdg-desktop-portal-hyprland
@@ -23,8 +20,6 @@ grim
 hyprpicker
 slurp
 jq
-swaybg
-awww
 adw-gtk-theme
 xdg-user-dirs
 xdg-utils

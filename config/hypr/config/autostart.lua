@@ -4,9 +4,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("noctalia --daemon")
     -- keep the clipboard after the app it was copied from closes
     hl.exec_cmd("wl-clip-persist --clipboard regular")
-    -- clipboard history for Super+V (cliphist + rofi)
-    hl.exec_cmd("wl-paste --type text --watch cliphist store")
-    hl.exec_cmd("wl-paste --type image --watch cliphist store")
+    -- clipboard history is Noctalia's own (Super+V), no cliphist needed
     -- password prompts for GUI apps that need root (Disks, Nautilus admin, ...)
     hl.exec_cmd("systemctl --user start hyprpolkitagent")
     -- LocalSend's port may be left open if the session died while it ran (bin/localsend)

@@ -41,7 +41,8 @@ Spotify), скрипт пишет об этом и продолжает, а не
 - Hyprland - воркспейсы и раскладка dwindle (конфиг на Lua)
 - Noctalia - бар, лаунчер, уведомления, OSD, локскрин, центр управления;
   палитра из обоев идёт в темы приложений
-- Alacritty, fish (tide), rofi, cliphist, hyprpicker, grim/slurp, swaybg/awww
+- Alacritty, fish (tide), hyprpicker, grim/slurp; лаунчер, калькулятор, буфер
+  и обои - силами самой Noctalia
 - SDDM + where-is-my-sddm-theme (цвета берутся из палитры Noctalia)
 
 **Консоль**
@@ -81,10 +82,8 @@ yay -S --needed $(grep -vE '^\s*(#|$)' extras.txt)  # Steam, Lutris
   уведомления, OSD, меню питания (Super+Shift+Q), выбор обоев (Super+Shift+Enter),
   центр управления (Super+S). Палитра берётся из обоев и рендерится в темы
   приложений (alacritty, GTK, Spotify, Telegram, SDDM...)
-- `config/rofi` - запасной dmenu-лаунчер (Noctalia - основной)
 - `bin/screenshot` - скриншоты в буфер и в `~/Pictures/Screenshots`
   (выделение области - без рамки); у окон в Hyprland рамок нет
-- `bin/clipboard` - история буфера в rofi (запасной вариант к Super+V)
 - `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из обоев)
 - `config/fish` - конфиг fish (prompt на tide); `config/fish/cachyos` - копия
   fish-конфига CachyOS (алиасы eza/bat и т.п.), чтобы работало и на чистом Arch

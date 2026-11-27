@@ -77,7 +77,6 @@ pacman_install() {
 CONFIGS=(
     hypr
     noctalia
-    rofi
     alacritty
     fish
     fastfetch

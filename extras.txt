@@ -14,3 +14,8 @@ lutris
 
 # ─── Editor ───
 # pycharm-community-edition
+
+# ─── Dropped from the setup: here if you ever come back to them ───
+# rofi, rofi-calc, cliphist   (Noctalia does launcher/clipboard itself)
+# swaybg, awww                (wallpapers are Noctalia's)
+# meld                        (VS Code does diffs)
