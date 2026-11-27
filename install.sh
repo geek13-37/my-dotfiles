@@ -186,6 +186,23 @@ if [ "$SKIP_PACKAGES" -eq 0 ]; then
             sudo flatpak install -y --noninteractive flathub "${FLATPAKS[@]}" \
                 || warn "Some flatpaks failed to install"
         fi
+
+        # rproc (task manager, Ctrl+Shift+Esc) is not on Flathub - take the
+        # latest .flatpak bundle straight from its GitHub releases
+        if ! flatpak info io.github.trystan_sa.rproc >/dev/null 2>&1; then
+            step "Installing rproc (task manager) from GitHub"
+            RPROC_URL="$(curl -fsSL https://api.github.com/repos/Trystan-SA/rproc/releases/latest \
+                | jq -r '[.assets[] | select(.name | endswith(".flatpak"))][0].browser_download_url // empty')"
+            if [ -n "$RPROC_URL" ] && curl -fL -o /tmp/rproc.flatpak "$RPROC_URL" \
+                && flatpak install -y --noninteractive --user --bundle /tmp/rproc.flatpak; then
+                echo "Installed rproc"
+            else
+                warn "rproc failed to install - get it from https://github.com/Trystan-SA/rproc/releases"
+            fi
+            rm -f /tmp/rproc.flatpak
+        else
+            echo "rproc already installed"
+        fi
     fi
 
     # rustup/uv/cargo-xwin are only needed for development, not for the

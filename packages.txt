@@ -92,7 +92,6 @@ tealdeer
 zoxide
 fastfetch
 btop
-gnome-system-monitor
 glances
 yazi
 micro

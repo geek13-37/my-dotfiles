@@ -19,3 +19,6 @@ lutris
 # rofi, rofi-calc, cliphist   (Noctalia does launcher/clipboard itself)
 # swaybg, awww                (wallpapers are Noctalia's)
 # meld                        (VS Code does diffs)
+# gnome-system-monitor        (replaced by rproc - Ctrl+Shift+Esc)
+# rproc-bin                   (AUR build is stuck at 0.1.3; install.sh takes
+#                              the latest bundle from GitHub instead)

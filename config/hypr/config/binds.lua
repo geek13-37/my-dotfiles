@@ -28,8 +28,9 @@ bind("CTRL + T",             exec("Telegram"))
 bind("CTRL + S",             exec(os.getenv("HOME") .. "/.local/bin/spotify"))  -- keeps the Spicetify theme (bin/spotify)
 bind("CTRL + D",             exec("discord"))
 bind("CTRL + SHIFT + H",     exec("happ"))
--- Task manager on the Windows combo (no Mod)
-hl.bind("CTRL + SHIFT + Escape", exec("gnome-system-monitor"))
+-- Task manager on the Windows combo (no Mod): rproc (flatpak, see install.sh).
+-- Prefer the installed flatpak over whatever old build is on PATH.
+hl.bind("CTRL + SHIFT + Escape", exec("flatpak run io.github.trystan_sa.rproc"))
 
 -- ─── Shell (Noctalia) ───
 bind("SHIFT + Return",       exec("noctalia msg panel-toggle wallpaper"))
