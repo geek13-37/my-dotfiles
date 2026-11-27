@@ -24,7 +24,7 @@ adw-gtk-theme
 xdg-user-dirs
 xdg-utils
 
-# ─── Login screen: SDDM, stock theme (the old themed setup is in config/legacy) ───
+# ─── Login screen: SDDM, stock theme ───
 sddm
 qt6-declarative
 qt6-5compat

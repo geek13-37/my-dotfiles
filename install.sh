@@ -274,11 +274,9 @@ echo "Linked noctalia/settings.toml"
 
 if pacman -Qi sddm >/dev/null 2>&1; then
     step "SDDM: stock theme"
-    # The theme setup lives in config/legacy/sddm (where-is-my-sddm-theme,
-    # coloured from the wallpaper). It was dropped because the stock greeter
-    # is simpler and ready to go. An old install may still have the theme
-    # selected - point SDDM back at the stock one and pull the helper's
-    # sudoers rule.
+    # The stock greeter. An old install may still have the removed
+    # where-is-my-sddm-theme selected - point SDDM back at the stock one and
+    # pull the helper's sudoers rule.
     if [ -L /etc/sddm.conf.d/theme.conf ] || [ -f /etc/sddm.conf.d/theme.conf ]; then
         sudo rm -f /etc/sddm.conf.d/theme.conf
         echo "Removed the old theme.conf, SDDM uses the stock theme again"

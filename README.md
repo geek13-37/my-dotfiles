@@ -93,9 +93,7 @@ yay -S --needed $(grep -vE '^\s*(#|$)' extras.txt)  # Steam, Lutris
 - `config/fastfetch`, `config/mimeapps.list`
 - `bin/spotify` - запуск Spotify (бинд Ctrl+S и лаунчер): после обновления
   Spotify сам заново накатывает Spicetify с темой Comfy в цветах обоев
-- SDDM - стандартная тема. Старая тема where-is-my-sddm-theme с цветами из
-  обоев (`theme.conf`, `noctalia-boot-theme`, шаблон Noctalia) лежит в
-  `config/legacy/` - ставится вручную, если снова захочешь
+- SDDM - стандартная тема (старая where-is-my-sddm-theme убрана совсем)
 - Приватность:
   - `config/networkmanager/00-privacy.conf` -> `/etc/NetworkManager/conf.d/`:
     свой фейковый MAC для каждой сети, hostname не уходит по DHCP, временные
