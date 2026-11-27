@@ -124,6 +124,15 @@ widget_order = [ "lockscreen-login-box@winit", "lockscreen-login-box@HDMI-A-1" ]
         show_unlock_hint = true
         show_weather = true
 
+[osd]
+background_opacity = 0.4999999888241291
+border = false
+border_color = "primary"
+border_width = 1.5
+offset_x = 50
+offset_y = 20
+position = "bottom_center"
+
 [plugins]
 auto_update = "official"
 enabled = [
@@ -157,10 +166,6 @@ input_borders = false
 niri_overview_type_to_launch_enabled = true
 popup_borders = false
 
-    [shell.animation]
-    enabled = false
-    speed = 4.0
-
     [shell.launcher]
     categories = false
     layout = "simple"
@@ -178,6 +183,9 @@ popup_borders = false
     [shell.shadow]
     alpha = 0.099999997764825821
     direction = "up"
+
+    [shell.window_switcher]
+    mru = true
 
 [theme]
 builtin = "Catppuccin"

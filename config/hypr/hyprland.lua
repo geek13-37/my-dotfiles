@@ -10,8 +10,9 @@ require("config.rules")
 require("config.binds")
 require("config.autostart")
 
--- HyprMod managed settings
-require("hyprland-gui")
+-- HyprMod managed settings. The file is generated on this machine by HyprMod
+-- (not in the repo); a fresh install just runs without it.
+pcall(require, "hyprland-gui")
 
 -- For Noctalia Color templates
 require("noctalia").apply_theme()

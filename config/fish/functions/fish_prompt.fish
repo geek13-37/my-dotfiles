@@ -12,6 +12,8 @@ set -U $prompt_var # Set var here so if we erase $prompt_var, bg job won't set a
 
 set_color normal | read -l color_normal
 status fish-path | read -l fish_path
+# Prefer a stable PATH entry (e.g Homebrew's bin/fish symlink) over a versioned path that upgrades remove
+command -s fish | read -l path_fish && test "$(path resolve $path_fish)" = $fish_path && set fish_path $path_fish
 
 # _tide_repaint prevents us from creating a second background job
 function _tide_refresh_prompt --on-variable $prompt_var --on-variable COLUMNS
@@ -41,7 +43,7 @@ function fish_prompt
         jobs -q && jobs -p | count | read -lx _tide_jobs
         $fish_path -c \"set _tide_pipestatus \$_tide_pipestatus
 set _tide_parent_dirs \$_tide_parent_dirs
-PATH=\$(string escape \"\$PATH\") CMD_DURATION=\$CMD_DURATION fish_bind_mode=\$fish_bind_mode set $prompt_var (_tide_2_line_prompt)\" &
+PATH=\$(string escape \"\$PATH\") CMD_DURATION=\$CMD_DURATION fish_key_bindings=\$fish_key_bindings fish_bind_mode=\$fish_bind_mode set $prompt_var (_tide_2_line_prompt)\" </dev/null >/dev/null &
         builtin disown
 
         command kill \$_tide_last_pid 2>/dev/null
@@ -69,7 +71,7 @@ function fish_prompt
         jobs -q && jobs -p | count | read -lx _tide_jobs
         $fish_path -c \"set _tide_pipestatus \$_tide_pipestatus
 set _tide_parent_dirs \$_tide_parent_dirs
-PATH=\$(string escape \"\$PATH\") CMD_DURATION=\$CMD_DURATION fish_bind_mode=\$fish_bind_mode set $prompt_var (_tide_2_line_prompt)\" &
+PATH=\$(string escape \"\$PATH\") CMD_DURATION=\$CMD_DURATION fish_key_bindings=\$fish_key_bindings fish_bind_mode=\$fish_bind_mode set $prompt_var (_tide_2_line_prompt)\" </dev/null >/dev/null &
         builtin disown
 
         command kill \$_tide_last_pid 2>/dev/null
@@ -101,7 +103,7 @@ function fish_prompt
         jobs -q && jobs -p | count | read -lx _tide_jobs
         $fish_path -c \"set _tide_pipestatus \$_tide_pipestatus
 set _tide_parent_dirs \$_tide_parent_dirs
-PATH=\$(string escape \"\$PATH\") CMD_DURATION=\$CMD_DURATION fish_bind_mode=\$fish_bind_mode set $prompt_var (_tide_1_line_prompt)\" &
+PATH=\$(string escape \"\$PATH\") CMD_DURATION=\$CMD_DURATION fish_key_bindings=\$fish_key_bindings fish_bind_mode=\$fish_bind_mode set $prompt_var (_tide_1_line_prompt)\" </dev/null >/dev/null &
         builtin disown
 
         command kill \$_tide_last_pid 2>/dev/null
@@ -128,7 +130,7 @@ function fish_prompt
         jobs -q && jobs -p | count | read -lx _tide_jobs
         $fish_path -c \"set _tide_pipestatus \$_tide_pipestatus
 set _tide_parent_dirs \$_tide_parent_dirs
-PATH=\$(string escape \"\$PATH\") CMD_DURATION=\$CMD_DURATION fish_bind_mode=\$fish_bind_mode set $prompt_var (_tide_1_line_prompt)\" &
+PATH=\$(string escape \"\$PATH\") CMD_DURATION=\$CMD_DURATION fish_key_bindings=\$fish_key_bindings fish_bind_mode=\$fish_bind_mode set $prompt_var (_tide_1_line_prompt)\" </dev/null >/dev/null &
         builtin disown
 
         command kill \$_tide_last_pid 2>/dev/null

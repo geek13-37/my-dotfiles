@@ -4,8 +4,15 @@
 # this desktop: Hyprland + Noctalia, SDDM, apps, dev tools, dotfiles.
 # Safe to rerun: everything is --needed / idempotent.
 #
-# Usage: ./install.sh [--no-packages]
+# Usage: ./install.sh [options]
 #   --no-packages   skip all package/tool installs, only (re)link configs
+#   --no-flatpak    skip flatpaks
+#   --no-rust       skip rustup/cargo tools
+#   --list          print the program list (what and how it gets installed)
+#   --help
+#
+# Spicetify (Spotify theme) and the Rust/uv dev tools are installed on a best
+# effort basis; a failure there never aborts the rest.
 #
 # Run as your normal user (not root); sudo is used where needed.
 
@@ -14,13 +21,43 @@ set -euo pipefail
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$HOME/.config"
 SKIP_PACKAGES=0
+SKIP_FLATPAK=0
+SKIP_RUST=0
+
+usage() { sed -n '2,18p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 
 for arg in "$@"; do
     case "$arg" in
         --no-packages) SKIP_PACKAGES=1 ;;
-        *) echo "Unknown option: $arg" >&2; exit 1 ;;
+        --no-flatpak)  SKIP_FLATPAK=1 ;;
+        --no-rust)     SKIP_RUST=1 ;;
+        --list)        LIST=1 ;;
+        -h|--help)     usage; exit 0 ;;
+        *) echo "Unknown option: $arg (try --help)" >&2; exit 1 ;;
     esac
 done
+
+read_list() {
+    [ -f "$1" ] || return 0
+    grep -vE '^\s*#|^\s*$' "$1" | sed 's/\s*#.*//'
+}
+
+if [ "${LIST:-0}" -eq 1 ]; then
+    printf 'pkg      arch   %s\n' "name"
+    for f in packages.txt packages-aur.txt flatpaks.txt extras.txt; do
+        [ -f "$DOTFILES_DIR/$f" ] || continue
+        case "$f" in
+            packages.txt)     kind=repo ;;
+            packages-aur.txt) kind=AUR ;;
+            flatpaks.txt)     kind=flatpak ;;
+            *)                kind=optional ;;
+        esac
+        while read -r pkg; do
+            [ -n "$pkg" ] && printf '%-8s %-6s %s\n' "$kind" "-" "$pkg"
+        done < <(read_list "$DOTFILES_DIR/$f")
+    done
+    exit 0
+fi
 
 if [ "$EUID" -eq 0 ]; then
     echo "Run this as your normal user, not root (sudo is used where needed)." >&2
@@ -29,10 +66,6 @@ fi
 
 step() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
 warn() { printf '\033[1;33m!!  %s\033[0m\n' "$*"; }
-
-read_list() {
-    grep -vE '^\s*#|^\s*$' "$1" | sed 's/\s*#.*//'
-}
 
 # pacman with --noconfirm first; if that aborts (e.g. a conflict prompt whose
 # default is "no"), retry interactively so the user can answer it.
@@ -50,6 +83,13 @@ CONFIGS=(
     fastfetch
     mimeapps.list
 )
+
+# A listed package that is not in the repos (e.g. a package that was merged
+# into another one) is skipped with a warning instead of failing the whole
+# transaction.
+pkg_available() {
+    pacman -Si "$1" >/dev/null 2>&1 || pacman -Sgq 2>/dev/null | grep -qxF "$1"
+}
 
 if [ "$SKIP_PACKAGES" -eq 0 ]; then
     if ! command -v pacman >/dev/null 2>&1; then
@@ -77,11 +117,9 @@ if [ "$SKIP_PACKAGES" -eq 0 ]; then
 
     step "Installing packages from packages.txt"
     mapfile -t WANTED < <(read_list "$DOTFILES_DIR/packages.txt")
-    # Skip names that are not in the repos instead of failing the whole transaction
-    AVAILABLE="$(pacman -Slq; pacman -Sgq)"
     PACKAGES=()
     for pkg in "${WANTED[@]}"; do
-        if grep -qxF "$pkg" <<<"$AVAILABLE"; then
+        if pkg_available "$pkg"; then
             PACKAGES+=("$pkg")
         else
             warn "Not in repos, skipping: $pkg"
@@ -141,8 +179,8 @@ if [ "$SKIP_PACKAGES" -eq 0 ]; then
             || warn "Some AUR packages failed - rerun: yay -S ${AUR_PACKAGES[*]}"
     fi
 
-    step "Installing Flatpak apps from flatpaks.txt"
-    if command -v flatpak >/dev/null 2>&1; then
+    if [ "$SKIP_FLATPAK" -eq 0 ] && command -v flatpak >/dev/null 2>&1; then
+        step "Installing Flatpak apps from flatpaks.txt"
         sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
         mapfile -t FLATPAKS < <(read_list "$DOTFILES_DIR/flatpaks.txt")
         if [ ${#FLATPAKS[@]} -gt 0 ]; then
@@ -151,27 +189,34 @@ if [ "$SKIP_PACKAGES" -eq 0 ]; then
         fi
     fi
 
-    step "Installing Rust (rustup, stable toolchain)"
-    if [ ! -x "$HOME/.cargo/bin/rustup" ]; then
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
-    else
-        echo "rustup already installed"
-    fi
-    "$HOME/.cargo/bin/cargo" install --locked cargo-xwin || warn "cargo-xwin failed to install"
+    # rustup/uv/cargo-xwin are only needed for development, not for the
+    # desktop to boot. Failures here are warnings, never fatal.
+    if [ "$SKIP_RUST" -eq 0 ]; then
+        step "Installing Rust (rustup, stable toolchain)"
+        if [ ! -x "$HOME/.cargo/bin/rustup" ]; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path \
+                || warn "rustup failed to install"
+        else
+            echo "rustup already installed"
+        fi
+        if [ -x "$HOME/.cargo/bin/cargo" ]; then
+            "$HOME/.cargo/bin/cargo" install --locked cargo-xwin || warn "cargo-xwin failed to install"
+        fi
 
-    step "Installing uv (Python package manager)"
-    if [ ! -x "$HOME/.local/bin/uv" ]; then
-        curl -LsSf https://astral.sh/uv/install.sh | env UV_NO_MODIFY_PATH=1 sh
+        step "Installing uv (Python package manager)"
+        if [ ! -x "$HOME/.local/bin/uv" ]; then
+            curl -LsSf https://astral.sh/uv/install.sh | env UV_NO_MODIFY_PATH=1 sh \
+                || warn "uv failed to install"
+        else
+            echo "uv already installed"
+        fi
     else
-        echo "uv already installed"
+        step "Skipping Rust/uv (--no-rust)"
     fi
 
 else
     step "Skipping package install (--no-packages)"
 fi
-
-# Telegram, Happ and Spotify are only installed above - their own configs are
-# intentionally NOT managed/symlinked by this repo.
 
 step "Linking configs from $DOTFILES_DIR"
 
@@ -194,6 +239,12 @@ for name in "${CONFIGS[@]}"; do
     link_config "$name"
 done
 
+# API keys are not in the repo - seed a template on a fresh install
+if [ ! -e "$CONFIG_DIR/fish/secrets.fish" ] && [ -f "$CONFIG_DIR/fish/secrets.fish.example" ]; then
+    cp "$CONFIG_DIR/fish/secrets.fish.example" "$CONFIG_DIR/fish/secrets.fish"
+    echo "Created $CONFIG_DIR/fish/secrets.fish (fill the keys you use)"
+fi
+
 # Noctalia keeps the bar layout and enabled plugins in ~/.local/state,
 # so that file is tracked in the repo too
 step "Linking noctalia state (bar layout, enabled plugins)"
@@ -205,7 +256,7 @@ fi
 ln -sfn "$DOTFILES_DIR/state/noctalia/settings.toml" "$HOME/.local/state/noctalia/settings.toml"
 echo "Linked noctalia/settings.toml"
 
-if command -v sddm >/dev/null 2>&1 || [ -d /etc/sddm.conf.d ] || pacman -Qi sddm >/dev/null 2>&1; then
+if pacman -Qi sddm >/dev/null 2>&1; then
     step "Setting up SDDM theme (where_is_my_sddm_theme, colours from the wallpaper)"
 
     # The theme itself comes from packages-aur.txt (where-is-my-sddm-theme-git)
@@ -250,8 +301,10 @@ sudo install -Dm644 "$DOTFILES_DIR/config/networkmanager/00-privacy.conf" \
     /etc/NetworkManager/conf.d/00-privacy.conf
 echo "Installed NetworkManager privacy defaults (stable fake MAC, no hostname in DHCP)"
 
-sudo install -Dm644 "$DOTFILES_DIR/config/firefox/policies.json" /etc/firefox/policies/policies.json
-echo "Installed Firefox policies (no telemetry/studies/sponsored, DoH via Quad9)"
+if pacman -Qi firefox >/dev/null 2>&1 || [ -d /etc/firefox ]; then
+    sudo install -Dm644 "$DOTFILES_DIR/config/firefox/policies.json" /etc/firefox/policies/policies.json
+    echo "Installed Firefox policies (no telemetry/studies/sponsored, DoH via Quad9)"
+fi
 
 # Docker publishes ports (-p 8080:80) straight through iptables, past ufw -
 # bind them to localhost unless an address is given (-p 0.0.0.0:8080:80)
@@ -330,22 +383,36 @@ if command -v spicetify >/dev/null 2>&1; then
     COMFY="$CONFIG_DIR/spicetify/Themes/Comfy"
     if [ ! -d "$COMFY" ]; then
         COMFY_SRC="$(mktemp -d)"
-        git clone -q --depth 1 https://github.com/Comfy-Themes/Spicetify "$COMFY_SRC" \
-            && mkdir -p "$(dirname "$COMFY")" && cp -r "$COMFY_SRC/Comfy" "$COMFY"
+        if git clone -q --depth 1 https://github.com/Comfy-Themes/Spicetify "$COMFY_SRC"; then
+            mkdir -p "$(dirname "$COMFY")"
+            cp -r "$COMFY_SRC/Comfy" "$COMFY"
+        else
+            warn "Could not download the Comfy theme - skipped"
+        fi
         rm -rf "$COMFY_SRC"
     fi
     spicetify config current_theme Comfy color_scheme Comfy inject_css 1 replace_colors 1 \
-        overwrite_assets 1 inject_theme_js 1 >/dev/null
+        overwrite_assets 1 inject_theme_js 1 >/dev/null 2>&1 || true
     # needs Spotify launched (and logged in) once, so prefs exist
-    if [ -f "$CONFIG_DIR/spotify/prefs" ]; then
-        spicetify -q backup apply --no-restart && echo "Spicetify applied"
-    else
+    if [ ! -f "$CONFIG_DIR/spotify/prefs" ]; then
         warn "Launch Spotify once, then run: spicetify backup apply"
+    elif ! spicetify -q backup apply --no-restart; then
+        warn "Spicetify apply failed - run: spicetify backup apply"
+    else
+        echo "Spicetify applied"
     fi
 else
     warn "spicetify-cli is not installed - skipped"
 fi
 
+# chsh wants the binary listed in /etc/shells
+if command -v fish >/dev/null 2>&1 && ! grep -qxF "$(command -v fish)" /etc/shells 2>/dev/null; then
+    echo "$(command -v fish)" | sudo tee -a /etc/shells >/dev/null
+fi
+
+if [ "$SKIP_PACKAGES" -eq 0 ] && ! command -v noctalia >/dev/null 2>&1; then
+    warn "noctalia is not installed - the desktop shell will not start"
+fi
 
 if [ "$SKIP_PACKAGES" -eq 0 ] && command -v systemctl >/dev/null 2>&1; then
     step "Enabling services"

@@ -3,8 +3,8 @@
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/60dc04f1-a33b-46d8-8f3b-622c8cf993a1" />
 
 Моё окружение рабочего стола: Hyprland + Noctalia Shell, тема входа SDDM
-(where-is-my-sddm-theme), терминал alacritty, fish, fastfetch, обои - плюс все программы,
-которые у меня стоят.
+(where-is-my-sddm-theme), терминал alacritty, fish, fastfetch, обои - плюс
+список программ, которые я использую.
 
 ## Установка с нуля
 
@@ -21,13 +21,61 @@ cd ~/my-dotfiles
 
 3. Перезагрузиться и войти в сессию Hyprland.
 
-Скрипт спросит пароль sudo один раз, дальше идет сам. Его можно запускать
-повторно - уже установленное пропускается.
+Скрипт спросит пароль sudo один раз, дальше идёт сам. Его можно запускать
+повторно - уже установленное пропускается. Большие игры (Dota 2, Sober)
+и Steam сюда не входят - они в `extras.txt`, ставятся отдельно (см. ниже).
+
+Флаги: `--no-packages` (только перелинковать конфиги), `--no-flatpak`,
+`--no-rust` (без rustup/uv), `--list` (показать список программ),
+`--help`.
+
+Если что-то по пути не установилось (например, Spicetify без залогиненного
+Spotify), скрипт пишет об этом и продолжает, а не падает.
+
+## Программы
+
+Что ставится одной командой (`packages.txt` + `packages-aur.txt` +
+`flatpaks.txt`). Полный машинночитаемый список - `./install.sh --list`.
+
+**Окружение и shell**
+- Hyprland - воркспейсы и раскладка dwindle (конфиг на Lua)
+- Noctalia - бар, лаунчер, уведомления, OSD, локскрин, центр управления;
+  палитра из обоев идёт в темы приложений
+- Alacritty, fish (tide), rofi, cliphist, hyprpicker, grim/slurp, swaybg/awww
+- SDDM + where-is-my-sddm-theme (цвета берутся из палитры Noctalia)
+
+**Консоль**
+eza, bat, fzf, zoxide, ripgrep, yazi, vim/micro/nano, fastfetch, btop,
+glances, duf, pv, tealdeer, git, pkgfile, pacman-contrib, reflector
+
+**Приложения**
+Firefox, Telegram, Discord, Spotify (+ Spicetify с темой Comfy), VS Code,
+alacritty, Nautilus, Papers/Лупа, GIMP, LibreOffice, VLC, OBS, Meld,
+Remmina, GNOME Boxes, Tor Browser, scrcpy, nmap, ZAP, KeePassXC (flatpak),
+Happ, LocalSend, Ventoy
+
+**Разработка**
+base-devel, gcc (в т.ч. mingw), cmake, go, node/npm/pnpm, Python + uv,
+Docker, VirtualBox, rustup (+cargo-xwin), OpenSSH
+
+**Приватность и системное**
+ufw, OpenSnitch, ClamAV, smartmontools, hwinfo, fstrim, power-profiles-daemon
+
+**Ставлю сам отдельно (не в основной установке)**
+Steam и Dota 2, Sober/Roblox (flatpak), Lutris, PyCharm - это тяжёлые вещи,
+список лежит в `extras.txt`:
+
+```bash
+yay -S --needed $(grep -vE '^\s*(#|$)' extras.txt)  # Steam, Lutris
+# Dota 2 - изнутри Steam
+# Sober (Roblox) - flatpak install flathub org.vinegarhq.Sober
+```
 
 ## Что внутри
 
-- `config/hypr` - Hyprland (Lua-конфиг, раскладка dwindle)
-- `config/noctalia` + `state/noctalia/settings.toml` - Noctalia Shell (`noctalia --daemon`):
+- `config/hypr` - Hyprland (Lua-конфиг, раскладка dwindle). `hyprland-gui.lua`
+  генерирует HyprMod, поэтому в репо лежит только дефолт
+- `config/noctalia` + `state/noctalia/settings.toml` - Noctalia Shell:
   бар (воркспейсы, трей, RAM/CPU, сеть, Docker, буфер, яркость, питание),
   лаунчер (Super+Ctrl+Enter), калькулятор (Super+Z), история буфера (Super+V),
   уведомления, OSD, меню питания (Super+Shift+Q), выбор обоев (Super+Shift+Enter),
@@ -35,6 +83,7 @@ cd ~/my-dotfiles
   приложений (alacritty, GTK, Spotify, Telegram, SDDM...)
 - `config/rofi` - запасной dmenu-лаунчер (Noctalia - основной)
 - `bin/screenshot` - скриншоты в буфер и в `~/Pictures/Screenshots`
+- `bin/clipboard` - история буфера в rofi (запасной вариант к Super+V)
 - `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из обоев)
 - `config/fish` - конфиг fish (prompt на tide); `config/fish/cachyos` - копия
   fish-конфига CachyOS (алиасы eza/bat и т.п.), чтобы работало и на чистом Arch
@@ -44,9 +93,8 @@ cd ~/my-dotfiles
 - `config/sddm/theme.conf` - выбор темы входа SDDM (where-is-my-sddm-theme,
   ставится из AUR)
 - `config/noctalia/templates/sddm.conf` + `config/sddm/noctalia-boot-theme` -
-  цвета SDDM берутся из палитры обоев и
-  обновляются сами при её смене (скрипт ставится в `/usr/local/bin` и
-  запускается из Noctalia через sudo без пароля - только он, см. install.sh)
+  цвета SDDM берутся из палитры обоев и обновляются сами при её смене
+  (скрипт ставится в `/usr/local/bin`, sudo без пароля - только на него)
 - Приватность:
   - `config/networkmanager/00-privacy.conf` -> `/etc/NetworkManager/conf.d/`:
     свой фейковый MAC для каждой сети, hostname не уходит по DHCP, временные
@@ -62,3 +110,16 @@ cd ~/my-dotfiles
     программам можно в сеть
 - Telegram, Happ, Spotify - только ставятся пакетом, их личные конфиги в
   репозиторий не попадают
+
+## Секреты
+
+API-ключи (например, `VENICE_API_KEY`) не лежат в репозитории. При установке
+создаётся `~/.config/fish/secrets.fish` из `config/fish/secrets.fish.example`,
+туда и вписываются ключи - этот файл игнорируется гитом.
+
+## Обслуживание
+
+```bash
+./install.sh --no-packages   # после git pull: перелинковать конфиги
+./install.sh --list          # что и как ставится
+```

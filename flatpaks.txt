@@ -1,3 +1,5 @@
-# Flatpak apps from Flathub
+# Flatpak apps from Flathub. Big games/consoles (Sober, ...) are NOT here -
+# install them yourself.
+# org.gnome.Loupe is here because config/mimeapps.list opens images with it.
 org.keepassxc.KeePassXC
-org.vinegarhq.Sober
+org.gnome.Loupe

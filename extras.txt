@@ -1,0 +1,16 @@
+# Optional, heavy, or hardware-specific stuff. install.sh does NOT read this
+# file. To install it:
+#
+#   yay -S --needed $(grep -vE '^\s*(#|$)' extras.txt)
+#
+# Big games live here on purpose: they take tens of GB and update on their own,
+# so they are never pulled in by the main install.
+
+# ─── Games ───
+steam
+lutris
+# Dota 2: install from inside Steam (and skip it on a small SSD)
+# Sober / Roblox: flatpak install flathub org.vinegarhq.Sober
+
+# ─── Editor ───
+# pycharm-community-edition
