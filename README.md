@@ -2,8 +2,8 @@
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/60dc04f1-a33b-46d8-8f3b-622c8cf993a1" />
 
-Моё окружение рабочего стола: Hyprland + Noctalia Shell, тема входа SDDM
-(where-is-my-sddm-theme), терминал alacritty, fish, fastfetch, обои - плюс
+Моё окружение рабочего стола: Hyprland + Noctalia Shell, SDDM, терминал
+alacritty, fish, fastfetch, обои - плюс
 список программ, которые я использую.
 
 ## Установка с нуля
@@ -43,7 +43,7 @@ Spotify), скрипт пишет об этом и продолжает, а не
   палитра из обоев идёт в темы приложений
 - Alacritty, fish (tide), hyprpicker, grim/slurp; лаунчер, калькулятор, буфер
   и обои - силами самой Noctalia
-- SDDM + where-is-my-sddm-theme (цвета берутся из палитры Noctalia)
+- SDDM (стандартная тема)
 
 **Консоль**
 eza, bat, fzf, zoxide, ripgrep, yazi, vim/micro/nano, fastfetch, btop,
@@ -93,11 +93,9 @@ yay -S --needed $(grep -vE '^\s*(#|$)' extras.txt)  # Steam, Lutris
 - `config/fastfetch`, `config/mimeapps.list`
 - `bin/spotify` - запуск Spotify (бинд Ctrl+S и лаунчер): после обновления
   Spotify сам заново накатывает Spicetify с темой Comfy в цветах обоев
-- `config/sddm/theme.conf` - выбор темы входа SDDM (where-is-my-sddm-theme,
-  ставится из AUR)
-- `config/noctalia/templates/sddm.conf` + `config/sddm/noctalia-boot-theme` -
-  цвета SDDM берутся из палитры обоев и обновляются сами при её смене
-  (скрипт ставится в `/usr/local/bin`, sudo без пароля - только на него)
+- SDDM - стандартная тема. Старая тема where-is-my-sddm-theme с цветами из
+  обоев (`theme.conf`, `noctalia-boot-theme`, шаблон Noctalia) лежит в
+  `config/legacy/` - ставится вручную, если снова захочешь
 - Приватность:
   - `config/networkmanager/00-privacy.conf` -> `/etc/NetworkManager/conf.d/`:
     свой фейковый MAC для каждой сети, hostname не уходит по DHCP, временные

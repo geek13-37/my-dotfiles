@@ -15,7 +15,9 @@ lutris
 # ─── Editor ───
 # pycharm-community-edition
 
-# ─── Dropped from the setup: here if you ever come back to them ───
+# ─── Legacy: dropped from the setup, kept for reference ───
+# where-is-my-sddm-theme-git  (the theme files live in config/legacy/sddm;
+#                              SDDM now uses its stock greeter)
 # rofi, rofi-calc, cliphist   (Noctalia does launcher/clipboard itself)
 # swaybg, awww                (wallpapers are Noctalia's)
 # meld                        (VS Code does diffs)

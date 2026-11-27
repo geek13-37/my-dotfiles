@@ -273,40 +273,22 @@ ln -sfn "$DOTFILES_DIR/state/noctalia/settings.toml" "$HOME/.local/state/noctali
 echo "Linked noctalia/settings.toml"
 
 if pacman -Qi sddm >/dev/null 2>&1; then
-    step "Setting up SDDM theme (where_is_my_sddm_theme, colours from the wallpaper)"
-
-    # The theme itself comes from packages-aur.txt (where-is-my-sddm-theme-git)
-    if [ ! -d /usr/share/sddm/themes/where_is_my_sddm_theme ]; then
-        warn "where_is_my_sddm_theme is not installed - run: yay -S where-is-my-sddm-theme-git"
+    step "SDDM: stock theme"
+    # The theme setup lives in config/legacy/sddm (where-is-my-sddm-theme,
+    # coloured from the wallpaper). It was dropped because the stock greeter
+    # is simpler and ready to go. An old install may still have the theme
+    # selected - point SDDM back at the stock one and pull the helper's
+    # sudoers rule.
+    if [ -L /etc/sddm.conf.d/theme.conf ] || [ -f /etc/sddm.conf.d/theme.conf ]; then
+        sudo rm -f /etc/sddm.conf.d/theme.conf
+        echo "Removed the old theme.conf, SDDM uses the stock theme again"
     fi
-
-    sudo mkdir -p /etc/sddm.conf.d
-    sudo ln -sfn "$DOTFILES_DIR/config/sddm/theme.conf" /etc/sddm.conf.d/theme.conf
-    echo "Linked sddm theme.conf"
-
-    # Noctalia renders the palette into ~/.cache/noctalia/boot-theme/ and its
-    # post_hook runs this root helper (passwordless, this one script only) to
-    # recolour SDDM. The helper only writes validated hex colours.
-    sudo install -m755 "$DOTFILES_DIR/config/sddm/noctalia-boot-theme" /usr/local/bin/noctalia-boot-theme
-    SUDOERS_TMP="$(mktemp)"
-    echo "$USER ALL=(root) NOPASSWD: /usr/local/bin/noctalia-boot-theme" >"$SUDOERS_TMP"
-    if sudo visudo -cf "$SUDOERS_TMP" >/dev/null; then
-        sudo install -m440 "$SUDOERS_TMP" /etc/sudoers.d/noctalia-boot-theme
-        echo "Installed noctalia-boot-theme helper and sudoers rule"
-    else
-        warn "sudoers rule for noctalia-boot-theme failed validation, skipped"
-    fi
-    rm -f "$SUDOERS_TMP"
-
-    # /etc/sddm.conf takes precedence over /etc/sddm.conf.d/*, so a leftover
-    # Current= from a previously installed theme there would silently win.
-    if [ -f /etc/sddm.conf ] && grep -qE '^Current=' /etc/sddm.conf; then
-        echo "Removing conflicting Current= line from /etc/sddm.conf (leftover from another theme)"
-        sudo cp /etc/sddm.conf /etc/sddm.conf.backup
-        sudo sed -i '/^Current=/d' /etc/sddm.conf
+    if [ -e /etc/sudoers.d/noctalia-boot-theme ] || [ -e /usr/local/bin/noctalia-boot-theme ]; then
+        sudo rm -f /etc/sudoers.d/noctalia-boot-theme /usr/local/bin/noctalia-boot-theme
+        echo "Removed the noctalia-boot-theme helper and its sudoers rule"
     fi
 else
-    step "sddm not installed, skipping theme setup"
+    step "sddm not installed, skipping"
 fi
 
 step "Privacy: NetworkManager, Firefox, Docker"

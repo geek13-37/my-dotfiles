@@ -24,7 +24,7 @@ adw-gtk-theme
 xdg-user-dirs
 xdg-utils
 
-# ─── Login screen: SDDM (theme where-is-my-sddm-theme-git is in packages-aur.txt) ───
+# ─── Login screen: SDDM, stock theme (the old themed setup is in config/legacy) ───
 sddm
 qt6-declarative
 qt6-5compat
