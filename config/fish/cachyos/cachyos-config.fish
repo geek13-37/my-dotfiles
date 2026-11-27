@@ -1,20 +1,11 @@
-## Vendored from CachyOS cachyos-fish-config (not available on plain Arch)
-## Source from conf.d before our fish config
-source (status dirname)/done.fish
-
-## Set values
-## Run fastfetch as welcome message
-function fish_greeting
-    # fastfetch
-end
+# Vendored from CachyOS cachyos-fish-config (not available on plain Arch),
+# with the CachyOS-only bits cut out: the `done` plugin is not installed here,
+# GRUB is not our bootloader and depot_tools is not on this machine.
+# Sourced from config.fish.
 
 # Format man pages
 set -x MANROFFOPT "-c"
 set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
-
-# Set settings for https://github.com/franciscolourenco/done
-set -U __done_min_cmd_duration 10000
-set -U __done_notification_urgency_level low
 
 ## Environment setup
 # Apply .profile: use this to put fish compatible .profile stuff in
@@ -24,7 +15,7 @@ end
 
 # Append common directories for executable files to $PATH
 # -g: per session, not universal - universal would bake /home/<user> into fish_variables
-fish_add_path -g ~/.local/bin ~/.cargo/bin ~/go/bin ~/Applications/depot_tools
+fish_add_path -g ~/.local/bin ~/.cargo/bin ~/go/bin
 
 ## Functions
 # Functions needed for !! and !$ https://github.com/oh-my-fish/plugin-bang-bang
@@ -85,7 +76,6 @@ alias lt='eza -aT --color=always --group-directories-first --icons=always' # tre
 alias l.="eza -a | grep -e '^\.'"                                     # show only dotfiles
 
 # Common use
-alias grubup="sudo grub-mkconfig -o /boot/grub/grub.cfg"
 alias fixpacman="sudo rm /var/lib/pacman/db.lck"
 alias tarnow='tar -acf '
 alias untar='tar -zxvf '
@@ -107,17 +97,8 @@ alias big="expac -H M '%m\t%n' | sort -h | nl"              # Sort installed pac
 alias gitpkg='pacman -Q | grep -i "\-git" | wc -l'          # List amount of -git packages
 alias update='mirror && sudo pacman -Syu'
 
-# Get fastest mirrors (cachyos-rate-mirrors on CachyOS, reflector on plain Arch)
-if type -q cachyos-rate-mirrors
-    alias mirror="sudo cachyos-rate-mirrors"
-else
-    alias mirror="sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
-end
-
-# Help people new to Arch
-alias apt='man pacman'
-alias apt-get='man pacman'
-alias tb='nc termbin.com 9999'
+# Get fastest mirrors with reflector (packages.txt)
+alias mirror="sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
 
 # Cleanup orphaned packages
 alias cleanup='sudo pacman -Rns (pacman -Qtdq)'
