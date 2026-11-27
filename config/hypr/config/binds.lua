@@ -20,7 +20,6 @@ end
 bind("Return",               exec("alacritty"))
 bind("B",                    exec("firefox"))
 bind("CTRL + Y",             exec("firefox https://youtube.com"))
-bind("CTRL + SHIFT + C",     exec("firefox https://claude.ai"))
 bind("CTRL + G",             exec("firefox https://github.com"))
 bind("CTRL + M",             exec("firefox https://mail.proton.me"))
 bind("E",                    exec("nautilus"))
@@ -121,16 +120,6 @@ bind("CTRL + Right",         hl.dsp.focus({ workspace = "r+1" }))
 -- Scratchpad: a hidden terminal that drops down over the current workspace
 bind("grave",                hl.dsp.workspace.toggle_special("term"))
 bind("SHIFT + grave",        hl.dsp.window.move({ workspace = "special:term" }))
--- Claude Desktop: focus its window (fullscreen, see rules.lua) or launch it
-bind("SHIFT + C", function()
-    for _, w in ipairs(hl.get_windows()) do
-        if w.class == "com.anthropic.Claude" then
-            hl.dispatch(hl.dsp.focus({ window = "address:" .. w.address }))
-            return
-        end
-    end
-    hl.dispatch(exec("claude-desktop"))
-end)
 
 -- ─── Mouse wheel ───
 bind("mouse_down",                 hl.dsp.focus({ workspace = "r+1" }))

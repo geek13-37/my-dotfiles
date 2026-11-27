@@ -1,7 +1,6 @@
 # Vendored from CachyOS cachyos-fish-config (not available on plain Arch),
-# with the CachyOS-only bits cut out: the `done` plugin is not installed here,
-# GRUB is not our bootloader and depot_tools is not on this machine.
-# Sourced from config.fish.
+# with the CachyOS-only bits cut out: the `done` plugin, the cachyos mirror
+# helper and depot_tools are not installed here. Sourced from config.fish.
 
 # Format man pages
 set -x MANROFFOPT "-c"
@@ -76,6 +75,7 @@ alias lt='eza -aT --color=always --group-directories-first --icons=always' # tre
 alias l.="eza -a | grep -e '^\.'"                                     # show only dotfiles
 
 # Common use
+alias grubup="sudo grub-mkconfig -o /boot/grub/grub.cfg"
 alias fixpacman="sudo rm /var/lib/pacman/db.lck"
 alias tarnow='tar -acf '
 alias untar='tar -zxvf '

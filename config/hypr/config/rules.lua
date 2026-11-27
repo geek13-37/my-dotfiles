@@ -68,12 +68,6 @@ hl.workspace_rule({
     gaps_out         = 80,
 })
 
--- Claude Desktop (Mod+Shift+C): always opens fullscreen
-hl.window_rule({
-    match      = { class = "^com\\.anthropic\\.Claude$" },
-    fullscreen = true,
-})
-
 -- Sober (Roblox): no blur and fully opaque
 hl.window_rule({
     match   = { class = "^org\\.vinegarhq\\.Sober$" },
