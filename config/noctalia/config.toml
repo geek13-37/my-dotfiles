@@ -9,4 +9,4 @@ widget_spacing = 10
 [shell.screenshot]
 directory = "~/Screenshots"
 
-# SDDM uses its stock greeter (see config/legacy/sddm for the old theme).
+# SDDM uses its stock greeter.
