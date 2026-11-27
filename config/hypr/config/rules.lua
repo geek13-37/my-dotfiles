@@ -95,13 +95,6 @@ hl.window_rule({
     opaque  = true,
 })
 
--- Chromium: no blur and fully opaque
-hl.window_rule({
-    match   = { class = "^chromium$" },
-    no_blur = true,
-    opaque  = true,
-})
-
 -- Loupe (GNOME image viewer): no blur and fully opaque
 hl.window_rule({
     match   = { class = "^org\\.gnome\\.Loupe$" },

@@ -52,12 +52,12 @@ glances, duf, pv, tealdeer, git, pkgfile, pacman-contrib, reflector
 **Приложения**
 Firefox, Telegram, Discord, Spotify (+ Spicetify с темой Comfy), VS Code,
 alacritty, Nautilus, Papers/Лупа, GIMP, LibreOffice, VLC, OBS, Meld,
-Remmina, GNOME Boxes, Tor Browser, scrcpy, nmap, ZAP, KeePassXC (flatpak),
+Remmina, Tor Browser, scrcpy, nmap, KeePassXC (flatpak),
 Happ, LocalSend, Ventoy
 
 **Разработка**
 base-devel, gcc (в т.ч. mingw), cmake, go, node/npm/pnpm, Python + uv,
-Docker, VirtualBox, rustup (+cargo-xwin), OpenSSH
+Docker, VirtualBox (Windows/C++, см. mingw), rustup (+cargo-xwin), OpenSSH
 
 **Приватность и системное**
 ufw, OpenSnitch, ClamAV, smartmontools, hwinfo, fstrim, power-profiles-daemon

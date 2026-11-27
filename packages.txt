@@ -141,12 +141,10 @@ libdvdcss
 meld
 remmina
 freerdp
-gnome-boxes
 torbrowser-launcher
 steam
 scrcpy
 # pycharm-community-edition
-zaproxy
 nmap
 flatpak
 
