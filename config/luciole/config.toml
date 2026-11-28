@@ -1,0 +1,5 @@
+schema_version = 1
+
+[browser]
+# Mirror Noctalia's [shell].corner_radius_scale (currently 0 = square).
+corner_radius_scale = 0.0

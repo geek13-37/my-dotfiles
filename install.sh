@@ -350,6 +350,7 @@ fi
 
 step "Luciole: file manager and default handler for folders"
 mkdir -p "$HOME/.config/luciole"
+ln -sfn "$DOTFILES_DIR/config/luciole/config.toml" "$HOME/.config/luciole/config.toml"
 # From a TTY there is no session bus, and gsettings would silently drop the
 # write - spin up a temporary one so dconf actually saves it
 if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then GSET=(gsettings); else GSET=(dbus-run-session gsettings); fi

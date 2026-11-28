@@ -87,7 +87,9 @@ yay -S --needed $(grep -vE '^\s*(#|$)' extras.txt)  # Steam, Lutris
   `~/.config/luciole/colors.toml`; Luciole подхватывает его на лету. Рядом лежит
   готовая статичная палитра `config/noctalia/palettes/Luciole.json` (цвета самого
   файловика), если захочется уйти от обоев
-- Luciole - Wayland-файловик на `Super+E`, файловик по умолчанию для папок
+- Luciole - Wayland-файловик на `Super+E`, файловик по умолчанию для папок;
+  скругления и цвета тянет из Noctalia (`config/luciole/config.toml`,
+  `corner_radius_scale = 0.0` как у шелла)
 - `bin/screenshot` - скриншоты в буфер и в `~/Pictures/Screenshots`
   (выделение области - без рамки); у окон в Hyprland рамок нет
 - `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из обоев)
