@@ -349,12 +349,18 @@ if [ -f /usr/share/applications/localsend.desktop ]; then
 fi
 
 step "Luciole: file manager and default handler for folders"
+mkdir -p "$HOME/.config/luciole"
 # From a TTY there is no session bus, and gsettings would silently drop the
 # write - spin up a temporary one so dconf actually saves it
 if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then GSET=(gsettings); else GSET=(dbus-run-session gsettings); fi
 xdg-mime default dev.noctalia.luciole.desktop inode/directory 2>/dev/null \
     && echo "Set Luciole as default file manager" \
     || warn "luciole is not installed - skipped"
+# Noctalia writes Luciole's colors.toml from the active palette (wallpaper or
+# any other source); render the templates now if the shell is already running.
+if command -v noctalia >/dev/null 2>&1 && noctalia msg color-scheme-get >/dev/null 2>&1; then
+    noctalia msg templates-apply >/dev/null 2>&1 || true
+fi
 
 step "Cursor: Bibata-Modern-Classic everywhere"
 # Hyprland sets XCURSOR_* (environment.lua); GTK apps read gsettings, and

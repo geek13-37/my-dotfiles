@@ -1,0 +1,7 @@
+# Theme templates kept in the dotfiles.
+# Noctalia renders the active palette into Luciole's colors.toml; Luciole
+# watches that file and repaints open windows immediately.
+
+[theme.templates.user.luciole]
+input_path = "$XDG_CONFIG_HOME/noctalia/templates/luciole.toml"
+output_path = "$XDG_CONFIG_HOME/luciole/colors.toml"

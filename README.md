@@ -81,7 +81,13 @@ yay -S --needed $(grep -vE '^\s*(#|$)' extras.txt)  # Steam, Lutris
   лаунчер (Super+Ctrl+Enter), калькулятор (Super+Z), история буфера (Super+V),
   уведомления, OSD, меню питания (Super+Shift+Q), выбор обоев (Super+Shift+Enter),
   центр управления (Super+S). Палитра берётся из обоев и рендерится в темы
-  приложений (alacritty, GTK, Spotify, Telegram, SDDM...)
+  приложений (alacritty, GTK, Spotify, Telegram, SDDM, Luciole...)
+- `config/noctalia/templates.toml` + `config/noctalia/templates/luciole.toml` -
+  шаблон Noctalia, который при каждой смене палитры/темы пишет
+  `~/.config/luciole/colors.toml`; Luciole подхватывает его на лету. Рядом лежит
+  готовая статичная палитра `config/noctalia/palettes/Luciole.json` (цвета самого
+  файловика), если захочется уйти от обоев
+- Luciole - Wayland-файловик на `Super+E`, файловик по умолчанию для папок
 - `bin/screenshot` - скриншоты в буфер и в `~/Pictures/Screenshots`
   (выделение области - без рамки); у окон в Hyprland рамок нет
 - `config/alacritty` - терминал (JetBrainsMono Nerd Font, цвета из обоев)

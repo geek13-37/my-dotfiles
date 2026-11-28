@@ -1,6 +1,13 @@
 [shell]
 polkit_agent = true
 
+# Palette comes from the wallpaper; Noctalia's Luciole template renders it
+# into ~/.config/luciole/colors.toml so the file manager follows live.
+# For a static scheme like the file manager's own colours, set
+# source = "custom" with custom_palette = "Luciole" in the GUI.
+[theme]
+source = "wallpaper"
+
 [bar.default]
 position = "top"
 widget_spacing = 10

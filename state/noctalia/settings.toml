@@ -129,10 +129,8 @@ background_opacity = 0.4999999888241291
 border = false
 border_color = "primary"
 border_width = 1.5
-offset_x = 50
-offset_y = 20
-orientation = "vertical"
-position = "bottom_center"
+position = "top_right"
+position_vertical = "top_right"
 
 [plugins]
 auto_update = "official"
@@ -191,8 +189,8 @@ popup_borders = false
 [theme]
 builtin = "Catppuccin"
 community_palette = "Ayu Blue"
+custom_palette = "Luciole"
 mode = "dark"
-source = "builtin"
 wallpaper_scheme = "dysfunctional"
 
     [theme.templates]
