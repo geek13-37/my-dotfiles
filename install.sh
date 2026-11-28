@@ -348,13 +348,13 @@ if [ -f /usr/share/applications/localsend.desktop ]; then
         > "$HOME/.local/share/applications/localsend.desktop"
 fi
 
-step "Nautilus: \"Open in Terminal\" uses alacritty"
+step "Luciole: file manager and default handler for folders"
 # From a TTY there is no session bus, and gsettings would silently drop the
 # write - spin up a temporary one so dconf actually saves it
 if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then GSET=(gsettings); else GSET=(dbus-run-session gsettings); fi
-"${GSET[@]}" set com.github.stunkymonkey.nautilus-open-any-terminal terminal alacritty 2>/dev/null \
-    && echo "Set alacritty as Nautilus terminal" \
-    || warn "nautilus-open-any-terminal is not installed - skipped"
+xdg-mime default dev.noctalia.luciole.desktop inode/directory 2>/dev/null \
+    && echo "Set Luciole as default file manager" \
+    || warn "luciole is not installed - skipped"
 
 step "Cursor: Bibata-Modern-Classic everywhere"
 # Hyprland sets XCURSOR_* (environment.lua); GTK apps read gsettings, and

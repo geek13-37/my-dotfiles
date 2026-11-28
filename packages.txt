@@ -121,8 +121,6 @@ telegram-desktop
 discord
 spotify-launcher
 code
-nautilus
-sushi
 webp-pixbuf-loader
 gnome-disk-utility
 papers

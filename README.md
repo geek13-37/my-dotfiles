@@ -51,7 +51,7 @@ glances, duf, pv, tealdeer, git, pkgfile, pacman-contrib, reflector
 
 **Приложения**
 Firefox, Telegram, Discord, Spotify (+ Spicetify с темой Comfy), VS Code,
-alacritty, Nautilus, Papers/Лупа, GIMP, LibreOffice, VLC, OBS, Meld,
+alacritty, Luciole, Papers/Лупа, GIMP, LibreOffice, VLC, OBS, Meld,
 Remmina, Tor Browser, scrcpy, nmap, KeePassXC (flatpak),
 Happ, LocalSend, Ventoy
 

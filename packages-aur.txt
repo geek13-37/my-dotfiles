@@ -3,6 +3,6 @@ happ-desktop-bin
 localsend-bin
 ventoy-bin
 hyprmod
-nautilus-open-any-terminal
+luciole-git
 bibata-cursor-theme-bin
 spicetify-cli
